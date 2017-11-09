@@ -1,0 +1,19 @@
+{
+  "name": "chingu-api",
+  "version": "0.0.1",
+  "description": "API for the Chingu client",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oxyrus/chingu-api.git"
+  },
+  "author": "Oxyrus, TheSabby, The-Vampiire",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Oxyrus/chingu-api/issues"
+  },
+  "homepage": "https://github.com/Oxyrus/chingu-api#readme"
+}
