@@ -4,6 +4,7 @@
   "description": "API for the Chingu client",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "nodemon app.js"
   },
   "repository": {
@@ -15,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/Oxyrus/chingu-api/issues"
   },
-  "homepage": "https://github.com/Oxyrus/chingu-api#readme"
+  "homepage": "https://github.com/Oxyrus/chingu-api#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "ngrok": "^2.2.23",
+    "nodemon": "^1.12.1"
+  }
 }
