@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       onDelete: 'SET DEFAULT',
       defaultValue: 1,
-      foreignKey: {
+      references: {
         model: 'countries',
         key: 'id'
       }
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.INTEGER,
       onDelete: 'SET NULL',
-      foreignKey: {
+      references: {
         model: 'cities',
         key: 'id'
       }
