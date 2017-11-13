@@ -16,5 +16,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     }
   });
+
+  City.associate = models => {
+    City.belongsTo(models.Country, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
+    City.hasMany(models.User);
+  };
+
   return City;
 };
