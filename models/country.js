@@ -6,5 +6,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     }
   });
+
+  Country.associate = models => {
+    Country.hasMany(models.User);
+    Country.hasMany(models.City);
+  };
+
   return Country;
 };
