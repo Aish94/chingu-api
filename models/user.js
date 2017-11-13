@@ -64,5 +64,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     }
   });
+
+  User.associate = models => {
+    User.belongsTo(models.Country, {
+      foreignKey: false
+    });
+    User.belongsTo(models.City, {
+      foreignKey: true
+    });
+
+    User.hasOne(models.ProfileImage);
+    User.belongsToMany(models.Project, { through: models.ProjectUser });
+    User.belongsToMany(models.Cohort, { through: models.CohortUser });
+    User.belongsToMany(models.CohortTeam, { through: models.CohortTeamUser });
+    User.belongsToMany(models.Group, { through: models.GroupUser });
+  };
+
   return User;
 };
