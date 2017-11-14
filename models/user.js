@@ -67,10 +67,14 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = models => {
     User.belongsTo(models.Country, {
-      foreignKey: false
+      foreignKey: {
+        allowNull: false
+      }
     });
     User.belongsTo(models.City, {
-      foreignKey: true
+      foreignKey: {
+        allowNull: true
+      }
     });
 
     User.hasOne(models.ProfileImage);
