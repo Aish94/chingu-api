@@ -14,7 +14,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       description: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.TEXT
       },
       project_url: {
@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       github_url: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.STRING
       },
 

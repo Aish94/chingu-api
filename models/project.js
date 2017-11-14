@@ -3,19 +3,19 @@ module.exports = (sequelize, DataTypes) => {
   var Project = sequelize.define('Project', {
     title: {
       allowNull: false,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     description: {
       allowNull: true,
-      type: Sequelize.TEXT
+      type: DataTypes.TEXT
     },
     project_url: {
       allowNull: true,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     github_url: {
       allowNull: true,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     }
   });
 
