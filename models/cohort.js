@@ -1,12 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var cohort = sequelize.define('cohort', {
-    cohort_id: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-      onDelete: 'NOT SURE WHAT GOES HERE',
-    },
-    
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -23,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
         'ongoing',
         'ended'
       ],
-      allowNull: false,
-      defaultValue: 'registration_open'
+      allowNull: true,
+      defaultValue: null
     },
 
     start_date: {

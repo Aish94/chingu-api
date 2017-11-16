@@ -23,16 +23,16 @@ module.exports = {
           'ongoing',
           'ended'
         ],
-        allowNull: false,
-        defaultValue: 'registration_open'
+        allowNull: true,
+        defaultValue: null
       },
       start_date: {
-        type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
+        type: Sequelize.DATE
       },
       end_date: {
-        type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
+        type: Sequelize.DATE
       },
       created_at: {
         allowNull: false,
