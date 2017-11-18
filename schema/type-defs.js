@@ -120,8 +120,8 @@ module.exports = `
     city(city_id: ID!): City!
     country(country_id: ID!): Country!
     cohort(cohort_id: ID!): Cohort!
-    cohorts(size: Int = 10, last_id: Int = 0): [Cohort!]!
-    projects(size: Int = 10, last_id: Int = 0): [Project!]!
+    cohorts(limit: Int = 10, offset: Int = 0): [Cohort!]!
+    projects(limit: Int = 10, offset: Int = 0): [Project!]!
   }
 
   input UserInput {
