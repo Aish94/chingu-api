@@ -30,13 +30,6 @@ module.exports = `
     team_assigned
   }
 
-  enum _CohortTier {
-    One
-    Two
-    Three
-    Four
-  }
-
   type Country {
     name: String!
     users: [User!]!
@@ -65,12 +58,12 @@ module.exports = `
     user: User!
     cohort: Cohort!
     status: _CohortUserStatus!
-    tier: _CohortTier!
+    tier: Int!
   }
 
   type CohortTeam {
     title: String!
-    tier: _CohortTier!
+    tier: Int!
     cohort: Cohort!
     project: Project!
     users: [CohortTeamUser!]!
