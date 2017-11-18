@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Cohort.associate = models => {
-    Cohort.hasMany(models.CohortUser);
+    // Cohort.hasMany(models.CohortUser);
     Cohort.hasMany(models.CohortTeam);
     Cohort.belongsTo(models.Group); // Logically flipped
   };
