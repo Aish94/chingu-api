@@ -139,6 +139,12 @@ module.exports = `
   }
 
   type Mutation {
+    createCountry(name: String!): Country!
+    createCity(country_id: ID!, name: String!): City!
+    createCohort(title: String!): Cohort!
+    createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
+    assignCohortTeamUser(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
+
     signInUser(email: String!, password: String!): Token!
     createUser(user: UserInput!): User!
     updateUser(user_id: ID!, user: UserInput!): User!
