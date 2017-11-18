@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Group.associate = models => {
+    Group.belongsToMany(models.User, { through: models.GroupUser });
     Group.hasOne(models.City);
     Group.hasOne(models.Country);
     Group.hasOne(models.Cohort);

@@ -28,16 +28,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   ProjectUser.associate = models => {
-    ProjectUser.belongsTo(models.User, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
-    ProjectUser.belongsTo(models.Project, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
+    ProjectUser.belongsTo(models.User);
+    ProjectUser.belongsTo(models.Project);
   };
 
   return ProjectUser;

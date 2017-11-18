@@ -77,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
 
     User.hasOne(models.ProfileImage);
     User.belongsToMany(models.Project, { through: models.ProjectUser });
-    // User.belongsToMany(models.Cohort, { through: models.CohortUser });
+    User.belongsToMany(models.Cohort, { through: models.CohortUser });
     User.belongsToMany(models.CohortTeam, { through: models.CohortTeamUser });
     User.belongsToMany(models.Group, { through: models.GroupUser });
   };
