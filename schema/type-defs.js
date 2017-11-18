@@ -30,13 +30,6 @@ module.exports = `
     team_assigned
   }
 
-  enum _CohortTier {
-    1
-    2
-    3
-    4
-  }
-
   type Country {
     name: String!
     users: [User!]!
@@ -65,12 +58,12 @@ module.exports = `
     user: User!
     cohort: Cohort!
     status: _CohortUserStatus!
-    tier: _CohortTier!
+    tier: Int!
   }
 
   type CohortTeam {
     title: String!
-    tier: _CohortTier!
+    tier: Int!
     cohort: Cohort!
     project: Project!
     users: [CohortTeamUser!]!
@@ -117,8 +110,18 @@ module.exports = `
     groups: [Group!]!
   }
 
+  type Token {
+    jwt: String!
+  }
+
   type Query {
-    projects(size: Int): [Project!]!
+    user(username: String!): User!
+    group(group_id: ID!): Group!
+    city(city_id: ID!): City!
+    country(country_id: ID!): Country!
+    cohort(cohort_id: ID!): Cohort!
+    cohorts(size: Int = 10, last_id: Int = 0): [Cohort!]!
+    projects(size: Int = 10, last_id: Int = 0): [Project!]!
   }
 
   type Mutation {
