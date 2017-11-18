@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   Country.associate = models => {
     Country.hasMany(models.User);
     Country.hasMany(models.City);
-    Country.belongsTo(models.Group); // logically flipped
+    Country.belongsTo(models.Group);
   };
 
   return Country;

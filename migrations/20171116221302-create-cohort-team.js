@@ -18,7 +18,6 @@ module.exports = {
           key: 'id'
         }
       },
-
       project_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -33,12 +32,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-
       tier: {
         type: Sequelize.ENUM,
         allowNull: false,
         values: [1, 2, 3, 4]
       },
+
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
