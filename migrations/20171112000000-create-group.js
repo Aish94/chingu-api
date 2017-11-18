@@ -8,20 +8,22 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+
       title: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      group_owner_type: {
+      group_type: {
         allowNull: false,
         type: Sequelize.ENUM,
         values: ['City', 'Cohort', 'Country']
       },
-      createdAt: {
+
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }

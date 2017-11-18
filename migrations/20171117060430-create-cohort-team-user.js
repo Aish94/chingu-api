@@ -18,7 +18,6 @@ module.exports = {
           key: 'id'
         }
       },
-
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -39,7 +38,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE

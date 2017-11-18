@@ -23,12 +23,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
-
       path: {
         type: Sequelize.STRING,
         allowNull: true
       },
-
       is_processed: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
@@ -39,7 +37,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE

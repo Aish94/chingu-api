@@ -18,7 +18,6 @@ module.exports = {
           key: 'id'
         }
       },
-
       group_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -39,7 +38,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE

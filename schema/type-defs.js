@@ -1,13 +1,13 @@
 module.exports = `
   scalar Date
 
-  enum _user_status {
+  enum _UserStatus {
     pending_approval
     profile_incomplete
     profile_complete
   }
 
-  enum _cohort_status {
+  enum _CohortStatus {
     registration_open
     registration_closed
     users_accepted
@@ -17,28 +17,43 @@ module.exports = `
     ended
   }
 
-  enum _cohort_team_user_role {
+  enum _CohortTeamUserRole {
     project_manager
     member
+  }
+
+  enum _CohortUserStatus {
+    pending_approval
+    rejected
+    accepted
+    tier_assigned
+    team_assigned
+  }
+
+  enum _CohortTier {
+    1
+    2
+    3
+    4
   }
 
   type Country {
     name: String!
     users: [User!]!
-    city: City
-    group: Group!
+    cities: [City!]!
+    group: Group
   }
 
   type City {
     name: String!
-    group: Group!
+    group: Group
     country: Country!
     users: [User!]!
   }
 
   type Cohort {
     title: String!
-    status: _cohort_status!
+    status: _CohortStatus!
     start_date: Date
     end_date: Date
     users: [User!]!
@@ -47,26 +62,29 @@ module.exports = `
   }
   
   type CohortUser {
-    placeholder: String!
+    user: User!
+    cohort: Cohort!
+    status: _CohortUserStatus!
+    tier: _CohortTier!
   }
 
   type CohortTeam {
     title: String!
-    tier: _cohort_team_tier!
+    tier: _CohortTier!
     cohort: Cohort!
     project: Project!
     users: [CohortTeamUser!]!
   }
 
   type CohortTeamUser {
-    role: _cohort_team_user_role
+    role: _CohortTeamUserRole
     user: User!
     cohort: Cohort!
   }
 
   type Group {
     title: String!
-    owner: String!
+    type: String!
     users: [User!]!
   }
 
@@ -83,7 +101,7 @@ module.exports = `
     username: String!
     first_name: String!
     last_name: String!
-    status: _user_status!
+    status: _UserStatus!
     github_url: String!
     linkedin_url: String
     portfolio_url: String

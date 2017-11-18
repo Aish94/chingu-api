@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
 
-    group_owner_type: {
+    group_type: {
       type: DataTypes.ENUM,
       allowNull: true,
       values: ['City', 'Cohort', 'Country']
