@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var Cohort_Team_User = sequelize.define('Cohort_Team_User', {
+  var CohortTeamUser = sequelize.define('CohortTeamUser', {
     cohort_team_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -24,26 +24,14 @@ module.exports = (sequelize, DataTypes) => {
     role: {
       type: DataTypes.ENUM,
       allowNull: false,
-      values: [
-        'project_manager',
-        'member'
-      ]
+      values: ['project_manager', 'member']
     }
   });
 
-  Cohort_Team_User.associate = models => {
-    Cohort_Team_User.belongsTo(models.Cohort_Team, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
-
-    Cohort_Team_User.belongsTo(models.User, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
+  CohortTeamUser.associate = models => {
+    CohortTeamUser.belongsTo(models.CohortTeam);
+    CohortTeamUser.belongsTo(models.User);
   };
 
-  return Cohort_Team_User;
+  return CohortTeamUser;
 };
