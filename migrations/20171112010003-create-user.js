@@ -29,6 +29,12 @@ module.exports = {
         }
       },
 
+      role: {
+        allowNull: false,
+        type: Sequelize.ENUM,
+        values: ['admin', 'member'],
+        defaultValue: 'member'
+      },
       email: {
         allowNull: false,
         unique: true,
