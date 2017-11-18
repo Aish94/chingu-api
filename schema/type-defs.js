@@ -31,10 +31,10 @@ module.exports = `
   }
 
   enum _CohortTier {
-    1
-    2
-    3
-    4
+    One
+    Two
+    Three
+    Four
   }
 
   type Country {
@@ -117,7 +117,17 @@ module.exports = `
     groups: [Group!]!
   }
 
+  type Token {
+    jwt: String!
+  }
+
   type Query {
+    user(username: String!): User!
+    group(title: String!): Group!
+    city(name: String!): City!
+    country(name: String!): Country!
+    cohort(title: String!): Cohort!
+    cohorts(size: Int): [Cohort!]!
     projects(size: Int): [Project!]!
   }
 
