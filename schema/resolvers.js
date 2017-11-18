@@ -1,10 +1,12 @@
-// throws error if user requesting an admin mutation 
-const requireAdmin = user => { if (user.role !== 'admin') throw new Error('Admin Only'); }
+// throws error if user requesting an admin mutation
+const requireAdmin = user => {
+  if (user.role !== 'admin') throw new Error('Admin Only');
+};
 
 module.exports = {
   Query: {
     user: async (root, { username, user_id }, { models: { User } }) => {
-      return (username)
+      return username
         ? await User.findOne({ where: { username } })
         : await User.findById(user_id);
     },
@@ -35,17 +37,27 @@ module.exports = {
   },
 
   Mutation: {
-
-    createCountry: async (root, { name }, { models: { Country, Group }, user }) => {
+    createCountry: async (
+      root,
+      { name },
+      { models: { Country, Group }, user }
+    ) => {
       requireAdmin(user);
       // create the Country Group
-      const group = await Group.create({ title: `${name} Group`, group_type: 'Country' });
-      // create Country 
-      return await Country.create({ name, group_id: group.id })
-    }, 
+      const group = await Group.create({
+        title: `${name} Group`,
+        group_type: 'Country'
+      });
+      // create Country
+      return await Country.create({ name, group_id: group.id });
+    },
 
-
-
+    updateUser: async (root, { user_data }, { models: { User }, user }) => {
+      if (user.status == 'pending_approval') {
+        user_data.username = undefined;
+      }
+      return await user.update(user_data);
+    }
   },
 
   User: {

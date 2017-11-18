@@ -148,7 +148,7 @@ module.exports = `
 
     signInUser(email: String!, password: String!): Token!
     createUser(user: UserInput!): User!
-    updateUser(user_id: ID!, user: UserInput!): User!
+    updateUser(user_data: UserInput!): User!
     updateUserEmail(user_id: ID!, email: String!): User!
     updateUsername(user_id: ID!, username: String!): User!
   }
