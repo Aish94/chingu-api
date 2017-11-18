@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
 
     email: {
       allowNull: false,
+      unique: true,
+      type: DataTypes.STRING
+    },
+    username: {
+      allowNull: false,
+      unique: true,
       type: DataTypes.STRING
     },
     first_name: {
@@ -66,20 +72,12 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.associate = models => {
-    User.belongsTo(models.Country, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
-    User.belongsTo(models.City, {
-      foreignKey: {
-        allowNull: true
-      }
-    });
+    User.belongsTo(models.Country);
+    User.belongsTo(models.City);
 
     User.hasOne(models.ProfileImage);
     User.belongsToMany(models.Project, { through: models.ProjectUser });
-    User.belongsToMany(models.Cohort, { through: models.CohortUser });
+    // User.belongsToMany(models.Cohort, { through: models.CohortUser });
     User.belongsToMany(models.CohortTeam, { through: models.CohortTeamUser });
     User.belongsToMany(models.Group, { through: models.GroupUser });
   };
