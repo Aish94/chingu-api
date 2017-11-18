@@ -115,7 +115,7 @@ module.exports = `
   }
 
   type Query {
-    user(username: String!): User!
+    user(username: String, user_id: ID): User!
     group(group_id: ID!): Group!
     city(city_id: ID!): City!
     country(country_id: ID!): Country!
@@ -124,7 +124,32 @@ module.exports = `
     projects(size: Int = 10, last_id: Int = 0): [Project!]!
   }
 
+  input UserInput {
+    email: String!
+    first_name: String!
+    last_name: String!
+    github_url: String!
+    linkedin_url: String
+    portfolio_url: String
+    website_url: String
+    twitter_url: String
+    blog_url: String
+    country_id: ID!
+    city: ID
+  }
+
   type Mutation {
-    createProject(title: String!): Project
+    createCountry(name: String!): Country!
+    createCity(country_id: ID!, name: String!): City!
+    createCohort(title: String!): Cohort!
+    createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
+    assignCohortTeamUser(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
+    changeUserStatus(user_id: ID!, status: _UserStatus!): User!
+
+    signInUser(email: String!, password: String!): Token!
+    createUser(user: UserInput!): User!
+    updateUser(user_id: ID!, user: UserInput!): User!
+    updateUserEmail(user_id: ID!, email: String!): User!
+    updateUsername(user_id: ID!, username: String!): User!
   }
 `;
