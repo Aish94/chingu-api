@@ -1,38 +1,38 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Profile_Images', {
+    return queryInterface.createTable('profile_images', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      storage_bucket: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        validate: {
-          isUrl: true
+
+      user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'users',
+          key: 'id'
         }
       },
-  
-      /**
-       * Same question as Group model. How to handle the hasOne relationship
-       * between the Profile_Image and the User table
-       */
-  
+
+      storage_bucket: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+
       path: {
         type: Sequelize.STRING,
-        allowNull: true,
-        validate: {
-          isUrl: true
-        }
+        allowNull: true
       },
 
       is_processed: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        setDefault: false
+        defaultValue: false
       },
 
       created_at: {
@@ -47,6 +47,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Profile_Images');
+    return queryInterface.dropTable('profile_images');
   }
 };

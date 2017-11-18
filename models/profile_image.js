@@ -1,40 +1,36 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var Profile_Image = sequelize.define('Profile_Image', {
-    storage_bucket: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        isUrl: true
+  var ProfileImage = sequelize.define('ProfileImage', {
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'users',
+        key: 'id'
       }
     },
 
-    /**
-     * Same question as Group model. How to handle the hasOne relationship
-     * between the Profile_Image and the User table
-     */
+    storage_bucket: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
 
     path: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        isUrl: true
-      }
+      allowNull: true
     },
+
     is_processed: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      setDefault: false
+      defaultValue: false
     }
   });
 
-  Profile_Image.associate = models => {
-    Profile_Image.hasOne(models.User, {
-      foreignKey: {
-        allowNull: false
-      }
-    })
-  }
+  ProfileImage.associate = models => {
+    ProfileImage.belongsTo(models.User);
+  };
 
-  return Profile_Image;
+  return ProfileImage;
 };
