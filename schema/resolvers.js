@@ -16,6 +16,9 @@ module.exports = {
     },
     cohorts: async (root, { limit, offset }, { models: { Cohort } }) => {
       return await Cohort.findAll({ limit, offset });
+    },
+    projects: async (root, { limit, offset }, { models: { Project } }) => {
+      return await Project.findAll({ limit, offset });
     }
   },
 
