@@ -122,13 +122,13 @@ module.exports = `
   }
 
   type Query {
-    user(username: String!): User!
-    group(title: String!): Group!
-    city(name: String!): City!
-    country(name: String!): Country!
-    cohort(title: String!): Cohort!
-    cohorts(size: Int): [Cohort!]!
-    projects(size: Int): [Project!]!
+    user(user_id: ID!): User!
+    group(group_id: ID!): Group!
+    city(city_id: ID!): City!
+    country(country_id: ID!): Country!
+    cohort(cohort_id: ID!): Cohort!
+    cohorts(size: Int = 10, last_id: Int = 0): [Cohort!]!
+    projects(size: Int = 10, last_id: Int = 0): [Project!]!
   }
 
   type Mutation {
