@@ -1,6 +1,15 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var City = sequelize.define('City', {
+    group_id: {
+      allowNull: true,
+      type: DataTypes.INTEGER,
+      onDelete: 'SET NULL',
+      references: {
+        model: 'groups',
+        key: 'id'
+      }
+    },
     country_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
@@ -18,11 +27,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   City.associate = models => {
-    City.belongsTo(models.Country, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
+    City.belongsTo(models.Group);
+    City.belongsTo(models.Country);
     City.hasMany(models.User);
   };
 

@@ -1,9 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var cohort = sequelize.define('cohort', {
+  var Cohort = sequelize.define('Cohort', {
+    group_id: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      onDelete: 'SET NULL',
+      references: {
+        model: 'groups',
+        key: 'id'
+      }
+    },
+
     title: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
 
     status: {
@@ -30,13 +40,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false
     }
-
   });
 
   Cohort.associate = models => {
-    Cohort.hasMany(models.Cohort_User);
-    Cohort.hasMany(models.Cohort_Team)
+    Cohort.hasMany(models.CohortUser);
+    Cohort.hasMany(models.CohortTeam);
+    Cohort.belongsTo(models.Group); // Logically flipped
   };
 
-  return cohort;
+  return Cohort;
 };

@@ -1,40 +1,33 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('countries', {
+    return queryInterface.createTable('groups', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-
-      group_id: {
-        allowNull: true,
-        type: Sequelize.INTEGER,
-        onDelete: 'SET NULL',
-        references: {
-          model: 'groups',
-          key: 'id'
-        }
-      },
-
-      name: {
+      title: {
         allowNull: false,
         type: Sequelize.STRING
       },
-
-      created_at: {
+      group_owner_type: {
+        allowNull: false,
+        type: Sequelize.ENUM,
+        values: ['City', 'Cohort', 'Country']
+      },
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('countries');
+    return queryInterface.dropTable('groups');
   }
 };
