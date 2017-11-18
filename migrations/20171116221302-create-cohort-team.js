@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      
+
       cohort_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -18,7 +18,7 @@ module.exports = {
           key: 'id'
         }
       },
-  
+
       project_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -37,13 +37,8 @@ module.exports = {
       tier: {
         type: Sequelize.ENUM,
         allowNull: false,
-        values: [
-          1,
-          2,
-          3,
-          4
-        ],
-    },
+        values: [1, 2, 3, 4]
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
