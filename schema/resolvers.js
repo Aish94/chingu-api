@@ -14,6 +14,9 @@ module.exports = {
     group: async (root, { group_id }, { models: { Group } }) => {
       return await Group.findById(group_id);
     },
+    cohorts: async (root, { limit, offset }, { models: { Cohort } }) => {
+      return await Cohort.findAll({ limit, offset });
+    },
     projects: async (root, { limit, offset }, { models: { Project } }) => {
       return await Project.findAll({ limit, offset });
     }
