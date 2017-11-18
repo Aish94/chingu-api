@@ -125,6 +125,7 @@ module.exports = `
   }
 
   input UserInput {
+    email: String!
     first_name: String!
     last_name: String!
     github_url: String!
@@ -138,6 +139,8 @@ module.exports = `
   }
 
   type Mutation {
+    signInUser(email: String!, password: String!): Token!
+    createUser(user: UserInput!): User!
     updateUser(user_id: ID!, user: UserInput!): User!
     updateUserEmail(user_id: ID!, email: String!): User!
     updateUsername(user_id: ID!, username: String!): User!
