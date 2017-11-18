@@ -8,6 +8,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+
+      group_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'groups',
+          key: 'id'
+        }
+      },
+
       title: {
         type: Sequelize.STRING,
         allowNull: false

@@ -6,46 +6,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
 
-    group_owner_id: {
-      type: DataTypes.INT,
-      allowNull: true,
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
-
-      /**
-       * from reading it seems we should use the hasOne relationship
-       * this will put the ownership in the target table rather than here
-       * in the Group table
-       * 
-       * This means a Country will "own" a Country Group and so forth
-       * Not sure how to handle this using the "references" field
-       */
-    },
-
     group_owner_type: {
       type: DataTypes.ENUM,
       allowNull: true,
-      values: [
-        'City',
-        'Cohort',
-        'Country',
-        'User'
-      ]
+      values: ['City', 'Cohort', 'Country']
     }
   });
 
   Group.associate = models => {
-    Group.hasMany(models.Group_User, {
-      foreignKey: {
-        allowNull: true
-      }
-    });
-
-    /**
-     * How do we handle the hasOne relationship with multiple potential models?
-     * Models: City / Cohort / Country / User
-     */
-  }
+    Group.hasOne(models.City);
+    Group.hasOne(models.Country);
+    Group.hasOne(models.Cohort);
+  };
 
   return Group;
 };

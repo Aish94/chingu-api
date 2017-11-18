@@ -9,6 +9,15 @@ module.exports = {
         type: Sequelize.INTEGER
       },
 
+      group_id: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'groups',
+          key: 'id'
+        }
+      },
       country_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
