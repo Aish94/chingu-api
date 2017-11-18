@@ -1,5 +1,8 @@
 module.exports = {
   Query: {
+    city: async (root, { city_id }, { models: { City } }) => {
+      return await City.findById(city_id);
+    }, 
     country: async (root, { country_id }, { models: { Country } }) => {
       return await Country.findById(country_id);
     },
