@@ -115,7 +115,7 @@ module.exports = `
   }
 
   type Query {
-    user(username: ID!): User!
+    user(username: String!): User!
     group(group_id: ID!): Group!
     city(city_id: ID!): City!
     country(country_id: ID!): Country!
