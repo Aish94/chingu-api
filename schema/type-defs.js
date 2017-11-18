@@ -147,7 +147,7 @@ module.exports = `
     changeUserStatus(user_id: ID!, status: _UserStatus!): User!
 
     signInUser(email: String!, password: String!): Token!
-    createUser(user: UserInput!): User!
+    createUser(user_data: UserInput!): User!
     updateUser(user_id: ID!, user: UserInput!): User!
     updateUserEmail(user_id: ID!, email: String!): User!
     updateUsername(user_id: ID!, username: String!): User!

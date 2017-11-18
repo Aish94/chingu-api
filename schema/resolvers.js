@@ -52,8 +52,9 @@ module.exports = {
       return await Country.create({ name, group_id: group.id });
     },
 
-    createUser: async (root, { user }, { models: { User } }) => {
-      return await User.create(user);
+    createUser: async (root, { user_data }, { models: { User } }) => {
+      user_data.username = undefined;
+      return await User.create(user_data);
     }
   },
 
