@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var Group_User = sequelize.define('Group_User', {
+  var GroupUser = sequelize.define('GroupUser', {
     user_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
@@ -24,26 +24,13 @@ module.exports = (sequelize, DataTypes) => {
     role: {
       allowNull: false,
       type: DataTypes.ENUM,
-      values: [
-        'admin', 
-        'moderator',
-        'member'
-      ]
+      values: ['admin', 'moderator', 'member']
     }
   });
 
-  Group_User.associate = models => {
-    Group_User.belongsTo(models.User, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
-    
-    Group_User.belongsTo(models.Group, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
-  }
-  return Group_User;
+  GroupUser.associate = models => {
+    GroupUser.belongsTo(models.User);
+    GroupUser.belongsTo(models.Group);
+  };
+  return GroupUser;
 };

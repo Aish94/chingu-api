@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Group_Users', {
+    return queryInterface.createTable('group_users', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -18,7 +18,7 @@ module.exports = {
           key: 'id'
         }
       },
-      
+
       group_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -28,15 +28,11 @@ module.exports = {
           key: 'id'
         }
       },
-  
+
       role: {
         allowNull: false,
         type: Sequelize.ENUM,
-        values: [
-          'admin', 
-          'moderator',
-          'member'
-        ]
+        values: ['admin', 'moderator', 'member']
       },
 
       created_at: {
@@ -51,6 +47,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Group_Users');
+    return queryInterface.dropTable('group_users');
   }
 };
