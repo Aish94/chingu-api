@@ -50,9 +50,9 @@ module.exports = {
       return await target_user.update({ status });
     },
 
-    createUser: async (root, { user_data }, { models: { User } }) => {
-      user_data.username = undefined;
-      return await User.create(user_data);
+    createUser: async (root, { user_data, password }, { models: { User } }) => {
+      const new_user = Object.assign({}, user_data, { username: undefined, password });
+      return await User.create(new_user);
     },
 
     updateUser: async (root, { user_data }, { user }) => {
