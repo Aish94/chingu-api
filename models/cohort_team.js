@@ -39,10 +39,10 @@ module.exports = (sequelize, DataTypes) => {
     CohortTeam.belongsTo(models.Project);
   };
 
-  CohortTeam.prototype.generateTitle = () => {
+  CohortTeam.prototype.generateTitle = async () => {
     const cohort = await this.getCohort();
     const tier_title = (await cohort.getTiers({ where: { level: this.tier } }))[0].title;
-    const team_count = (await cohort.geTeams()).length;
+    const team_count = (await cohort.getTeams()).length;
     return `${tier_title}-team-${team_count}`;
   }
 
