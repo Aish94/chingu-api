@@ -64,6 +64,14 @@ module.exports = {
       return await target_user.update({ status });
     },
 
+    createCohortTeam: async (root, { cohort_id, tier }, { models: { CohortTeam, Group }, user }) => {
+      requireAdmin(user);
+      // create the Country Group
+      const group = await Group.create({ title: `${Cohort.title} Group`, group_type: 'Country' });
+      // create Country 
+      return await Country.create({ name, group_id: group.id })
+    }, 
+
     createUser: async (root, { user_data }, { models: { User } }) => {
       user_data.username = undefined;
       return await User.create(user_data);
