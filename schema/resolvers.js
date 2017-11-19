@@ -67,11 +67,14 @@ module.exports = {
     createUser: async (root, { user_data }, { models: { User } }) => {
       user_data.username = undefined;
       return await User.create(user_data);
-    }
-  },
+    },
 
-  User: {
-    // custom property resolvers
-    // format -> property: async...
+    updateUser: async (root, { user_data }, { user }) => {
+      user.email = undefined;
+      if(user.status == 'pending_approval') {
+        user_data.username = undefined;
+      }
+      return await user.update(user_data);
+    }
   }
 };
