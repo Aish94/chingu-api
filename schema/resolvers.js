@@ -60,7 +60,7 @@ module.exports = {
     createCity: async (root, { country_id, name }, { models: { City, Group }, user }) => {
       requireAdmin(user);
       return await City.create({ country_id, name });
-    }
+    },
 
     changeUserStatus: async (
       root,
