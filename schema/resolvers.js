@@ -41,7 +41,7 @@ module.exports = {
       // create the Country Group
       const group = await Group.create({ title: `${name} Group`, group_type: 'Country' });
       // create Country 
-      return await Country.create({ name, group_id: group.id })
+      return await Country.create({ name, group_id: group.id });
     }, 
 
     createCohort: async (root, { title }, { models: { Cohort, Group }, user }) => {
@@ -52,7 +52,10 @@ module.exports = {
       return await Cohort.create({ title, group_id: group.id })
     },
 
-    
+    createCity: async (root, { country_id, name }, { models: { City, Group }, user }) => {
+      requireAdmin(user);
+      return await City.create({ country_id, name });
+    }
 
   },
 
