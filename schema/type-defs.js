@@ -125,17 +125,17 @@ module.exports = `
   }
 
   input UserInput {
-    email: String!
-    username: String!
-    first_name: String!
-    last_name: String!
-    github_url: String!
+    email: String
+    username: String
+    first_name: String
+    last_name: String
+    github_url: String
     linkedin_url: String
     portfolio_url: String
     website_url: String
     twitter_url: String
     blog_url: String
-    country_id: ID!
+    country_id: ID
     city: ID
   }
 

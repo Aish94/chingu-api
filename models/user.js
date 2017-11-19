@@ -3,10 +3,9 @@ const bcrypt = require('bcryptjs');
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     country_id: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.INTEGER,
-      onDelete: 'SET DEFAULT',
-      defaultValue: 1,
+      onDelete: 'SET NULL',
       references: {
         model: 'countries',
         key: 'id',
@@ -38,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     username: {
-      allowNull: false,
+      allowNull: true,
       unique: true,
       type: DataTypes.STRING,
     },
@@ -83,11 +82,11 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.hashPassword = async (password) => {
-    await bcrypt.hash(password, 12);
+    return bcrypt.hash(password, 12);
   };
 
   User.prototype.checkPassword = async (password) => {
-    await bcrypt.compare(password, this.password);
+    return bcrypt.compare(password, this.password);
   };
 
   User.associate = (models) => {

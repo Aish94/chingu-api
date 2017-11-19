@@ -79,7 +79,7 @@ module.exports = {
     createUser: async (root, { user_data, password }, { models: { User } }) => {
       const new_user = Object.assign({}, user_data, { username: undefined });
       new_user.password = await User.hashPassword(password);
-      await User.create(new_user);
+      return User.create(new_user);
     },
 
     updateUser: async (root, { user_data }, { jwt_object }) => {
@@ -92,5 +92,10 @@ module.exports = {
       await user.update(updated_user);
     },
 
+  },
+
+  User: {
+    groups: root => root.getGroups(),
+    cohorts: root => root.getCohorts(),
   },
 };
