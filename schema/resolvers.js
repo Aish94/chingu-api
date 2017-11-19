@@ -74,5 +74,10 @@ module.exports = {
       return cohort_team;
     },
 
+    assignCohortTeamUser: async (root, data, { models: { CohortTeamUser }, user }) => {
+      requireAdmin(user);
+      await CohortTeamUser.create(data);
+    },
+
   },
 };
