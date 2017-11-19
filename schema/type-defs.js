@@ -126,6 +126,7 @@ module.exports = `
 
   input UserInput {
     email: String!
+    username: String!
     first_name: String!
     last_name: String!
     github_url: String!
@@ -150,6 +151,5 @@ module.exports = `
     createUser(user: UserInput!): User!
     updateUser(user_data: UserInput!): User!
     updateUserEmail(user_id: ID!, email: String!): User!
-    updateUsername(user_id: ID!, username: String!): User!
   }
 `;
