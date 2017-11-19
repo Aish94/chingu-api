@@ -36,10 +36,6 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       allowNull: false,
       type: DataTypes.STRING,
-      async set(val) {
-        const hash = await bcrypt.hash(val, 12);
-        this.setDataValue('password', hash);
-      },
     },
     username: {
       allowNull: false,
@@ -85,6 +81,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
   });
+
+  User.hashPassword = async (password) => {
+    await bcrypt.hash(password, 12);
+  };
+
+  User.prototype.checkPassword = async (password) => {
+    await bcrypt.compare(password, this.password);
+  };
 
   User.associate = (models) => {
     User.belongsTo(models.Country);

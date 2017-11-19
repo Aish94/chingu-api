@@ -1,4 +1,5 @@
-// throws error if user requesting an admin mutation
+const jwt = require('jsonwebtoken');
+
 const requireAdmin = (user) => {
   if (user.role !== 'admin') throw new Error('Admin Only');
 };
@@ -50,14 +51,28 @@ module.exports = {
       return await target_user.update({ status });
     },
 
+    signInUser: async (root, { email, password }, { models: { User } }) => {
+      const user = await User.findOne({ email });
+      if (!user || !user.checkPassword(password)) throw new Error('Invalid email or password.');
+      const payload = {
+        role: user.role,
+        status: user.status,
+        user_id: user.id,
+      };
+      return {
+        jwt: await jwt.sign(payload, 'SUPER_SECRET_SECRET'),
+      };
+    },
+
     createUser: async (root, { user_data, password }, { models: { User } }) => {
-      const new_user = Object.assign({}, user_data, { username: undefined, password });
-      return await User.create(new_user);
+      const new_user = Object.assign({}, user_data, { username: undefined });
+      new_user.password = await User.hashPassword(password);
+      await User.create(new_user);
     },
 
     updateUser: async (root, { user_data }, { user }) => {
       user.email = undefined;
-      if (user.status == 'pending_approval') {
+      if (user.status === 'pending_approval') {
         user_data.username = undefined;
       }
       return await user.update(user_data);
