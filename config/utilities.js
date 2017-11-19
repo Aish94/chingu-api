@@ -1,5 +1,4 @@
 var fs        = require('fs');
-var path      = require('path');
 
 module.exports.loadConfigFile = file_name => {
   if(fs.existsSync(__dirname + '/../config/' + file_name + '-local.js')) {
