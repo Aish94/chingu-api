@@ -83,6 +83,20 @@ module.exports = {
         user_data.username = undefined;
       }
       return await user.update(user_data);
-    }
+    },
+
+    createCohortTeam: async (root, { cohort_id, tier }, { models: { CohortTeam, Cohort, Tier, Project }, user}) => {
+      requireAdmin(user);
+      // get the tier title to generate the Cohort Team title
+      const tierTitle = await Cohort.getTierTitle(cohort_id, tier, Tier);
+      // get last team ID
+      const lastTeamID = await 
+      const teamTitle = await CohortTeam.generateTitle(tierTitle);
+      // create the Cohort Team Project using a default title of Team Title
+      const project = await Project.create({ title: teamTitle });
+      // create Cohort Team
+      return CohortTeam.create({ title: teamTitle, project_id: project.id, cohort_id, tier });
+    },
+
   }
 };

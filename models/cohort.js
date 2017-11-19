@@ -49,5 +49,17 @@ module.exports = (sequelize, DataTypes) => {
     Cohort.belongsTo(models.Group);
   };
 
+// returns the Tier title associated with the Cohort Team tier
+  Cohort.getTierTitle = async (cohort_id, tier, Tier) => {
+    return await Cohort.findOne({
+      where: { id: cohort_id }, 
+      include: {
+        model: Tier, 
+        where: { level: tier },
+        attributes: 'title'
+      }
+    });
+  };
+
   return Cohort;
 };
