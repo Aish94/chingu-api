@@ -64,14 +64,6 @@ module.exports = {
       return await target_user.update({ status });
     },
 
-    createCohortTeam: async (root, { cohort_id, tier }, { models: { CohortTeam, Group }, user }) => {
-      requireAdmin(user);
-      // create the Country Group
-      const group = await Group.create({ title: `${Cohort.title} Group`, group_type: 'Country' });
-      // create Country 
-      return await Country.create({ name, group_id: group.id })
-    }, 
-
     createUser: async (root, { user_data }, { models: { User } }) => {
       user_data.username = undefined;
       return await User.create(user_data);
@@ -85,17 +77,14 @@ module.exports = {
       return await user.update(user_data);
     },
 
-    createCohortTeam: async (root, { cohort_id, tier }, { models: { CohortTeam, Cohort, Tier, Project }, user}) => {
+    createCohortTeam: async (root, data, { models: { CohortTeam, Project }, user}) => {
       requireAdmin(user);
-      // get the tier title to generate the Cohort Team title
-      const tierTitle = await Cohort.getTierTitle(cohort_id, tier, Tier);
-      // get last team ID
-      const lastTeamID = await 
-      const teamTitle = await CohortTeam.generateTitle(tierTitle);
-      // create the Cohort Team Project using a default title of Team Title
-      const project = await Project.create({ title: teamTitle });
-      // create Cohort Team
-      return CohortTeam.create({ title: teamTitle, project_id: project.id, cohort_id, tier });
+      
+      const cohort_team = CohortTeam.build(data);
+      cohort_team.title = cohort_team.generateTitle();
+      await cohort_team.save();
+      await cohort_team.addProject({ title: team.title });
+      return cohort_team;
     },
 
   }

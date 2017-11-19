@@ -45,20 +45,8 @@ module.exports = (sequelize, DataTypes) => {
   Cohort.associate = models => {
     Cohort.belongsToMany(models.Tier, { through: models.CohortTier });
     Cohort.belongsToMany(models.User, { through: models.CohortUser });
-    Cohort.hasMany(models.CohortTeam);
+    Cohort.hasMany(models.CohortTeam, { as: 'Teams' });
     Cohort.belongsTo(models.Group);
-  };
-
-// returns the Tier title associated with the Cohort Team tier
-  Cohort.getTierTitle = async (cohort_id, tier, Tier) => {
-    return await Cohort.findOne({
-      where: { id: cohort_id }, 
-      include: {
-        model: Tier, 
-        where: { level: tier },
-        attributes: 'title'
-      }
-    });
   };
 
   return Cohort;

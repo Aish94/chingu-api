@@ -39,12 +39,11 @@ module.exports = (sequelize, DataTypes) => {
     CohortTeam.belongsTo(models.Project);
   };
 
-/**
- * generates a Cohort Team title based on the tier and the respective animal mapping associated with the parent Cohort
- * Accepts a cohortTitle as a base and forms the title with the Cohort Team ID
- */
-  CohortTeam.generateTitle = (tierTitle) => {
-    return `${tierTitle}-team-${}`;
+  CohortTeam.prototype.generateTitle = () => {
+    const cohort = await this.getCohort();
+    const tier_title = (await cohort.getTiers({ where: { level: this.tier } }))[0].title;
+    const team_count = (await cohort.geTeams()).length;
+    return `${tier_title}-team-${team_count}`;
   }
 
   return CohortTeam;
