@@ -67,7 +67,8 @@ module.exports = {
       requireAdmin(user);
 
       const cohort_team = CohortTeam.build(data);
-      cohort_team.title = await cohort_team.generateTitle();
+      const team_count = CohortTeam.count({ where: { cohort_id: data.cohort_id } });
+      cohort_team.title = await cohort_team.generateTitle(team_count);
       await cohort_team.save();
       await cohort_team.addProject({ title: cohort_team.title });
       return cohort_team;
