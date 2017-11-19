@@ -3,26 +3,32 @@ const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const cors = require('cors');
 
+const { authenticate } = require('./config/auth');
 const models = require('./models');
 const schema = require('./schema');
 
 const app = express();
 
+const buildOptions = async (req) => {
+  const user = await authenticate(req);
+  return {
+    context: { models, user },
+    schema,
+  };
+};
+
 app.use(
   '/graphql',
   bodyParser.json(),
-  graphqlExpress({
-    context: { models },
-    schema
-  })
+  graphqlExpress(buildOptions),
 );
 
 app.use(
   '/graphiql',
   graphiqlExpress({
     endpointURL: '/graphql',
-    passHeader: ``
-  })
+    passHeader: '',
+  }),
 );
 
 const port = process.env.PORT || 5000;
