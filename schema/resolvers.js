@@ -37,11 +37,7 @@ module.exports = {
   },
 
   Mutation: {
-    createCountry: async (
-      root,
-      { name },
-      { models: { Country, Group }, user }
-    ) => {
+    createCountry: async (root, { name }, { models: { Country, Group }, user }) => {
       requireAdmin(user);
       // create the Country Group
       const group = await Group.create({ title: `${name} Group`, group_type: 'Country' });
@@ -62,14 +58,15 @@ module.exports = {
       return await City.create({ country_id, name });
     },
 
-    changeUserStatus: async (
-      root,
-      { user_id, status },
-      { models: { User }, user }
-    ) => {
+    changeUserStatus: async (root, { user_id, status }, { models: { User }, user }) => {
       requireAdmin(user);
       const target_user = await User.findById(user_id);
       return await target_user.update({ status });
+    },
+
+    createUser: async (root, { user_data }, { models: { User } }) => {
+      user_data.username = undefined;
+      return await User.create(user_data);
     }
   },
 
