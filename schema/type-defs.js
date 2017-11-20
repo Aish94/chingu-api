@@ -137,6 +137,7 @@ module.exports = `
   }
 
   type Token {
+    user: User!
     jwt: String!
   }
 
