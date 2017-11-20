@@ -25,7 +25,7 @@ app.use(
   bodyParser.json(),
   graphqlExpress(buildOptions),
 );
-// fix the options before deploying
+
 app.use(
   '/graphiql',
   graphiqlExpress({
