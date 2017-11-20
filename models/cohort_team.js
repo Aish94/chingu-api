@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   CohortTeam.associate = (models) => {
+    CohortTeam.hasMany(models.CohortTeamUser, { as: 'Members' });
     CohortTeam.belongsToMany(models.User, { through: models.CohortTeamUser });
     CohortTeam.belongsTo(models.Cohort);
     CohortTeam.belongsTo(models.Project);
