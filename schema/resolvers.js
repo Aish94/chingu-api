@@ -66,7 +66,7 @@ module.exports = {
 
     signInUser: async (root, { email, password }, { models: { User } }) => {
       const user = await User.findOne({ where: { email } });
-      if (!user || !await user.checkPassword(password, user)) throw new Error('Invalid email or password.');
+      if (!user || !await user.checkPassword(password)) throw new Error('Invalid email or password.');
       return {
         jwt: await jwt.sign({
           user_role: user.role,
