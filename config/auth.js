@@ -7,7 +7,7 @@ const config = loadConfigFile('config');
 module.exports.authenticate = async (req) => {
   const token = req.headers.authorization;
   try {
-    return await jwt.verify(token, config.SECRET);
+    return jwt.verify(token, config.JWT_SECRET);
   } catch (err) {
     return {};
   }
@@ -25,4 +25,4 @@ module.exports.loginRequired = (jwt_object) => {
   throw new Error('Login required.');
 };
 
-module.exports.getLoggedInUser = user => User.findById(user.id);
+module.exports.getLoggedInUser = user => User.findById(user.user_id);
