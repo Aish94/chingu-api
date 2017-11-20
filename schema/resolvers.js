@@ -106,6 +106,10 @@ module.exports = {
     group: root => root.getGroup(),
   },
 
+  Project: {
+    users: root => root.getUsers(),
+  },
+  
   Group: {
     users: root => root.getUsers(),
   }, 
@@ -126,5 +130,5 @@ module.exports = {
     project: root => root.getProject(),
     users: root => root.getUsers(),
   },
-
+  
 };
