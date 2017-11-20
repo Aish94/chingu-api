@@ -125,17 +125,17 @@ module.exports = `
   }
 
   input UserInput {
-    email: String!
-    username: String!
-    first_name: String!
-    last_name: String!
-    github_url: String!
+    email: String
+    username: String
+    first_name: String
+    last_name: String
+    github_url: String
     linkedin_url: String
     portfolio_url: String
     website_url: String
     twitter_url: String
     blog_url: String
-    country_id: ID!
+    country_id: ID
     city: ID
   }
 
@@ -148,7 +148,7 @@ module.exports = `
     changeUserStatus(user_id: ID!, status: _UserStatus!): User!
 
     signInUser(email: String!, password: String!): Token!
-    createUser(user_data: UserInput!): User!
+    createUser(user_data: UserInput!, password: String!): User!
     updateUser(user_data: UserInput!): User!
     updateUserEmail(user_id: ID!, email: String!): User!
   }

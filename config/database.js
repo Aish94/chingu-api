@@ -7,8 +7,8 @@ module.exports = {
     dialect: 'postgres',
     define: {
       underscored: true,
-      underscoredAll: true
-    }
+      underscoredAll: true,
+    },
   },
   test: {
     username: 'root',
@@ -18,8 +18,8 @@ module.exports = {
     dialect: 'postgres',
     define: {
       underscored: true,
-      underscoredAll: true
-    }
+      underscoredAll: true,
+    },
   },
   production: {
     username: process.env.DB_USERNAME,
@@ -29,7 +29,7 @@ module.exports = {
     dialect: 'postgres',
     define: {
       underscored: true,
-      underscoredAll: true
-    }
-  }
+      underscoredAll: true,
+    },
+  },
 };

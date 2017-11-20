@@ -10,10 +10,9 @@ module.exports = {
       },
 
       country_id: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER,
-        onDelete: 'SET DEFAULT',
-        defaultValue: 1,
+        onDelete: 'SET NULL',
         references: {
           model: 'countries',
           key: 'id'
@@ -40,8 +39,12 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
-      username: {
+      password: {
         allowNull: false,
+        type: Sequelize.STRING
+      },
+      username: {
+        allowNull: true,
         unique: true,
         type: Sequelize.STRING
       },

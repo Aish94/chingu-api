@@ -1,15 +1,15 @@
-'use strict';
+const bcrypt = require('bcryptjs');
+
 module.exports = (sequelize, DataTypes) => {
-  var User = sequelize.define('User', {
+  const User = sequelize.define('User', {
     country_id: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.INTEGER,
-      onDelete: 'SET DEFAULT',
-      defaultValue: 1,
+      onDelete: 'SET NULL',
       references: {
         model: 'countries',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     city_id: {
       allowNull: true,
@@ -17,67 +17,79 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'SET NULL',
       references: {
         model: 'cities',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
 
     role: {
       allowNull: false,
       type: DataTypes.ENUM,
       values: ['admin', 'member'],
-      defaultValue: 'member'
+      defaultValue: 'member',
     },
     email: {
       allowNull: false,
       unique: true,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+    },
+    password: {
+      allowNull: false,
+      type: DataTypes.STRING,
     },
     username: {
-      allowNull: false,
+      allowNull: true,
       unique: true,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     first_name: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     last_name: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     status: {
       allowNull: false,
       type: DataTypes.ENUM,
       values: ['pending_approval', 'profile_incomplete', 'profile_complete'],
-      defaultValue: 'pending_approval'
+      defaultValue: 'pending_approval',
     },
     github_url: {
       allowNull: true,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     linkedin_url: {
       allowNull: true,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     portfolio_url: {
       allowNull: true,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     website_url: {
       allowNull: true,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     twitter_url: {
       allowNull: true,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     blog_url: {
       allowNull: true,
-      type: DataTypes.STRING
-    }
+      type: DataTypes.STRING,
+    },
   });
 
-  User.associate = models => {
+  User.hashPassword = async (password) => {
+    return bcrypt.hash(password, 12);
+  };
+
+  User.prototype.checkPassword = async (password) => {
+    return bcrypt.compare(password, this.password);
+  };
+
+  User.associate = (models) => {
     User.belongsTo(models.Country);
     User.belongsTo(models.City);
 
