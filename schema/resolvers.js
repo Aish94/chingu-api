@@ -112,4 +112,10 @@ module.exports = {
     group: root => root.getGroups(),
   },
 
+  CohortTeam: {
+    cohort: root => root.getCohort(),
+    project: root => root.getProject(),
+    users: root => root.getUsers(),
+  },
+
 };
