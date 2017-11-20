@@ -1,14 +1,13 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var GroupUser = sequelize.define('GroupUser', {
+  const GroupUser = sequelize.define('GroupUser', {
     user_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
       onDelete: 'CASCADE',
       references: {
         model: 'users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
 
     group_id: {
@@ -17,18 +16,18 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       references: {
         model: 'groups',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
 
     role: {
       allowNull: false,
       type: DataTypes.ENUM,
-      values: ['admin', 'moderator', 'member']
-    }
+      values: ['admin', 'moderator', 'member'],
+    },
   });
 
-  GroupUser.associate = models => {
+  GroupUser.associate = (models) => {
     GroupUser.belongsTo(models.User);
     GroupUser.belongsTo(models.Group);
   };

@@ -1,14 +1,13 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var ProjectUser = sequelize.define('ProjectUser', {
+  const ProjectUser = sequelize.define('ProjectUser', {
     user_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
       onDelete: 'CASCADE',
       references: {
         model: 'users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     project_id: {
       allowNull: false,
@@ -16,18 +15,18 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       references: {
         model: 'projects',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
 
     role: {
       allowNull: false,
       type: DataTypes.ENUM,
-      values: ['project_manager', 'collaborator']
-    }
+      values: ['project_manager', 'collaborator'],
+    },
   });
 
-  ProjectUser.associate = models => {
+  ProjectUser.associate = (models) => {
     ProjectUser.belongsTo(models.User);
     ProjectUser.belongsTo(models.Project);
   };
