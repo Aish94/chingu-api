@@ -69,6 +69,17 @@ module.exports = `
     users: [User!]!
     teams: [CohortTeam!]!
     group: Group!
+    tiers: [Tier!]!
+  }
+
+  type CohortTier {
+    cohort_id: ID!
+    tier_id: ID!
+  }
+
+  type Tier {
+    level: Int!
+    title: String!
   }
   
   type CohortUser {
@@ -155,6 +166,8 @@ module.exports = `
     createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
     assignCohortTeamUser(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
     changeUserStatus(user_id: ID!, status: _UserStatus!): User!
+    createTier(level: Int!, title: String!): Tier!
+    linkTier(cohort_id: ID!, tier_id: ID!): CohortTier!
 
     signInUser(email: String!, password: String!): Token!
     createUser(user_data: UserInput!, email: String!, password: String!): User!

@@ -43,19 +43,33 @@ module.exports = {
       return Cohort.create({ title, group_id: group.id });
     },
 
-    createCohortTeam: async (root, data, { models: { CohortTeam }, jwt_object }) => {
+    createCohortTeam: async (root, data, { models: { CohortTeam, Project }, jwt_object }) => {
       adminRequired(jwt_object);
       const cohort_team = CohortTeam.build(data);
+      // console.log(cohort_team);
+      // console.log(await cohort_team.getCohort());
       const team_count = CohortTeam.count({ where: { cohort_id: data.cohort_id } });
       cohort_team.title = await cohort_team.generateTitle(team_count);
+      // await cohort_team.addProject({ title: cohort_team.title });
+      const project = await Project.create({ title: cohort_team.title });
+      cohort_team.project_id = project.id;
       await cohort_team.save();
-      await cohort_team.addProject({ title: cohort_team.title });
       return cohort_team;
     },
 
     assignCohortTeamUser: async (root, data, { models: { CohortTeamUser }, jwt_object }) => {
       adminRequired(jwt_object);
       return CohortTeamUser.create(data);
+    },
+
+    createTier: async (root, data, { models: { Tier }, jwt_object }) => {
+      adminRequired(jwt_object);
+      return Tier.create(data);
+    },
+
+    linkTier: async (root, data, { models: { CohortTier }, jwt_object }) => {
+      adminRequired(jwt_object);
+      return CohortTier.create(data);
     },
 
     changeUserStatus: async (root, { user_id, status }, { models: { User }, jwt_object }) => {
@@ -123,6 +137,7 @@ module.exports = {
     users: root => root.getUsers(),
     teams: root => root.getTeams(),
     group: root => root.getGroups(),
+    tiers: root => root.getTiers(),
   },
 
   CohortUser: {
