@@ -106,6 +106,12 @@ module.exports = {
     group: root => root.getGroup(),
   },
 
+  Cohort: {
+    users: root => root.getUsers(),
+    teams: root => root.getCohortTeams(),
+    group: root => root.getGroups(),
+  },
+
   CohortUser: {
     user: root => root.getUser(),
     cohort: root => root.getCohort(),
