@@ -6,9 +6,10 @@ const { JWT_SECRET } = loadConfigFile('config');
 
 module.exports = {
   Query: {
-    user: async (root, { username, user_id }, { models: { User } }) => {
+    user: async (root, { username, user_id }, { models: { User }, jwt_object }) => {
       if (username) return User.findOne({ where: { username } });
-      return User.findById(user_id);
+      else if (user_id) return User.findById(user_id);
+      return getLoggedInUser(loginRequired(jwt_object));
     },
 
     city: async (root, { city_id }, { models: { City } }) => City.findById(city_id),
