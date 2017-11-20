@@ -5,6 +5,7 @@ module.exports = `
     first_name: String
     last_name: String
     github_url: String
+    bio: String
     linkedin_url: String
     portfolio_url: String
     website_url: String
@@ -110,6 +111,7 @@ module.exports = `
     first_name: String!
     last_name: String!
     status: _UserStatus!
+    bio: String
     github_url: String!
     linkedin_url: String
     portfolio_url: String
