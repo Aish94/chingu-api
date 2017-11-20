@@ -96,7 +96,7 @@ module.exports = `
     tier: Int!
     cohort: Cohort!
     project: Project!
-    users: [CohortTeamUser!]!
+    members: [CohortTeamUser!]!
   }
 
   type CohortTeamUser {
@@ -136,7 +136,7 @@ module.exports = `
     website_url: String
     twitter_url: String
     blog_url: String
-    country: Country!
+    country: Country
     city: City
     profile_image: String
     projects: [Project!]!
