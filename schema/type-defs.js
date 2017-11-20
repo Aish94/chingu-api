@@ -164,6 +164,8 @@ module.exports = `
     createCity(country_id: ID!, name: String!): City!
     createCohort(title: String!): Cohort!
     createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
+    assignCohortUser(cohort_id: ID!, user_id: ID!, tier: Int!): CohortUser!
+    updateCohortUserStatus(cohort_user_id: ID!, status: _CohortUserStatus): CohortUser!
     assignCohortTeamUser(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
     changeUserStatus(user_id: ID!, status: _UserStatus!): User!
     createTier(level: Int!, title: String!): Tier!

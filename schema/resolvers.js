@@ -46,15 +46,24 @@ module.exports = {
     createCohortTeam: async (root, data, { models: { CohortTeam, Project }, jwt_object }) => {
       adminRequired(jwt_object);
       const cohort_team = CohortTeam.build(data);
-      // console.log(cohort_team);
-      // console.log(await cohort_team.getCohort());
-      const team_count = CohortTeam.count({ where: { cohort_id: data.cohort_id } });
+      const team_count = await CohortTeam.count({ where: { cohort_id: data.cohort_id } });
       cohort_team.title = await cohort_team.generateTitle(team_count);
-      // await cohort_team.addProject({ title: cohort_team.title });
       const project = await Project.create({ title: cohort_team.title });
       cohort_team.project_id = project.id;
       await cohort_team.save();
       return cohort_team;
+    },
+
+    assignCohortUser: async (root, data, { models: { CohortUser }, jwt_object }) => {
+      adminRequired(jwt_object);
+      return CohortUser.create(data);
+    },
+
+    updateCohortUserStatus: async (root, data, { models: { CohortUser }, jwt_object }) => {
+      adminRequired(jwt_object);
+      return CohortUser.findById(data.cohort_user_id)
+        .then(cohort_user => cohort_user.update(data.status))
+        .catch(error => console.error(error));
     },
 
     assignCohortTeamUser: async (root, data, { models: { CohortTeamUser }, jwt_object }) => {
