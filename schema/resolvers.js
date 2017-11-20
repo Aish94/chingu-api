@@ -105,4 +105,9 @@ module.exports = {
     cities: root => root.getCities(),
     group: root => root.getGroup(),
   },
+
+  Project: {
+    users: root => root.getUsers(),
+  },
+
 };
