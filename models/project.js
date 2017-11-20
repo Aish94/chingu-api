@@ -1,25 +1,24 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var Project = sequelize.define('Project', {
+  const Project = sequelize.define('Project', {
     title: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     description: {
       allowNull: true,
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
     },
     project_url: {
       allowNull: true,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     github_url: {
       allowNull: true,
-      type: DataTypes.STRING
-    }
+      type: DataTypes.STRING,
+    },
   });
 
-  Project.associate = models => {
+  Project.associate = (models) => {
     Project.belongsToMany(models.User, { through: models.ProjectUser });
   };
 

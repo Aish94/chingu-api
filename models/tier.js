@@ -1,17 +1,16 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var Tier = sequelize.define('Tier', {
+  const Tier = sequelize.define('Tier', {
     level: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
     },
     title: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
   });
 
-  Tier.associate = models => {
+  Tier.associate = (models) => {
     Tier.belongsToMany(models.Cohort, { through: models.CohortTier });
   };
 

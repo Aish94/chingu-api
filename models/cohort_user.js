@@ -1,14 +1,13 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var CohortUser = sequelize.define('CohortUser', {
+  const CohortUser = sequelize.define('CohortUser', {
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       onDelete: 'CASCADE',
       references: {
         model: 'users',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     cohort_id: {
       type: DataTypes.INTEGER,
@@ -16,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       references: {
         model: 'cohorts',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
 
     status: {
@@ -28,18 +27,18 @@ module.exports = (sequelize, DataTypes) => {
         'rejected',
         'accepted',
         'tier_assigned',
-        'team_assigned'
+        'team_assigned',
       ],
-      defaultValue: 'pending_approval'
+      defaultValue: 'pending_approval',
     },
     tier: {
       type: DataTypes.ENUM,
       allowNull: false,
-      values: [1, 2, 3, 4]
-    }
+      values: [1, 2, 3, 4],
+    },
   });
 
-  CohortUser.associate = models => {
+  CohortUser.associate = (models) => {
     CohortUser.belongsTo(models.User);
     CohortUser.belongsTo(models.Cohort);
   };
