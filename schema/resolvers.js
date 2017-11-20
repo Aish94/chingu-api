@@ -92,14 +92,14 @@ module.exports = {
       await user.update(updated_user);
     },
 
+    assignCohortTeamUser: async (root, data, { models: { CohortTeamUser }, user }) => {
+      adminRequired(user);
+      return CohortTeamUser.create(data);
+    },
   },
 
   User: {
     groups: root => root.getGroups(),
     cohorts: root => root.getCohorts(),
-    assignCohortTeamUser: async (root, data, { models: { CohortTeamUser }, user }) => {
-      adminRequired(user);
-      await CohortTeamUser.create(data);
-    },
   },
 };
