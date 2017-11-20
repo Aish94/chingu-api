@@ -173,7 +173,7 @@ module.exports = `
     linkTier(cohort_id: ID!, tier_id: ID!): CohortTier!
 
     signInUser(email: String!, password: String!): Token!
-    createUser(user_data: UserInput!, email: String!, password: String!): User!
+    createUser(user_data: UserInput!, email: String!, password: String!): Token!
     updateUser(user_data: UserInput!): User!
   }
 `;
