@@ -83,12 +83,8 @@ module.exports = {
     },
 
     updateUser: async (root, { user_data }, { jwt_object }) => {
-      const user = getLoggedInUser(loginRequired(jwt_object));
-      const updated_user = Object.assign({}, user_data, {
-        username: (user.status === 'pending_approval' ? undefined : user_data.username),
-        email: undefined,
-      });
-      return user.update(updated_user);
+      const user = await getLoggedInUser(loginRequired(jwt_object));
+      return user.update(user_data);
     },
   },
 
@@ -105,6 +101,12 @@ module.exports = {
     users: root => root.getUsers(),
     cities: root => root.getCities(),
     group: root => root.getGroup(),
+  },
+
+  City: {
+    group: root => root.getGroup(),
+    country: root => root.getCountry(),
+    users: root => root.getUsers(),
   },
 
   Project: {

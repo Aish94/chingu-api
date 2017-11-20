@@ -1,7 +1,5 @@
 module.exports = `
   input UserInput {
-    email: String
-    username: String
     first_name: String
     last_name: String
     github_url: String
@@ -12,7 +10,7 @@ module.exports = `
     twitter_url: String
     blog_url: String
     country_id: ID
-    city: ID
+    city_id: ID
   }
 
   scalar Date
@@ -159,7 +157,7 @@ module.exports = `
     changeUserStatus(user_id: ID!, status: _UserStatus!): User!
 
     signInUser(email: String!, password: String!): Token!
-    createUser(user_data: UserInput!, password: String!): User!
+    createUser(user_data: UserInput!, email: String!, password: String!): User!
     updateUser(user_data: UserInput!): User!
   }
 `;
