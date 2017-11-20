@@ -97,5 +97,9 @@ module.exports = {
   User: {
     groups: root => root.getGroups(),
     cohorts: root => root.getCohorts(),
+    assignCohortTeamUser: async (root, data, { models: { CohortTeamUser }, user }) => {
+      adminRequired(user);
+      await CohortTeamUser.create(data);
+    },
   },
 };
