@@ -115,9 +115,10 @@ module.exports = {
     users: root => root.getUsers(),
   },
 
+// getCohortTeams() = alias => getTeams()
   Cohort: {
     users: root => root.getUsers(),
-    teams: root => root.getCohortTeams(),
+    teams: root => root.getTeams(),
     group: root => root.getGroups(),
   },
 

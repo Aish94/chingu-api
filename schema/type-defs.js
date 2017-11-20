@@ -65,7 +65,7 @@ module.exports = `
   type Cohort {
     id: ID!
     title: String!
-    status: _CohortStatus!
+    status: _CohortStatus
     start_date: Date
     end_date: Date
     users: [User!]!
