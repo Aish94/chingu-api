@@ -1,14 +1,13 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var CohortTier = sequelize.define('CohortTier', {
+  const CohortTier = sequelize.define('CohortTier', {
     cohort_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
       onDelete: 'CASCADE',
       references: {
         model: 'cohorts',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     tier_id: {
       allowNull: false,
@@ -16,15 +15,15 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       references: {
         model: 'tiers',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
   });
 
-  CohortTier.associate = models => {
+  CohortTier.associate = (models) => {
     CohortTier.belongsTo(models.Cohort);
     CohortTier.belongsTo(models.Tier);
-  }
+  };
 
   return CohortTier;
 };

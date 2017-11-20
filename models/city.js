@@ -1,33 +1,32 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var City = sequelize.define('City', {
+  const City = sequelize.define('City', {
     group_id: {
       allowNull: true,
       type: DataTypes.INTEGER,
       onDelete: 'SET NULL',
       references: {
         model: 'groups',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
-    
+
     country_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
       onDelete: 'CASCADE',
       references: {
         model: 'countries',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
 
     name: {
       allowNull: false,
-      type: DataTypes.STRING
-    }
+      type: DataTypes.STRING,
+    },
   });
 
-  City.associate = models => {
+  City.associate = (models) => {
     City.belongsTo(models.Group);
     City.belongsTo(models.Country);
     City.hasMany(models.User);
