@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       values: ['pending_approval', 'profile_incomplete', 'profile_complete'],
       defaultValue: 'pending_approval',
     },
+    bio: {
+      allowNull: true,
+      type: DataTypes.TEXT,
+    },
     github_url: {
       allowNull: true,
       type: DataTypes.STRING,
@@ -81,13 +85,9 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  User.hashPassword = async (password) => {
-    return bcrypt.hash(password, 12);
-  };
+  User.hashPassword = async password => bcrypt.hash(password, 12);
 
-  User.prototype.checkPassword = async (password) => {
-    return bcrypt.compare(password, this.password);
-  };
+  User.prototype.checkPassword = async password => bcrypt.compare(password, this.password);
 
   User.associate = (models) => {
     User.belongsTo(models.Country);
