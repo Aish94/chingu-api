@@ -13,14 +13,14 @@ module.exports.authenticate = async (req) => {
   }
 };
 
-module.exports.adminRequired = (user) => {
-  if (user.role === 'admin') return user;
+module.exports.adminRequired = (jwt_object) => {
+  if (jwt_object.user_role === 'admin') return jwt_object;
 
   throw new Error('Admin privileges required.');
 };
 
-module.exports.loginRequired = (user) => {
-  if (user.id) return user;
+module.exports.loginRequired = (jwt_object) => {
+  if (jwt_object.user_id) return jwt_object;
 
   throw new Error('Login required.');
 };
