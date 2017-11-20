@@ -87,7 +87,10 @@ module.exports = (sequelize, DataTypes) => {
 
   User.hashPassword = async password => bcrypt.hash(password, 12);
 
-  User.prototype.checkPassword = async (password, user) => bcrypt.compare(password, user.password);
+  User.prototype.checkPassword = function async(password) {
+    console.log(this.password);
+    return bcrypt.compare(password, this.password);
+  };
 
   User.associate = (models) => {
     User.belongsTo(models.Country);
