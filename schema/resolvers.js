@@ -106,7 +106,15 @@ module.exports = {
     createUser: async (root, { user_data, email, password }, { models: { User } }) => {
       const new_user = Object.assign({}, user_data, { email });
       new_user.password = await User.hashPassword(password);
-      return User.create(new_user);
+      const user = await User.create(new_user);
+      return {
+        user,
+        jwt: await jwt.sign({
+          user_role: user.role,
+          user_status: user.status,
+          user_id: user.id,
+        }, JWT_SECRET),
+      };
     },
 
     updateUser: async (root, { user_data }, { jwt_object }) => {
