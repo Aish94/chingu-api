@@ -1,34 +1,29 @@
-'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('tiers', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
+  up: (queryInterface, Sequelize) => queryInterface.createTable('tiers', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: Sequelize.INTEGER,
+    },
 
-      level: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      title: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
+    level: {
+      allowNull: false,
+      type: Sequelize.INTEGER,
+    },
+    title: {
+      allowNull: false,
+      type: Sequelize.STRING,
+    },
 
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
-  },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('tiers');
-  },
+    created_at: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
+    updated_at: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
+  }),
+  down: queryInterface => queryInterface.dropTable('tiers'),
 };
