@@ -1,4 +1,19 @@
 module.exports = `
+  input UserInput {
+    email: String
+    username: String
+    first_name: String
+    last_name: String
+    github_url: String
+    linkedin_url: String
+    portfolio_url: String
+    website_url: String
+    twitter_url: String
+    blog_url: String
+    country_id: ID
+    city: ID
+  }
+
   scalar Date
 
   enum _UserStatus {
@@ -115,28 +130,13 @@ module.exports = `
   }
 
   type Query {
-    user(username: String, user_id: ID): User!
-    group(group_id: ID!): Group!
-    city(city_id: ID!): City!
-    country(country_id: ID!): Country!
-    cohort(cohort_id: ID!): Cohort!
+    user(username: String, user_id: ID): User
+    group(group_id: ID!): Group
+    city(city_id: ID!): City
+    country(country_id: ID!): Country
+    cohort(cohort_id: ID!): Cohort
     cohorts(limit: Int = 10, offset: Int = 0): [Cohort!]!
     projects(limit: Int = 10, offset: Int = 0): [Project!]!
-  }
-
-  input UserInput {
-    email: String
-    username: String
-    first_name: String
-    last_name: String
-    github_url: String
-    linkedin_url: String
-    portfolio_url: String
-    website_url: String
-    twitter_url: String
-    blog_url: String
-    country_id: ID
-    city: ID
   }
 
   type Mutation {
