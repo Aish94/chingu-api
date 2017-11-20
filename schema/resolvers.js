@@ -50,8 +50,7 @@ module.exports = {
       cohort_team.title = await cohort_team.generateTitle(team_count);
       const project = await Project.create({ title: cohort_team.title });
       cohort_team.project_id = project.id;
-      await cohort_team.save();
-      return cohort_team;
+      return cohort_team.save();
     },
 
     assignCohortUser: async (root, data, { models: { CohortUser }, jwt_object }) => {
@@ -59,11 +58,15 @@ module.exports = {
       return CohortUser.create(data);
     },
 
-    updateCohortUserStatus: async (root, data, { models: { CohortUser }, jwt_object }) => {
+    updateCohortUserStatus: async (
+      root,
+      { cohort_user_id, status },
+      { models: { CohortUser },
+      jwt_object },
+    ) => {
       adminRequired(jwt_object);
-      return CohortUser.findById(data.cohort_user_id)
-        .then(cohort_user => cohort_user.update(data.status))
-        .catch(error => console.error(error));
+      const cohort_user = await CohortUser.findById(cohort_user_id);
+      return cohort_user.update({ status });
     },
 
     assignCohortTeamUser: async (root, data, { models: { CohortTeamUser }, jwt_object }) => {
@@ -101,8 +104,7 @@ module.exports = {
     },
 
     createUser: async (root, { user_data, email, password }, { models: { User } }) => {
-      const new_user = Object.assign({}, user_data, { email }, { password });
-      console.log(new_user);
+      const new_user = Object.assign({}, user_data, { email });
       new_user.password = await User.hashPassword(password);
       return User.create(new_user);
     },
