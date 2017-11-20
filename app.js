@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
+const cors = require('cors');
 const { loadConfigFile } = require('./config/utilities');
 const { authenticate } = require('./config/auth');
 
@@ -9,6 +10,7 @@ const models = require('./models');
 const schema = require('./schema');
 
 const app = express();
+app.use(cors());
 
 const buildOptions = async (req) => {
   const jwt_object = await authenticate(req);
