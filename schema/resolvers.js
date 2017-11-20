@@ -92,8 +92,12 @@ module.exports = {
   },
 
   User: {
-    groups: root => root.getGroups(),
+    country: root => root.getCountry(),
+    city: root => root.getCity(),
+    projects: root => root.getProjects(),
     cohorts: root => root.getCohorts(),
+    cohort_teams: root => root.getCohortTeams(),
+    groups: root => root.getGroups(),
   },
 
   Country: {
