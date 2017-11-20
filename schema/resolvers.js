@@ -90,8 +90,9 @@ module.exports = {
       };
     },
 
-    createUser: async (root, { user_data, password }, { models: { User } }) => {
-      const new_user = Object.assign({}, user_data, { username: undefined });
+    createUser: async (root, { user_data, email, password }, { models: { User } }) => {
+      const new_user = Object.assign({}, user_data, { email }, { password });
+      console.log(new_user);
       new_user.password = await User.hashPassword(password);
       return User.create(new_user);
     },
