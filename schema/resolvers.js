@@ -69,9 +69,20 @@ module.exports = {
       return cohort_user.update({ status });
     },
 
-    assignCohortTeamUser: async (root, data, { models: { CohortTeamUser }, jwt_object }) => {
+    assignCohortTeamUser: async (
+      root,
+      { user_id, cohort_team_id, role },
+      { models: { CohortTeamUser, CohortTeam, ProjectUser },
+      jwt_object,
+    }) => {
       adminRequired(jwt_object);
-      return CohortTeamUser.create(data);
+      const cohort_team = await CohortTeam.findById(cohort_team_id);
+      await ProjectUser.create({
+        user_id,
+        project_id: cohort_team.project_id,
+        role: cohort_team.role === 'project_manager' ? 'project_manager' : 'collaborator',
+      });
+      return CohortTeamUser.create({ user_id, cohort_team_id, role });
     },
 
     createTier: async (root, data, { models: { Tier }, jwt_object }) => {

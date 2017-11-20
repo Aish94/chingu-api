@@ -43,6 +43,12 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE,
     },
+  }, {
+    uniqueKeys: [{
+      name: 'cohort_team_cohort-project_unique_index',
+      singleField: false,
+      fields: ['cohort_id', 'project_id'],
+    }],
   }),
   down: queryInterface => queryInterface.dropTable('cohort_teams'),
 };

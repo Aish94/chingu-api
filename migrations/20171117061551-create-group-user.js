@@ -40,6 +40,12 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE,
     },
+  }, {
+    uniqueKeys: [{
+      name: 'group_users_user-group_unique_index',
+      singleField: false,
+      fields: ['user_id', 'group_id'],
+    }],
   }),
   down: queryInterface => queryInterface.dropTable('group_users'),
 };
