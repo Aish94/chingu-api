@@ -14,10 +14,8 @@ module.exports.authenticate = async (req) => {
 };
 
 module.exports.adminRequired = (jwt_object) => {
-  // if (jwt_object.user_role === 'admin') 
-  return jwt_object;
-
-  // throw new Error('Admin privileges required.');
+  if (jwt_object.user_role === 'admin') return jwt_object;
+  throw new Error('Admin privileges required.');
 };
 
 module.exports.loginRequired = (jwt_object) => {
