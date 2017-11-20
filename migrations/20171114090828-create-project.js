@@ -20,7 +20,7 @@ module.exports = {
       type: Sequelize.STRING,
     },
     github_url: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.STRING,
     },
 
