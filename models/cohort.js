@@ -1,19 +1,20 @@
-'use strict';
+
+
 module.exports = (sequelize, DataTypes) => {
-  var Cohort = sequelize.define('Cohort', {
+  const Cohort = sequelize.define('Cohort', {
     group_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
       onDelete: 'SET NULL',
       references: {
         model: 'groups',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
 
     title: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
 
     status: {
@@ -25,24 +26,24 @@ module.exports = (sequelize, DataTypes) => {
         'tiers_assigned',
         'teams_assigned',
         'ongoing',
-        'ended'
+        'ended',
       ],
       allowNull: true,
-      defaultValue: null
+      defaultValue: null,
     },
 
     start_date: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true,
     },
 
     end_date: {
       type: DataTypes.DATE,
-      allowNull: false
-    }
+      allowNull: true,
+    },
   });
 
-  Cohort.associate = models => {
+  Cohort.associate = (models) => {
     Cohort.belongsToMany(models.Tier, { through: models.CohortTier });
     Cohort.belongsToMany(models.User, { through: models.CohortUser });
     Cohort.hasMany(models.CohortTeam, { as: 'Teams' });
