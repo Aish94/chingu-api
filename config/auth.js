@@ -9,7 +9,7 @@ module.exports.authenticate = async (req) => {
   try {
     return jwt.verify(token, config.JWT_SECRET);
   } catch (err) {
-    return {};
+    return false;
   }
 };
 
