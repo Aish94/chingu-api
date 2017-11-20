@@ -40,6 +40,12 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE,
     },
+  }, {
+    uniqueKeys: [{
+      name: 'project_users_user-project_unique_index',
+      singleField: false,
+      fields: ['user_id', 'project_id'],
+    }],
   }),
   down: queryInterface => queryInterface.dropTable('project_users'),
 };

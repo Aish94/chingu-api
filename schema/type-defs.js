@@ -73,11 +73,13 @@ module.exports = `
   }
 
   type CohortTier {
+    id: ID!
     cohort_id: ID!
     tier_id: ID!
   }
 
   type Tier {
+    id: ID!
     level: Int!
     title: String!
   }
