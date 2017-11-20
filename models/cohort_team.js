@@ -26,9 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     tier: {
-      type: DataTypes.ENUM,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      values: [1, 2, 3, 4],
     },
   });
 

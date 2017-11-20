@@ -1,7 +1,5 @@
 module.exports = `
   input UserInput {
-    email: String
-    username: String
     first_name: String
     last_name: String
     github_url: String
@@ -12,7 +10,7 @@ module.exports = `
     twitter_url: String
     blog_url: String
     country_id: ID
-    city: ID
+    city_id: ID
   }
 
   scalar Date
@@ -71,6 +69,17 @@ module.exports = `
     users: [User!]!
     teams: [CohortTeam!]!
     group: Group!
+    tiers: [Tier!]!
+  }
+
+  type CohortTier {
+    cohort_id: ID!
+    tier_id: ID!
+  }
+
+  type Tier {
+    level: Int!
+    title: String!
   }
   
   type CohortUser {
@@ -156,11 +165,15 @@ module.exports = `
     createCity(country_id: ID!, name: String!): City!
     createCohort(title: String!): Cohort!
     createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
+    assignCohortUser(cohort_id: ID!, user_id: ID!, tier: Int!): CohortUser!
+    updateCohortUserStatus(cohort_user_id: ID!, status: _CohortUserStatus): CohortUser!
     assignCohortTeamUser(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
     changeUserStatus(user_id: ID!, status: _UserStatus!): User!
+    createTier(level: Int!, title: String!): Tier!
+    linkTier(cohort_id: ID!, tier_id: ID!): CohortTier!
 
     signInUser(email: String!, password: String!): Token!
-    createUser(user_data: UserInput!, password: String!): User!
+    createUser(user_data: UserInput!, email: String!, password: String!): User!
     updateUser(user_data: UserInput!): User!
   }
 `;

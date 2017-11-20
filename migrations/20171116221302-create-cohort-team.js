@@ -31,9 +31,8 @@ module.exports = {
       allowNull: false,
     },
     tier: {
-      type: Sequelize.ENUM,
+      type: Sequelize.INTEGER,
       allowNull: false,
-      values: [1, 2, 3, 4],
     },
 
     created_at: {
