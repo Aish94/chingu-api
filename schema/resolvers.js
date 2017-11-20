@@ -113,6 +113,7 @@ module.exports = {
 
   Group: {
     users: root => root.getUsers(),
+    type: root => root.group_type,
   },
 
 // getCohortTeams() = alias => getTeams()
