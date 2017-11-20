@@ -150,6 +150,5 @@ module.exports = `
     signInUser(email: String!, password: String!): Token!
     createUser(user_data: UserInput!, password: String!): User!
     updateUser(user_data: UserInput!): User!
-    updateUserEmail(user_id: ID!, email: String!): User!
   }
 `;
