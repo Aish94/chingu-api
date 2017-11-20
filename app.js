@@ -11,9 +11,9 @@ const schema = require('./schema');
 const app = express();
 
 const buildOptions = async (req) => {
-  const user = await authenticate(req);
+  const jwt_object = await authenticate(req);
   return {
-    context: { models, user },
+    context: { models, jwt_object },
     schema,
   };
 };
