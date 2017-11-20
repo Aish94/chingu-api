@@ -47,6 +47,7 @@ module.exports = `
   }
 
   type Country {
+    id: ID!
     name: String!
     users: [User!]!
     cities: [City!]!
@@ -54,6 +55,7 @@ module.exports = `
   }
 
   type City {
+    id: ID!
     name: String!
     group: Group
     country: Country!
@@ -61,6 +63,7 @@ module.exports = `
   }
 
   type Cohort {
+    id: ID!
     title: String!
     status: _CohortStatus!
     start_date: Date
@@ -71,6 +74,7 @@ module.exports = `
   }
   
   type CohortUser {
+    id: ID!
     user: User!
     cohort: Cohort!
     status: _CohortUserStatus!
@@ -78,6 +82,7 @@ module.exports = `
   }
 
   type CohortTeam {
+    id: ID!
     title: String!
     tier: Int!
     cohort: Cohort!
@@ -86,18 +91,21 @@ module.exports = `
   }
 
   type CohortTeamUser {
+    id: ID!
     role: _CohortTeamUserRole
     user: User!
     cohort: Cohort!
   }
 
   type Group {
+    id: ID!
     title: String!
     type: String!
     users: [User!]!
   }
 
   type Project {
+    id: ID!
     title: String!
     description: String
     project_url: String
@@ -106,8 +114,9 @@ module.exports = `
   }
 
   type User {
+    id: ID!
     email: String!
-    username: String!
+    username: String
     first_name: String!
     last_name: String!
     status: _UserStatus!
