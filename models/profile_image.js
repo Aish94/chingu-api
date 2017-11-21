@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const ProfileImage = sequelize.define('ProfileImage', {
     user_id: {
       type: DataTypes.INTEGER,
+      unique: true,
       allowNull: false,
       onDelete: 'CASCADE',
       references: {

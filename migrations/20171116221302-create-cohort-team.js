@@ -45,9 +45,13 @@ module.exports = {
     },
   }, {
     uniqueKeys: [{
-      name: 'cohort_team_cohort-project_unique_index',
+      name: 'cohort_teams_cohort-project_unique_index',
       singleField: false,
       fields: ['cohort_id', 'project_id'],
+    }, {
+      name: 'cohort_teams_cohort-cohort_team_unique_index',
+      singleField: false,
+      fields: ['cohort_id', 'title'],
     }],
   }),
   down: queryInterface => queryInterface.dropTable('cohort_teams'),

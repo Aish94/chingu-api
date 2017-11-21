@@ -1,15 +1,16 @@
-const jwt = require('jsonwebtoken');
-const { loadConfigFile } = require('../config/utilities');
-const { adminRequired, loginRequired, getLoggedInUser } = require('../config/auth');
+const { checkUserPermissions, getLoggedInUser } = require('../config/auth');
 
-const { JWT_SECRET } = loadConfigFile('config');
+const requireAdmin = async (jwt_object) => {
+  const user = await getLoggedInUser(jwt_object);
+  return checkUserPermissions(user, { role: 'admin ' });
+};
 
 module.exports = {
   Query: {
     user: async (root, { username, user_id }, { models: { User }, jwt_object }) => {
       if (username) return User.findOne({ where: { username } });
       else if (user_id) return User.findById(user_id);
-      return getLoggedInUser(loginRequired(jwt_object));
+      return getLoggedInUser(jwt_object);
     },
 
     city: async (root, { city_id }, { models: { City } }) => City.findById(city_id),
@@ -27,35 +28,42 @@ module.exports = {
 
   Mutation: {
     createCountry: async (root, { name }, { models: { Country, Group }, jwt_object }) => {
-      adminRequired(jwt_object);
+      requireAdmin(jwt_object);
       const group = await Group.create({ title: `${name} Group`, group_type: 'Country' });
       return Country.create({ name, group_id: group.id });
     },
 
     createCity: async (root, { country_id, name }, { models: { City }, jwt_object }) => {
-      adminRequired(jwt_object);
+      requireAdmin(jwt_object);
       return City.create({ country_id, name });
     },
 
+    updateUserStatus: async (root, { user_id, status }, { models: { User }, jwt_object }) => {
+      requireAdmin(jwt_object);
+      const target_user = await User.findById(user_id);
+      return target_user.update({ status });
+    },
+
+    createTier: async (root, data, { models: { Tier }, jwt_object }) => {
+      requireAdmin(jwt_object);
+      return Tier.create(data);
+    },
+
     createCohort: async (root, { title }, { models: { Cohort, Group }, jwt_object }) => {
-      adminRequired(jwt_object);
+      requireAdmin(jwt_object);
       const group = await Group.create({ title: `${title} Group`, group_type: 'Cohort' });
       return Cohort.create({ title, group_id: group.id });
     },
 
-    createCohortTeam: async (root, data, { models: { CohortTeam, Project }, jwt_object }) => {
-      adminRequired(jwt_object);
-      const cohort_team = CohortTeam.build(data);
-      const team_count = await CohortTeam.count({ where: { cohort_id: data.cohort_id } });
-      cohort_team.title = await cohort_team.generateTitle(team_count);
-      const project = await Project.create({ title: cohort_team.title });
-      cohort_team.project_id = project.id;
-      return cohort_team.save();
+    updateCohort: async (root, { cohort_id, cohort_data }, { models: { Cohort }, jwt_object }) => {
+      requireAdmin(jwt_object);
+      const cohort = Cohort.findById(cohort_id);
+      return cohort.update(cohort_data);
     },
 
-    assignCohortUser: async (root, data, { models: { CohortUser }, jwt_object }) => {
-      adminRequired(jwt_object);
-      return CohortUser.create(data);
+    addTierToCohort: async (root, data, { models: { CohortTier }, jwt_object }) => {
+      requireAdmin(jwt_object);
+      return CohortTier.create(data);
     },
 
     updateCohortUserStatus: async (
@@ -64,19 +72,32 @@ module.exports = {
       { models: { CohortUser },
       jwt_object },
     ) => {
-      adminRequired(jwt_object);
+      requireAdmin(jwt_object);
       const cohort_user = await CohortUser.findById(cohort_user_id);
       return cohort_user.update({ status });
     },
 
-    assignCohortTeamUser: async (
+    createCohortTeam: async (root, data, { models: { CohortTeam, Project }, jwt_object }) => {
+      requireAdmin(jwt_object);
+      const cohort_team = CohortTeam.build(data);
+      await cohort_team.generateTitle();
+      const project = await Project.create({ title: cohort_team.title });
+      cohort_team.project_id = project.id;
+      return cohort_team.save();
+    },
+
+    addUserToCohortTeam: async (
       root,
       { user_id, cohort_team_id, role },
-      { models: { CohortTeamUser, CohortTeam, ProjectUser },
+      { models: { CohortUser, CohortTeamUser, CohortTeam, ProjectUser },
       jwt_object,
     }) => {
-      adminRequired(jwt_object);
+      requireAdmin(jwt_object);
       const cohort_team = await CohortTeam.findById(cohort_team_id);
+      const cohort_user = await CohortUser.findOne({
+        where: { user_id, cohort_id: cohort_team.cohort_id },
+      });
+      if (!cohort_user || !cohort_user.isAccepted()) throw new Error('User is not accepted in cohort.');
       await ProjectUser.create({
         user_id,
         project_id: cohort_team.project_id,
@@ -85,32 +106,12 @@ module.exports = {
       return CohortTeamUser.create({ user_id, cohort_team_id, role });
     },
 
-    createTier: async (root, data, { models: { Tier }, jwt_object }) => {
-      adminRequired(jwt_object);
-      return Tier.create(data);
-    },
-
-    linkTier: async (root, data, { models: { CohortTier }, jwt_object }) => {
-      adminRequired(jwt_object);
-      return CohortTier.create(data);
-    },
-
-    changeUserStatus: async (root, { user_id, status }, { models: { User }, jwt_object }) => {
-      adminRequired(jwt_object);
-      const target_user = await User.findById(user_id);
-      return target_user.update({ status });
-    },
-
     signInUser: async (root, { email, password }, { models: { User } }) => {
       const user = await User.findOne({ where: { email } });
       if (!user || !await user.checkPassword(password)) throw new Error('Invalid email or password.');
       return {
         user,
-        jwt: await jwt.sign({
-          user_role: user.role,
-          user_status: user.status,
-          user_id: user.id,
-        }, JWT_SECRET),
+        jwt: await user.signIn(),
       };
     },
 
@@ -120,17 +121,20 @@ module.exports = {
       const user = await User.create(new_user);
       return {
         user,
-        jwt: await jwt.sign({
-          user_role: user.role,
-          user_status: user.status,
-          user_id: user.id,
-        }, JWT_SECRET),
+        jwt: await user.signIn(),
       };
     },
 
     updateUser: async (root, { user_data }, { jwt_object }) => {
-      const user = await getLoggedInUser(loginRequired(jwt_object));
+      const user = await getLoggedInUser(jwt_object);
       return user.update(user_data);
+    },
+
+    joinCohort: async (root, { cohort_id }, { models: { Cohort, CohortUser }, jwt_object }) => {
+      const user = checkUserPermissions(getLoggedInUser(jwt_object), { status: 'profile_incomplete' });
+      const cohort = await Cohort.findById(cohort_id);
+      if (cohort.status !== 'registration_open') throw new Error('Registration is not open.');
+      return CohortUser.create({ cohort_id, user_id: user.id });
     },
   },
 

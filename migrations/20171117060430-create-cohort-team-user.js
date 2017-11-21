@@ -42,7 +42,7 @@ module.exports = {
     },
   }, {
     uniqueKeys: [{
-      name: 'cohort_team_user_user-cohort_team_unique_index',
+      name: 'cohort_team_users_user-cohort_team_unique_index',
       singleField: false,
       fields: ['user_id', 'cohort_team_id'],
     }],
