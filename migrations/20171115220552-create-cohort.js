@@ -9,6 +9,7 @@ module.exports = {
 
     group_id: {
       allowNull: false,
+      unique: true,
       type: Sequelize.INTEGER,
       onDelete: 'SET NULL',
       references: {
@@ -19,6 +20,7 @@ module.exports = {
 
     title: {
       type: Sequelize.STRING,
+      unique: true,
       allowNull: false,
     },
     status: {

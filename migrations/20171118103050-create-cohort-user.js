@@ -40,7 +40,7 @@ module.exports = {
     },
     tier: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
 
     created_at: {
@@ -53,7 +53,7 @@ module.exports = {
     },
   }, {
     uniqueKeys: [{
-      name: 'cohort_users_cohort-user_unique_index',
+      name: 'cohort_users_user-cohort_unique_index',
       singleField: false,
       fields: ['user_id', 'cohort_id'],
     }],

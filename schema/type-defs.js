@@ -1,18 +1,4 @@
 module.exports = `
-  input UserInput {
-    first_name: String
-    last_name: String
-    github_url: String
-    bio: String
-    linkedin_url: String
-    portfolio_url: String
-    website_url: String
-    twitter_url: String
-    blog_url: String
-    country_id: ID
-    city_id: ID
-  }
-
   scalar Date
 
   enum _UserStatus {
@@ -162,20 +148,47 @@ module.exports = `
     projects(limit: Int = 10, offset: Int = 0): [Project!]!
   }
 
+  input UserInput {
+    first_name: String
+    last_name: String
+    github_url: String
+    bio: String
+    linkedin_url: String
+    portfolio_url: String
+    website_url: String
+    twitter_url: String
+    blog_url: String
+    country_id: ID
+    city_id: ID
+  }
+
+  input CohortInput {
+    title: String,
+    status: _CohortStatus,
+    start_date: Date,
+    end_date: Date
+  }
+
+  input CohortUserInput {
+    status: _CohortUserStatus,
+    tier: Int!
+  }
+
   type Mutation {
     createCountry(name: String!): Country!
     createCity(country_id: ID!, name: String!): City!
-    createCohort(title: String!): Cohort!
-    createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
-    assignCohortUser(cohort_id: ID!, user_id: ID!, tier: Int!): CohortUser!
-    updateCohortUserStatus(cohort_user_id: ID!, status: _CohortUserStatus): CohortUser!
-    assignCohortTeamUser(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
-    changeUserStatus(user_id: ID!, status: _UserStatus!): User!
+    updateUserStatus(user_id: ID!, status: _UserStatus!): User!
     createTier(level: Int!, title: String!): Tier!
-    linkTier(cohort_id: ID!, tier_id: ID!): CohortTier!
+    createCohort(title: String!, cohort_data: CohortInput): Cohort!
+    updateCohort(cohort_id: ID!, cohort_data: CohortInput!): Cohort!
+    addTierToCohort(cohort_id: ID!, tier_id: ID!): CohortTier!
+    updateCohortUser(cohort_user_id: ID!, cohort_user_data: CohortUserInput!): CohortUser!
+    createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
+    addUserToCohortTeam(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
 
-    signInUser(email: String!, password: String!): Token!
     createUser(user_data: UserInput!, email: String!, password: String!): Token!
+    signInUser(email: String!, password: String!): Token!
     updateUser(user_data: UserInput!): User!
+    joinCohort(cohort_id: ID!): CohortUser!
   }
 `;

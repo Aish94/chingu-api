@@ -13,15 +13,27 @@ module.exports.authenticate = async (req) => {
   }
 };
 
-module.exports.adminRequired = (jwt_object) => {
-  if (jwt_object.user_role === 'admin') return jwt_object;
-  throw new Error('Admin privileges required.');
+module.exports.checkUserPermissions = async (user, permissions) => {
+  if (permissions.role) {
+    if (permissions.role === 'admin' && user.role !== 'admin') {
+      throw new Error('Admin privileges required.');
+    } else if (permissions.role === 'moderator' && user.role === 'member') {
+      throw new Error('Moderator privileges required.');
+    }
+  }
+
+  if (permissions.status) {
+    if (permissions.status === 'profile_complete' && user.status !== 'profile_complete') {
+      throw new Error('Profile must be complete.');
+    } else if (permissions.status === 'profile_incomplete' && user.status === 'pending_approval') {
+      throw new Error('Must be accepted into Chingu.');
+    }
+  }
+
+  return user;
 };
 
-module.exports.loginRequired = (jwt_object) => {
-  if (jwt_object.user_id) return jwt_object;
-
+module.exports.getLoggedInUser = async (jwt_object) => {
+  if (jwt_object.user_id) return User.findById(jwt_object.user_id);
   throw new Error('Login required.');
 };
-
-module.exports.getLoggedInUser = user => User.findById(user.user_id);

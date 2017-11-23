@@ -54,6 +54,10 @@ module.exports = {
       allowNull: false,
       type: Sequelize.STRING,
     },
+    bio: {
+      allowNull: true,
+      type: Sequelize.TEXT,
+    },
     status: {
       allowNull: false,
       type: Sequelize.ENUM,

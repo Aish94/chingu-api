@@ -1,4 +1,8 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { loadConfigFile } = require('../config/utilities');
+
+const { JWT_SECRET } = loadConfigFile('config');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -89,6 +93,14 @@ module.exports = (sequelize, DataTypes) => {
 
   User.prototype.checkPassword = async function checkPassword(password) {
     return bcrypt.compare(password, this.password);
+  };
+
+  User.prototype.signIn = async function signIn() {
+    return jwt.sign({
+      role: this.role,
+      status: this.status,
+      id: this.id,
+    }, JWT_SECRET);
   };
 
   User.associate = (models) => {

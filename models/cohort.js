@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const Cohort = sequelize.define('Cohort', {
     group_id: {
       allowNull: false,
+      unique: true,
       type: DataTypes.INTEGER,
       onDelete: 'SET NULL',
       references: {
@@ -12,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 
     title: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
 

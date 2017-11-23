@@ -33,9 +33,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     tier: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   });
+
+  CohortUser.prototype.isAccepted = () => {
+    if (this.status === 'pending_approval' || this.status === 'rejected') {
+      return false;
+    }
+    return true;
+  };
 
   CohortUser.associate = (models) => {
     CohortUser.belongsTo(models.User);
