@@ -111,7 +111,7 @@ module.exports = {
       if (!user || !await user.checkPassword(password)) throw new Error('Invalid email or password.');
       return {
         user,
-        jwt: await user.signIn(),
+        jwt: `Bearer ${await user.signIn()}`,
       };
     },
 
@@ -121,7 +121,7 @@ module.exports = {
       const user = await User.create(new_user);
       return {
         user,
-        jwt: await user.signIn(),
+        jwt: `Bearer ${await user.signIn()}`,
       };
     },
 

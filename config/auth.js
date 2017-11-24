@@ -4,8 +4,11 @@ const { loadConfigFile } = require('./utilities');
 
 const config = loadConfigFile('config');
 
-module.exports.authenticate = async (req) => {
-  const token = req.headers.authorization;
+module.exports.authenticate = async ({ headers: { authorization } }) => {
+  if (!authorization || !authorization.split(' ').length > 1) return false;
+
+  const token = authorization.split(' ')[1];
+
   try {
     return jwt.verify(token, config.JWT_SECRET);
   } catch (err) {
