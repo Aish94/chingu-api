@@ -66,15 +66,15 @@ module.exports = {
       return CohortTier.create(data);
     },
 
-    updateCohortUserStatus: async (
+    updateCohortUser: async (
       root,
-      { cohort_user_id, status },
+      { cohort_user_id, cohort_user_data },
       { models: { CohortUser },
       jwt_object },
     ) => {
       requireAdmin(jwt_object);
       const cohort_user = await CohortUser.findById(cohort_user_id);
-      return cohort_user.update({ status });
+      return cohort_user.update(cohort_user_data);
     },
 
     createCohortTeam: async (root, data, { models: { CohortTeam, Project }, jwt_object }) => {
