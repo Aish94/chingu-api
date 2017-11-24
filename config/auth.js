@@ -34,6 +34,6 @@ module.exports.checkUserPermissions = async (user, permissions) => {
 };
 
 module.exports.getLoggedInUser = async (jwt_object) => {
-  if (jwt_object.user_id) return User.findById(jwt_object.user_id);
+  if (jwt_object.id) return User.findById(jwt_object.id);
   throw new Error('Login required.');
 };
