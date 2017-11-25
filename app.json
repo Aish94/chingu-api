@@ -1,0 +1,23 @@
+{
+  "name": "chingu-api",
+  "scripts": {
+    "postdeploy": "config/setup"
+  },
+  "env": {
+    "JWT_SECRET": {
+      "required": true
+    },
+    "NODE_ENV": {
+      "required": true
+    }
+  },
+  "formation": {},
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+const { getConfigPath } = require('./config/utilities');
+
+module.exports = {
+  'config': getConfigPath('database')
+};
