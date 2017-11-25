@@ -22,11 +22,12 @@ module.exports = {
     },
   },
   production: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
+    url: process.env.DATABASE_URL,
+    ssl: true,
     dialect: 'postgres',
+    dialectOptions: {
+      ssl: true,
+    },
     define: {
       underscored: true,
       underscoredAll: true,
