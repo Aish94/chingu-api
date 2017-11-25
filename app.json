@@ -1,7 +1,9 @@
 {
   "name": "chingu-api",
   "scripts": {
-    "postdeploy": "config/setup"
+    "postdeploy": [
+      "sequelize db:migrate"
+    ]
   },
   "env": {
     "JWT_SECRET": {
