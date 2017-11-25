@@ -23,7 +23,11 @@ module.exports = {
   },
   production: {
     url: process.env.DATABASE_URL,
+    ssl: true,
     dialect: 'postgres',
+    dialectOptions: {
+      ssl: true,
+    },
     define: {
       underscored: true,
       underscoredAll: true,
