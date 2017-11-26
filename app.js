@@ -10,7 +10,17 @@ const models = require('./models');
 const schema = require('./schema');
 
 const app = express();
-app.use(cors());
+
+// configure CORS for accessing the prod and dev domains
+const corsOptions = {
+  origin: ['https://chingu.io', /^http:\/\/localhost(:[0-9]{0,4})?\/?$/],
+  methods: ['GET', 'PUT', 'POST'],
+  exposedHeaders: ['Access-Control-Allow-Origin'],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 const buildOptions = async (req) => {
   const jwt_object = await authenticate(req);
