@@ -1,5 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Group = sequelize.define('Group', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+
     title: {
       type: DataTypes.STRING,
       unique: true,

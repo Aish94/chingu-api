@@ -1,5 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const ProfileImage = sequelize.define('ProfileImage', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+
     user_id: {
       type: DataTypes.INTEGER,
       unique: true,
