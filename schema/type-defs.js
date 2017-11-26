@@ -54,6 +54,7 @@ module.exports = `
     end_date: Date
     users: [User!]!
     teams: [CohortTeam!]!
+    projects: [Project!]!
     group: Group!
     tiers: [Tier!]!
   }
