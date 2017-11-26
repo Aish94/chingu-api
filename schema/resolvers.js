@@ -57,7 +57,7 @@ module.exports = {
 
     updateCohort: async (root, { cohort_id, cohort_data }, { models: { Cohort }, jwt_object }) => {
       requireAdmin(jwt_object);
-      const cohort = Cohort.findById(cohort_id);
+      const cohort = await Cohort.findById(cohort_id);
       return cohort.update(cohort_data);
     },
 
@@ -131,7 +131,10 @@ module.exports = {
     },
 
     joinCohort: async (root, { cohort_id }, { models: { Cohort, CohortUser }, jwt_object }) => {
-      const user = checkUserPermissions(getLoggedInUser(jwt_object), { status: 'profile_incomplete' });
+      const user = checkUserPermissions(
+        await getLoggedInUser(jwt_object),
+        { status: 'profile_incomplete' },
+      );
       const cohort = await Cohort.findById(cohort_id);
       if (cohort.status !== 'registration_open') throw new Error('Registration is not open.');
       return CohortUser.create({ cohort_id, user_id: user.id });
@@ -169,9 +172,11 @@ module.exports = {
   },
 
   Cohort: {
+    members: root => root.getMembers(),
     users: root => root.getUsers(),
     teams: root => root.getTeams(),
     projects: root => root.getProjects(),
+    countries: root => root.getUsers().map(user => user.getCountry()),
     group: root => root.getGroups(),
     tiers: root => root.getTiers(),
   },
