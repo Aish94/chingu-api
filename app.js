@@ -15,7 +15,7 @@ const app = express();
 const corsOptions = {
   origin: [
     'https://chingu.io',
-    'https://chingu-dev-network.firebaseapp.com/',
+    'https://chingu-dev-network.firebaseapp.com',
     /^http:\/\/localhost(:[0-9]{0,4})?\/?$/,
   ],
   methods: ['GET', 'PUT', 'POST'],
