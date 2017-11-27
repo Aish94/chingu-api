@@ -13,7 +13,11 @@ const app = express();
 
 // configure CORS for accessing the prod and dev domains
 const corsOptions = {
-  origin: ['https://chingu.io', /^http:\/\/localhost(:[0-9]{0,4})?\/?$/],
+  origin: [
+    'https://chingu.io',
+    'https://chingu-dev-network.firebaseapp.com/',
+    /^http:\/\/localhost(:[0-9]{0,4})?\/?$/,
+  ],
   methods: ['GET', 'PUT', 'POST'],
   exposedHeaders: ['Access-Control-Allow-Origin'],
   credentials: true,
