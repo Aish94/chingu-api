@@ -25,6 +25,15 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+    cohort_tier_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'cohort_tiers',
+        key: 'id',
+      },
+    },
 
     status: {
       allowNull: false,
@@ -54,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
   CohortUser.associate = (models) => {
     CohortUser.belongsTo(models.User);
     CohortUser.belongsTo(models.Cohort);
+    CohortUser.belongsTo(models.CohortTier);
   };
 
   return CohortUser;

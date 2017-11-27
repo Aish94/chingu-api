@@ -16,7 +16,15 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-
+    cohort_tier_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'cohort_tiers',
+        key: 'id',
+      },
+    },
     project_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -42,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     CohortTeam.hasMany(models.CohortTeamUser, { as: 'Members' });
     CohortTeam.belongsToMany(models.User, { through: models.CohortTeamUser });
     CohortTeam.belongsTo(models.Cohort);
+    CohortTeam.belongsTo(models.CohortTier);
     CohortTeam.belongsTo(models.Project);
   };
 
