@@ -1,5 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Tier = sequelize.define('Tier', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+
     level: {
       allowNull: false,
       type: DataTypes.INTEGER,

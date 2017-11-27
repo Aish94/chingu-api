@@ -1,5 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const GroupUser = sequelize.define('GroupUser', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+
     user_id: {
       allowNull: false,
       type: DataTypes.INTEGER,

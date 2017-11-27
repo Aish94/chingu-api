@@ -1,5 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const CohortTeam = sequelize.define('CohortTeam', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+
     cohort_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

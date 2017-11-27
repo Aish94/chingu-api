@@ -6,6 +6,13 @@ const { JWT_SECRET } = loadConfigFile('config');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+
     country_id: {
       allowNull: true,
       type: DataTypes.INTEGER,

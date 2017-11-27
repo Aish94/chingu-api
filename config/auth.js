@@ -16,7 +16,7 @@ module.exports.authenticate = async ({ headers: { authorization } }) => {
   }
 };
 
-module.exports.checkUserPermissions = async (user, permissions) => {
+module.exports.checkUserPermissions = (user, permissions) => {
   if (permissions.role) {
     if (permissions.role === 'admin' && user.role !== 'admin') {
       throw new Error('Admin privileges required.');

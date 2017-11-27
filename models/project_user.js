@@ -1,5 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const ProjectUser = sequelize.define('ProjectUser', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+
     user_id: {
       allowNull: false,
       type: DataTypes.INTEGER,

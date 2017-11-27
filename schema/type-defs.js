@@ -52,8 +52,11 @@ module.exports = `
     status: _CohortStatus
     start_date: Date
     end_date: Date
+    members: [CohortUser!]!
     users: [User!]!
     teams: [CohortTeam!]!
+    projects: [Project!]!
+    countries: [Country!]!
     group: Group!
     tiers: [Tier!]!
   }
@@ -171,7 +174,7 @@ module.exports = `
 
   input CohortUserInput {
     status: _CohortUserStatus,
-    tier: Int!
+    tier: Int
   }
 
   type Mutation {
