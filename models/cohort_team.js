@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     cohort_tier_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -25,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     project_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -39,14 +41,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     tier: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+
     standup_schedule: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'Mon-Thur',
+      defaultValue: '1,4',
     },
   });
 

@@ -16,6 +16,7 @@ module.exports = {
         key: 'id',
       },
     },
+
     cohort_team_standup_id: {
       allowNull: true,
       type: Sequelize.INTEGER,
@@ -30,6 +31,7 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE,
     },
+
     updated_at: {
       allowNull: false,
       type: Sequelize.DATE,

@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     standup_schedule: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'Mon-Thur',
+      defaultValue: '1,4',
     },
   });
 

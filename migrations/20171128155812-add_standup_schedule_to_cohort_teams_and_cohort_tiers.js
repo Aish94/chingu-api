@@ -3,12 +3,12 @@ module.exports = {
     queryInterface.addColumn('cohort_teams', 'standup_schedule', {
       allowNull: false,
       type: Sequelize.STRING,
-      defaultValue: 'Mon-Thur',
+      defaultValue: '1,4',
     }),
     queryInterface.addColumn('cohort_tiers', 'standup_schedule', {
       allowNull: false,
       type: Sequelize.STRING,
-      defaultValue: 'Mon-Thur',
+      defaultValue: '1,4',
     }),
   ]),
 
