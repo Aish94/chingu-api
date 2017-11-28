@@ -8,6 +8,7 @@ const { authenticate } = require('./config/auth');
 const { AUTH_HEADER } = loadConfigFile('config');
 const models = require('./models');
 const schema = require('./schema');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -52,4 +53,11 @@ const port = process.env.PORT || 5000;
 app.listen(port, (error) => {
   if (error) console.error(`Error connecting to port ${port}\nError: ${error}`);
   else console.log(`Server is up and listening on port ${port}`);
+});
+
+// --------------------- MONGO DATABASE --------------------- //
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.mongoURL, { useMongoClient: true }, (error) => {
+  if (error) console.log(`Error connecting to database\n${error}`);
+  else console.log('Successfully connected to the database');
 });
