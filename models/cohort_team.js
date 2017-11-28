@@ -35,6 +35,11 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
+    slack_channel_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -43,11 +48,6 @@ module.exports = (sequelize, DataTypes) => {
     tier: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-
-    slack_channel_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
   });
 
