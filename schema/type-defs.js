@@ -63,8 +63,10 @@ module.exports = `
 
   type CohortTier {
     id: ID!
-    cohort_id: ID!
-    tier_id: ID!
+    cohort: Cohort!
+    tier: Tier!
+    teams: [CohortTeam!]!
+    users: [CohortUser!]!
   }
 
   type Tier {
@@ -79,6 +81,7 @@ module.exports = `
     cohort: Cohort!
     status: _CohortUserStatus!
     tier: Int!
+    standups: [CohortUserStandup!]!
   }
 
   type CohortTeam {
@@ -88,6 +91,18 @@ module.exports = `
     cohort: Cohort!
     project: Project!
     members: [CohortTeamUser!]!
+    standups: [CohortTeamStandup!]!
+  }
+
+  type CohortUserStandup {
+    id: ID!
+    team_standup: CohortTeamStandup
+    user: CohortUser!
+  }
+
+  type CohortTeamStandup {
+    id: ID!
+    user_standups: [CohortUserStandup!]!
   }
 
   type CohortTeamUser {

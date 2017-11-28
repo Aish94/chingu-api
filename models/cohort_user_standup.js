@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     cohort_team_standup_id: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.INTEGER,
       onDelete: 'CASCADE',
       references: {
