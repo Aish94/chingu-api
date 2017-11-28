@@ -9,7 +9,9 @@ const fileMetadataSchema = {
   num_stars: Number,
 };
 
+// _oid must be set to the associated cohort_user
 const metadataSchema = new Schema({
+  slack_timestamp: Number,
   messages: Number,
   thread_comments: Number,
   thread_replies: Number,
