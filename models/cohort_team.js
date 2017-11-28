@@ -44,6 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+
+    slack_channel_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 
   CohortTeam.associate = (models) => {
