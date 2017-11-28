@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     cohort_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -25,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     cohort_tier_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -47,8 +49,14 @@ module.exports = (sequelize, DataTypes) => {
       ],
       defaultValue: 'pending_approval',
     },
+
     tier: {
       type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+
+    slack_user_id: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
   });
