@@ -18,9 +18,10 @@ module.exports = {
     }),
   ]),
 
-  down: (queryInterface, Sequelize) => Promise.all([
+  down: queryInterface => Promise.all([
     queryInterface.removeColumn('cohorts', 'slack_team_token'),
     queryInterface.removeColumn('cohorts', 'slack_bot_token'),
     queryInterface.removeColumn('cohorts', 'slack_team_id'),
-    queryInterface.removeColumn('cohorts', 'autobot_id')]),
+    queryInterface.removeColumn('cohorts', 'autobot_id'),
+  ]),
 };
