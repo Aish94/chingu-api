@@ -5,7 +5,7 @@ const cors = require('cors');
 const { loadConfigFile } = require('./config/utilities');
 const { authenticate } = require('./config/auth');
 
-const { AUTH_HEADER } = loadConfigFile('config');
+const { AUTH_HEADER, MONGO_URL } = loadConfigFile('config');
 const models = require('./models');
 const schema = require('./schema');
 const mongoose = require('mongoose');
@@ -57,7 +57,8 @@ app.listen(port, (error) => {
 
 // --------------------- MONGO DATABASE --------------------- //
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.mongoURL, { useMongoClient: true }, (error) => {
+mongoose.connect(MONGO_URL, { useMongoClient: true }, (error) => {
   if (error) console.log(`Error connecting to database\n${error}`);
   else console.log('Successfully connected to the database');
 });
+
