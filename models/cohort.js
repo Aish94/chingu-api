@@ -54,12 +54,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
 
-    slack_bot_token: {
+    slack_team_id: {
       type: DataTypes.STRING,
       allowNull: true,
     },
 
-    slack_team_id: {
+    slack_autobot_token: {
       type: DataTypes.STRING,
       allowNull: true,
     },
