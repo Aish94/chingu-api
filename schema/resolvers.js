@@ -181,15 +181,33 @@ module.exports = {
     tiers: root => root.getTiers(),
   },
 
+  CohortTier: {
+    cohort: root => root.getCohort(),
+    tier: root => root.getTier(),
+    teams: root => root.getTeams(),
+    users: root => root.getUsers(),
+  },
+
   CohortUser: {
     user: root => root.getUser(),
     cohort: root => root.getCohort(),
+    standups: root => root.getStandups(),
   },
 
   CohortTeam: {
     cohort: root => root.getCohort(),
     project: root => root.getProject(),
     members: root => root.getMembers(),
+    standups: root => root.getStandups(),
+  },
+
+  CohortUserStandup: {
+    team_standup: root => root.getCohortTeamStandup(),
+    user: root => root.getCohortUser(),
+  },
+
+  CohortTeamStandup: {
+    user_standups: root => root.getUserStandups(),
   },
 
   CohortTeamUser: {

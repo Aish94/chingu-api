@@ -72,6 +72,7 @@ module.exports = (sequelize, DataTypes) => {
     CohortUser.belongsTo(models.User);
     CohortUser.belongsTo(models.Cohort);
     CohortUser.belongsTo(models.CohortTier);
+    CohortUser.hasMany(models.CohortUserStandup, { as: 'Standups' });
   };
 
   return CohortUser;

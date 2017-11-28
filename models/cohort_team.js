@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     project_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -50,10 +51,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+
+    standup_schedule: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '1,4',
+    },
   });
 
   CohortTeam.associate = (models) => {
     CohortTeam.hasMany(models.CohortTeamUser, { as: 'Members' });
+    CohortTeam.hasMany(models.CohortTeamStandup, { as: 'Standups' });
     CohortTeam.belongsToMany(models.User, { through: models.CohortTeamUser });
     CohortTeam.belongsTo(models.Cohort);
     CohortTeam.belongsTo(models.CohortTier);
