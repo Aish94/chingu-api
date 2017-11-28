@@ -25,6 +25,12 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
+    standup_schedule: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'Mon-Thur',
+    },
   });
 
   CohortTier.associate = (models) => {

@@ -39,10 +39,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
     tier: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    standup_schedule: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'Mon-Thur',
     },
   });
 
