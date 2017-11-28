@@ -5,9 +5,10 @@ const cors = require('cors');
 const { loadConfigFile } = require('./config/utilities');
 const { authenticate } = require('./config/auth');
 
-const { AUTH_HEADER } = loadConfigFile('config');
+const { AUTH_HEADER, MONGO_URL } = loadConfigFile('config');
 const models = require('./models');
 const schema = require('./schema');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -53,3 +54,11 @@ app.listen(port, (error) => {
   if (error) console.error(`Error connecting to port ${port}\nError: ${error}`);
   else console.log(`Server is up and listening on port ${port}`);
 });
+
+// --------------------- MONGO DATABASE --------------------- //
+mongoose.Promise = global.Promise;
+mongoose.connect(MONGO_URL, { useMongoClient: true }, (error) => {
+  if (error) console.log(`Error connecting to database\n${error}`);
+  else console.log('Successfully connected to the database');
+});
+
