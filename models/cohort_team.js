@@ -35,6 +35,11 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
+    slack_channel_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     title: {
       type: DataTypes.STRING,
       allowNull: false,
