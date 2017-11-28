@@ -1,23 +1,28 @@
-'use strict';
-
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
+  up: (queryInterface, Sequelize) =>
+  queryInterface.addColumn('cohorts', 'slack_team_token', {
+    type: Sequelize.STRING,
+    allowNull: true,
+  }).then(() =>
+  queryInterface.addColumn('cohorts', 'slack_bot_token', {
+    type: Sequelize.STRING,
+    allowNull: true,
+  })).then(() => 
+  queryInterface.addColumn('cohorts', 'slack_team_id', {
+    type: Sequelize.STRING,
+    allowNull: true,
+  })).then(() =>
+  queryInterface.addColumn('cohorts', 'autobot_id', {
+    type: Sequelize.STRING,
+    allowNull: true,
+  })),
 
-      Example:
-      return queryInterface.createTable('users', { id: Sequelize.INTEGER });
-    */
-  },
-
-  down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.dropTable('users');
-    */
-  }
+  down: (queryInterface, Sequelize) =>
+  queryInterface.removeColumn('cohorts', 'slack_team_token')
+  .then(() =>
+  queryInterface.removeColumn('cohorts', 'slack_bot_token'))
+  .then(() =>
+  queryInterface.removeColumn('cohorts', 'slack_team_id'))
+  .then(() =>
+  queryInterface.removeColumn('cohorts', 'autobot_id')),
 };
