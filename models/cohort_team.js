@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     cohort_tier_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
