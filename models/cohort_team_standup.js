@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 
   CohortTeamStandup.associate = (models) => {
     CohortTeamStandup.belongsTo(models.CohortTeam);
+    CohortTeamStandup.hasMany(models.CohortUserStandup, { as: 'UserStandups' });
   };
 
   return CohortTeamStandup;
