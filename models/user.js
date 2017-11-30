@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { loadConfigFile } = require('../config/utilities');
-
-const { JWT_SECRET } = loadConfigFile('config');
+const { JWT_SECRET } = ((process.env.NODE_ENV || 'development') === 'development')
+  ? require('../config/config-local')
+  : require('../config/config');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
