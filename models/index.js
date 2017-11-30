@@ -1,13 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const db_config = ((process.env.NODE_ENV || 'development') === 'development')
-  ? require('../config/database-local')
-  : require('../config/database');
+const { getConfigPath } = require('../config/utilities');
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = db_config[env];
+const config = require(getConfigPath('database'))[env];
 const db = {};
 
 let sequelize = {};

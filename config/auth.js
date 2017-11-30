@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
-const { JWT_SECRET } = ((process.env.NODE_ENV || 'development') === 'development')
-  ? require('./config-local')
-  : require('./config');
+const { getConfigPath } = require('./utilities');
+
+const { JWT_SECRET } = require(getConfigPath('config'));
 
 module.exports.authenticate = async ({ headers: { authorization } }) => {
   if (!authorization || !authorization.split(' ').length > 1) return false;

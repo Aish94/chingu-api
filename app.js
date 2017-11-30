@@ -2,11 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const cors = require('cors');
+const { getConfigPath } = require('./config/utilities');
 const { authenticate } = require('./config/auth');
-const { AUTH_HEADER, MONGO_URL } = ((process.env.NODE_ENV || 'development') === 'development')
-  ? require('./config/config-local')
-  : require('./config/config');
 
+const { AUTH_HEADER, MONGO_URL } = require(getConfigPath('config'));
 const models = require('./models');
 const schema = require('./schema');
 const mongoose = require('mongoose');
