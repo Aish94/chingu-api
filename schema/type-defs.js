@@ -67,6 +67,38 @@ module.exports = `
     tier: Tier!
     teams: [CohortTeam!]!
     users: [CohortUser!]!
+    acts: [CohortTierAct!]!
+  }
+
+  type Milestone {
+    id: ID!
+    title: String!
+    decription: String
+    resource_url: String
+    acts: [CohortTierAct!]!
+  }
+
+  type CohortTierAct {
+    id: ID!
+    cohort_tier: CohortTier!
+    title: String!
+    order_index: Int!
+    repeatable: Boolean!
+    milestones: [Milestone!]!
+  }
+
+  type CohortTierActMilestone {
+    id: ID!
+    order_index: Int!
+    act: CohortTierAct!
+    milestone: Milestone!
+    teams: [CohortTeam!]!
+  }
+
+  type CohortTeamMilestone {
+    id: ID!
+    team: CohortTeam!
+    act_milestone: CohortTierActMilestone!
   }
 
   type Tier {
@@ -92,6 +124,7 @@ module.exports = `
     project: Project!
     members: [CohortTeamUser!]!
     standups: [CohortTeamStandup!]!
+    act_milestones: [CohortTierActMilestone!]!
   }
 
   type CohortUserStandup {

@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   CohortTeamMilestone.associate = (models) => {
-    CohortTeamMilestone.belongsTo(models.CohortTierActMilestone);
+    CohortTeamMilestone.belongsTo(models.CohortTierActMilestone, { as: 'ActMilestone' });
     CohortTeamMilestone.belongsTo(models.CohortTeam);
   };
 

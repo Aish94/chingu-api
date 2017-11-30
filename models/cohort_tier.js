@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     tier_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
