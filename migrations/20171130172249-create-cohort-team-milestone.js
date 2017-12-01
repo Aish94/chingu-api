@@ -36,12 +36,6 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE,
     },
-  }, {
-    uniqueKeys: [{
-      name: 'cohort_team_milestones_cohort_team-cohort_tier_act_milestone_unique_index',
-      singleField: false,
-      fields: ['cohort_team_id', 'cohort_tier_act_milestone_id'],
-    }],
   }),
   down: queryInterface => queryInterface.dropTable('cohort_team_milestones'),
 };
