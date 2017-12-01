@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const CohortTeamMilestone = sequelize.define('CohortTeamMilestone', {
+  const CohortTeamTierActMilestone = sequelize.define('CohortTeamTierActMilestone', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
 
-    cohort_team_id: {
+    cohort_team_tier_act_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
       onDelete: 'CASCADE',
       references: {
-        model: 'cohort_teams',
+        model: 'cohort_team_tier_acts',
         key: 'id',
       },
     },
@@ -28,10 +28,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  CohortTeamMilestone.associate = (models) => {
-    CohortTeamMilestone.belongsTo(models.CohortTierActMilestone, { as: 'ActMilestone' });
-    CohortTeamMilestone.belongsTo(models.CohortTeam);
+  CohortTeamTierActMilestone.associate = (models) => {
+    CohortTeamTierActMilestone.belongsTo(models.CohortTierActMilestone, { as: 'ActMilestone' });
+    CohortTeamTierActMilestone.belongsTo(models.CohortTeamTierAct, { as: 'TeamAct' });
   };
 
-  return CohortTeamMilestone;
+  return CohortTeamTierActMilestone;
 };

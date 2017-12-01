@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('cohort_team_milestones', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('cohort_team_tier_act_milestones', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -7,12 +7,12 @@ module.exports = {
       type: Sequelize.INTEGER,
     },
 
-    cohort_team_id: {
+    cohort_team_tier_act_id: {
       allowNull: false,
       type: Sequelize.INTEGER,
       onDelete: 'CASCADE',
       references: {
-        model: 'cohort_teams',
+        model: 'cohort_team_tier_acts',
         key: 'id',
       },
     },
@@ -36,6 +36,12 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE,
     },
+  }, {
+    uniqueKeys: [{
+      name: 'cohort_team_tier_act_milestone_unique_index',
+      singleField: false,
+      fields: ['cohort_tier_act_milestone_id', 'cohort_team_tier_act_id'],
+    }],
   }),
-  down: queryInterface => queryInterface.dropTable('cohort_team_milestones'),
+  down: queryInterface => queryInterface.dropTable('cohort_team_tier_act_milestones'),
 };

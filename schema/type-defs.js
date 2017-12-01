@@ -80,11 +80,13 @@ module.exports = `
 
   type CohortTierAct {
     id: ID!
-    cohort_tier: CohortTier!
     title: String!
     order_index: Int!
     repeatable: Boolean!
-    milestones: [Milestone!]!
+    cohort_tier: CohortTier!
+    act_milestones: [CohortTierActMilestone!]!
+    teams: [CohortTeam!]!
+    team_acts: [CohortTeamTierAct!]!
   }
 
   type CohortTierActMilestone {
@@ -92,12 +94,12 @@ module.exports = `
     order_index: Int!
     act: CohortTierAct!
     milestone: Milestone!
-    teams: [CohortTeam!]!
+    team_acts: [CohortTeamTierAct!]!
   }
 
-  type CohortTeamMilestone {
+  type CohortTeamTierActMilestone {
     id: ID!
-    team: CohortTeam!
+    team_act: CohortTeamTierAct!
     act_milestone: CohortTierActMilestone!
   }
 
@@ -116,15 +118,23 @@ module.exports = `
     standups: [CohortUserStandup!]!
   }
 
+  type CohortTeamTierAct {
+    id: ID!
+    repetition: Int!
+    team: CohortTeam!
+    act: CohortTierAct!
+    completed_act_milestones: [CohortTierActMilestone!]!
+  }
+
   type CohortTeam {
     id: ID!
     title: String!
-    tier: Int!
     cohort: Cohort!
     project: Project!
+    cohort_tier: CohortTier!
     members: [CohortTeamUser!]!
     standups: [CohortTeamStandup!]!
-    act_milestones: [CohortTierActMilestone!]!
+    team_acts: [CohortTeamTierAct!]!
   }
 
   type CohortUserStandup {
