@@ -186,6 +186,29 @@ module.exports = {
     tier: root => root.getTier(),
     teams: root => root.getTeams(),
     users: root => root.getUsers(),
+    acts: root => root.getActs(),
+  },
+
+  Milestone: {
+    acts: root => root.getActs(),
+  },
+
+  CohortTierAct: {
+    cohort_tier: root => root.getCohortTier(),
+    act_milestones: root => root.getActMilestones(),
+    teams: root => root.getTeams(),
+    team_acts: root => root.getTeamActs(),
+  },
+
+  CohortTierActMilestone: {
+    act: root => root.getAct(),
+    milestone: root => root.getMilestone(),
+    team_acts: root => root.getTeamActs(),
+  },
+
+  CohortTeamTierActMilestone: {
+    team_act: root => root.getTeamAct(),
+    act_milestone: root => root.getActMilestone(),
   },
 
   CohortUser: {
@@ -194,11 +217,19 @@ module.exports = {
     standups: root => root.getStandups(),
   },
 
+  CohortTeamTierAct: {
+    team: root => root.getTeam(),
+    act: root => root.getAct(),
+    completed_act_milestones: root => root.getCompletedActMilestones(),
+  },
+
   CohortTeam: {
     cohort: root => root.getCohort(),
     project: root => root.getProject(),
+    cohort_tier: root => root.getCohortTier(),
     members: root => root.getMembers(),
     standups: root => root.getStandups(),
+    team_acts: root => root.getTeamActs(),
   },
 
   CohortUserStandup: {

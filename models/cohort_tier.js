@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     tier_id: {
       allowNull: false,
       type: DataTypes.INTEGER,
@@ -36,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
   CohortTier.associate = (models) => {
     CohortTier.belongsTo(models.Cohort);
     CohortTier.belongsTo(models.Tier);
+    CohortTier.hasMany(models.CohortTierAct, { as: 'Acts' });
     CohortTier.hasMany(models.CohortTeam, { as: 'Teams' });
     CohortTier.hasMany(models.CohortUser, { as: 'Users' });
   };
