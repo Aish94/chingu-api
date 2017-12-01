@@ -207,7 +207,6 @@ module.exports = {
   },
 
   CohortTeamTierActMilestone: {
-    team: root => root.getTeam(),
     team_act: root => root.getTeamAct(),
     act_milestone: root => root.getActMilestone(),
   },
