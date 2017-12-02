@@ -76,6 +76,7 @@ module.exports = (sequelize, DataTypes) => {
     Cohort.belongsToMany(models.Project, { through: models.CohortTeam });
     Cohort.hasMany(models.CohortUser, { as: 'Members' });
     Cohort.hasMany(models.CohortTeam, { as: 'Teams' });
+    Cohort.hasOne(models.AutoBot);
     Cohort.belongsTo(models.Group);
   };
 
