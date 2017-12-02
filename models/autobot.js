@@ -1,7 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
   const AutoBot = sequelize.define('AutoBot', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+
     cohort_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: true,
       onDelete: 'CASCADE',
       references: {

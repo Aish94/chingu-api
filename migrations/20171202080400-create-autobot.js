@@ -8,7 +8,7 @@ module.exports = {
     },
 
     cohort_id: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
       allowNull: true,
       onDelete: 'CASCADE',
       references: {
