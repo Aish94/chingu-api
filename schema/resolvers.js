@@ -19,6 +19,11 @@ module.exports = {
 
     group: async (root, { group_id }, { models: { Group } }) => Group.findById(group_id),
 
+    // TODO: handle autobot_token (grab from context)
+    autobot: async (root, { slack_team_id }, { models: { AutoBot } }) => AutoBot.findOne({
+      where: { slack_team_id },
+    }),
+
     cohort: async (root, { cohort_id }, { models: { Cohort } }) => Cohort.findById(cohort_id),
 
     cohorts: async (root, data, { models: { Cohort } }) => Cohort.findAll(data),
@@ -169,6 +174,10 @@ module.exports = {
   Group: {
     users: root => root.getUsers(),
     type: root => root.group_type,
+  },
+
+  AutoBot: {
+    cohort: root => root.getCohort(),
   },
 
   Cohort: {
