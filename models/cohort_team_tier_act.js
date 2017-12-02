@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     CohortTeamTierAct.belongsTo(models.CohortTeam, { as: 'Team' });
     CohortTeamTierAct.belongsTo(models.CohortTierAct, { as: 'Act' });
     CohortTeamTierAct.belongsToMany(models.CohortTierActMilestone, {
-      through: models.CohortTeamTierActMilestones,
+      through: models.CohortTeamTierActMilestone,
       as: 'CompletedActMilestones',
     });
   };
