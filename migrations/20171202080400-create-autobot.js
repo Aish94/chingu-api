@@ -10,6 +10,7 @@ module.exports = {
     cohort_id: {
       type: Sequelize.INTEGER,
       allowNull: true,
+      unique: true,
       onDelete: 'CASCADE',
       references: {
         model: 'cohorts',
