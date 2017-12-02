@@ -61,6 +61,14 @@ module.exports = `
     tiers: [Tier!]!
   }
 
+  type AutoBot {
+    slack_team_id: String!
+    slack_team_token: String!
+    autobot_id: String!
+    autobot_token: String!
+    cohort: Cohort!
+  }
+
   type CohortTier {
     id: ID!
     cohort: Cohort!
@@ -204,6 +212,7 @@ module.exports = `
     group(group_id: ID!): Group
     city(city_id: ID!): City
     country(country_id: ID!): Country
+    autobot(slack_team_id: String!): AutoBot
     cohort(cohort_id: ID!): Cohort
     cohorts(limit: Int = 10, offset: Int = 0): [Cohort!]!
     projects(limit: Int = 10, offset: Int = 0): [Project!]!
