@@ -64,8 +64,8 @@ module.exports = `
   type AutoBot {
     slack_team_id: String!
     slack_team_token: String!
-    autobot_id: String!
-    autobot_token: String!
+    bot_id: String!
+    bot_token: String!
     cohort: Cohort!
   }
 
