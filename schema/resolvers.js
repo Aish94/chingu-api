@@ -49,10 +49,10 @@ module.exports = {
       return autobot.update(autobot_data);
     },
 
-    registerCohortTeamUser: async (
+    registerCohortTeamCohortUser: async (
       root,
       { slack_team_id, slack_channel_id, slack_user_id, email_base, role },
-      { models: { Autobot, User, CohortTeam, CohortUser, CohortTeamUser }, is_autobot },
+      { models: { Autobot, User, CohortTeam, CohortUser, CohortTeamCohortUser }, is_autobot },
     ) => {
       requireAutobot(is_autobot);
       const autobot = await Autobot.findOne({ where: { slack_team_id } });
@@ -64,7 +64,7 @@ module.exports = {
         where: { cohort_id: autobot.cohort_id, user_id: user.id },
       });
       await cohort_user.update({ slack_user_id });
-      return CohortTeamUser.create({
+      return CohortTeamCohortUser.create({
         cohort_user_id: cohort_user.id,
         cohort_team_id: cohort_team.id,
         role,
@@ -133,7 +133,7 @@ module.exports = {
     addUserToCohortTeam: async (
       root,
       { cohort_user_id, cohort_team_id, role },
-      { models: { CohortUser, CohortTeamUser, CohortTeam, ProjectUser },
+      { models: { CohortUser, CohortTeamCohortUser, CohortTeam, ProjectUser },
       jwt_object,
     }) => {
       await requireAdmin(jwt_object);
@@ -145,7 +145,7 @@ module.exports = {
         project_id: cohort_team.project_id,
         role: cohort_team.role === 'project_manager' ? 'project_manager' : 'collaborator',
       });
-      return CohortTeamUser.create({ cohort_user_id, cohort_team_id, role });
+      return CohortTeamCohortUser.create({ cohort_user_id, cohort_team_id, role });
     },
 
     signInUser: async (root, { email, password }, { models: { User } }) => {
@@ -275,6 +275,7 @@ module.exports = {
     cohort: root => root.getCohort(),
     project: root => root.getProject(),
     cohort_tier: root => root.getCohortTier(),
+    cohort_users: root => root.getCohortUsers(),
     members: root => root.getMembers(),
     standups: root => root.getStandups(),
     team_acts: root => root.getTeamActs(),
@@ -289,7 +290,7 @@ module.exports = {
     user_standups: root => root.getUserStandups(),
   },
 
-  CohortTeamUser: {
+  CohortTeamCohortUser: {
     cohort_user: root => root.getCohortUser(),
     cohort: root => root.getCohort(),
   },

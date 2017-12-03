@@ -17,12 +17,12 @@ module.exports = `
     ended
   }
 
-  enum _CohortTeamUserRole {
+  enum _CohortTeamCohortUserRole {
     project_manager
     member
   }
 
-  enum _CohortTeamUserStatus {
+  enum _CohortTeamCohortUserStatus {
     active
     removed
     reassigned
@@ -147,7 +147,8 @@ module.exports = `
     cohort: Cohort!
     project: Project!
     cohort_tier: CohortTier!
-    members: [CohortTeamUser!]!
+    members: [CohortTeamCohortUser!]!
+    cohort_users: [CohortUser!]!
     standups: [CohortTeamStandup!]!
     team_acts: [CohortTeamTierAct!]!
   }
@@ -163,10 +164,10 @@ module.exports = `
     user_standups: [CohortUserStandup!]!
   }
 
-  type CohortTeamUser {
+  type CohortTeamCohortUser {
     id: ID!
-    role: _CohortTeamUserRole
-    status: _CohortTeamUserStatus
+    role: _CohortTeamCohortUserRole
+    status: _CohortTeamCohortUserStatus
     cohort_user: CohortUser!
     cohort: Cohort!
   }
@@ -264,13 +265,13 @@ module.exports = `
   type Mutation {
     createAutobot(autobot_data: AutobotInput!): Autobot!
     updateAutobot(slack_team_id: String!, autobot_data: AutobotInput!): Autobot!
-    registerCohortTeamUser(
+    registerCohortTeamCohortUser(
       slack_team_id: String!,
       slack_channel_id: String!,
       slack_user_id: String!,
       email_base: String!
-      role: _CohortTeamUserRole!
-    ): CohortTeamUser!
+      role: _CohortTeamCohortUserRole!
+    ): CohortTeamCohortUser!
 
     createCountry(name: String!): Country!
     createCity(country_id: ID!, name: String!): City!
@@ -284,8 +285,8 @@ module.exports = `
     addUserToCohortTeam(
       cohort_team_id: ID!,
       cohort_user_id: ID!,
-      role: _CohortTeamUserRole!
-    ): CohortTeamUser!
+      role: _CohortTeamCohortUserRole!
+    ): CohortTeamCohortUser!
 
     createUser(user_data: UserInput!, email: String!, password: String!): Token!
     signInUser(email: String!, password: String!): Token!

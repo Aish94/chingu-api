@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('cohort_team_users', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('cohort_team_cohort_users', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -51,10 +51,10 @@ module.exports = {
     },
   }, {
     uniqueKeys: [{
-      name: 'cohort_team_users_cohort_user-cohort_team_unique_index',
+      name: 'cohort_team_cohort_users_cohort_user-cohort_team_unique_index',
       singleField: false,
       fields: ['cohort_user_id', 'cohort_team_id'],
     }],
   }),
-  down: queryInterface => queryInterface.dropTable('cohort_team_users'),
+  down: queryInterface => queryInterface.dropTable('cohort_team_cohort_users'),
 };

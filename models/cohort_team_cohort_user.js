@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const CohortTeamUser = sequelize.define('CohortTeamUser', {
+  const CohortTeamCohortUser = sequelize.define('CohortTeamCohortUser', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -41,10 +41,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  CohortTeamUser.associate = (models) => {
-    CohortTeamUser.belongsTo(models.CohortTeam);
-    CohortTeamUser.belongsTo(models.CohortUser);
+  CohortTeamCohortUser.associate = (models) => {
+    CohortTeamCohortUser.belongsTo(models.CohortTeam);
+    CohortTeamCohortUser.belongsTo(models.CohortUser);
   };
 
-  return CohortTeamUser;
+  return CohortTeamCohortUser;
 };
