@@ -273,6 +273,11 @@ module.exports = `
       email_base: String!
       role: _CohortTeamCohortUserRole!
     ): CohortTeamCohortUser!
+    unregisterCohortTeamCohortUser(
+      slack_team_id: String!,
+      slack_channel_id: String!,
+      slack_user_id: String!
+    ): CohortTeamCohortUser!
     autobotCreateCohortTeam(slack_team_id: String!, title: String!, slack_channel_id: String!): CohortTeam!
 
     createCountry(name: String!): Country!
