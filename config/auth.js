@@ -4,7 +4,7 @@ const { getConfigPath } = require('./utilities');
 
 const { JWT_SECRET, AUTOBOT_CDN_API_SECRET } = require(getConfigPath('config'));
 
-const authenticateAutobot = async ({ headers: { authorization } }) => {
+const authenticateAutobot = ({ headers: { authorization } }) => {
   if (!authorization) return false;
 
   return authorization === AUTOBOT_CDN_API_SECRET;
