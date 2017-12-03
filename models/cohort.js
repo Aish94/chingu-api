@@ -48,26 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
-
-    slack_team_token: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-
-    slack_team_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-
-    slack_autobot_token: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-
-    autobot_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
   });
 
   Cohort.associate = (models) => {

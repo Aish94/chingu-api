@@ -20,11 +20,13 @@ module.exports = (sequelize, DataTypes) => {
 
     slack_team_id: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
 
     slack_team_token: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
 
