@@ -326,6 +326,6 @@ module.exports = {
 
   CohortTeamCohortUser: {
     cohort_user: root => root.getCohortUser(),
-    cohort: root => root.getCohort(),
+    cohort_team: root => root.getCohortTeam(),
   },
 };
