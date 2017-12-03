@@ -58,7 +58,7 @@ module.exports = {
       const cohort_team = await CohortTeam.findOne({
         where: { slack_channel_id, cohort_id: autobot.cohort_id },
       });
-      const user = await User.findOne({ where: { [Op.ilike]: `${email_base}%` } });
+      const user = await User.findOne({ where: { email: { [Op.iLike]: `${email_base}%` } } });
       const cohort_user = await CohortUser.findOne({
         where: { cohort_id: autobot.cohort_id, user_id: user.id },
       });
@@ -146,8 +146,7 @@ module.exports = {
     updateCohortUser: async (
       root,
       { cohort_user_id, cohort_user_data },
-      { models: { CohortUser },
-      jwt_object },
+      { models: { CohortUser }, jwt_object },
     ) => {
       await requireAdmin(jwt_object);
       const cohort_user = await CohortUser.findById(cohort_user_id);
@@ -166,9 +165,8 @@ module.exports = {
     addUserToCohortTeam: async (
       root,
       { cohort_user_id, cohort_team_id, role },
-      { models: { CohortUser, CohortTeamCohortUser, CohortTeam, ProjectUser },
-      jwt_object,
-    }) => {
+      { models: { CohortUser, CohortTeamCohortUser, CohortTeam, ProjectUser }, jwt_object },
+    ) => {
       await requireAdmin(jwt_object);
       const cohort_team = await CohortTeam.findById(cohort_team_id);
       const cohort_user = await CohortUser.findById(cohort_user_id);
