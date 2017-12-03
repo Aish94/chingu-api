@@ -1,9 +1,9 @@
-const { checkUserPermissions, getLoggedInUser } = require('../config/auth');
-
-const requireAdmin = async (jwt_object) => {
-  const user = await getLoggedInUser(jwt_object);
-  return checkUserPermissions(user, { role: 'admin ' });
-};
+const {
+  checkUserPermissions,
+  getLoggedInUser,
+  requireAutobot,
+  requireAdmin,
+} = require('../config/auth');
 
 module.exports = {
   Query: {
@@ -19,10 +19,10 @@ module.exports = {
 
     group: async (root, { group_id }, { models: { Group } }) => Group.findById(group_id),
 
-    // TODO: handle autobot_token (grab from context)
-    autobot: async (root, { slack_team_id }, { models: { AutoBot } }) => AutoBot.findOne({
-      where: { slack_team_id },
-    }),
+    autobot: async (root, { slack_team_id }, { models: { Autobot }, autobot }) => {
+      requireAutobot(autobot);
+      Autobot.findOne({ where: { slack_team_id } });
+    },
 
     cohort: async (root, { cohort_id }, { models: { Cohort } }) => Cohort.findById(cohort_id),
 

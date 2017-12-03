@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const AutoBot = sequelize.define('AutoBot', {
+  const Autobot = sequelize.define('Autobot', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -41,9 +41,9 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  AutoBot.associate = (models) => {
-    AutoBot.belongsTo(models.Cohort);
+  Autobot.associate = (models) => {
+    Autobot.belongsTo(models.Cohort);
   };
 
-  return AutoBot;
+  return Autobot;
 };
