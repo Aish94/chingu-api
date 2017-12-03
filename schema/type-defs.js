@@ -170,7 +170,7 @@ module.exports = `
     role: _CohortTeamCohortUserRole
     status: _CohortTeamCohortUserStatus
     cohort_user: CohortUser!
-    cohort: Cohort!
+    cohort_team: CohortTeam!
   }
 
   type Group {
