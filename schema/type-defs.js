@@ -17,12 +17,12 @@ module.exports = `
     ended
   }
 
-  enum _CohortTeamUserRole {
+  enum _CohortTeamCohortUserRole {
     project_manager
     member
   }
 
-  enum _CohortTeamUserStatus {
+  enum _CohortTeamCohortUserStatus {
     active
     removed
     reassigned
@@ -128,7 +128,8 @@ module.exports = `
     user: User!
     cohort: Cohort!
     status: _CohortUserStatus!
-    tier: Int!
+    tier: Tier!
+    team: CohortTeam
     standups: [CohortUserStandup!]!
   }
 
@@ -146,8 +147,9 @@ module.exports = `
     slack_channel_id: String!
     cohort: Cohort!
     project: Project!
-    cohort_tier: CohortTier!
-    members: [CohortTeamUser!]!
+    tier: Tier!
+    members: [CohortTeamCohortUser!]!
+    cohort_users: [CohortUser!]!
     standups: [CohortTeamStandup!]!
     team_acts: [CohortTeamTierAct!]!
   }
@@ -163,12 +165,12 @@ module.exports = `
     user_standups: [CohortUserStandup!]!
   }
 
-  type CohortTeamUser {
+  type CohortTeamCohortUser {
     id: ID!
-    role: _CohortTeamUserRole
-    status: _CohortTeamUserStatus
-    user: User!
-    cohort: Cohort!
+    role: _CohortTeamCohortUserRole
+    status: _CohortTeamCohortUserStatus
+    cohort_user: CohortUser!
+    cohort_team: CohortTeam!
   }
 
   type Group {
@@ -206,7 +208,8 @@ module.exports = `
     profile_image: String
     projects: [Project!]!
     cohorts: [Cohort!]!
-    cohort_teams: [CohortTeam!]!
+    cohort_users: [CohortUser!]!
+    teams: [CohortTeam!]!
     groups: [Group!]!
   }
 
@@ -263,6 +266,13 @@ module.exports = `
   type Mutation {
     createAutobot(autobot_data: AutobotInput!): Autobot!
     updateAutobot(slack_team_id: String!, autobot_data: AutobotInput!): Autobot!
+    registerCohortTeamCohortUser(
+      slack_team_id: String!,
+      slack_channel_id: String!,
+      slack_user_id: String!,
+      email_base: String!
+      role: _CohortTeamCohortUserRole!
+    ): CohortTeamCohortUser!
     autobotCreateCohortTeam(slack_team_id: String!, title: String!, slack_channel_id: String!): CohortTeam!
 
     createCountry(name: String!): Country!
@@ -273,8 +283,12 @@ module.exports = `
     updateCohort(cohort_id: ID!, cohort_data: CohortInput!): Cohort!
     addTierToCohort(cohort_id: ID!, tier_id: ID!): CohortTier!
     updateCohortUser(cohort_user_id: ID!, cohort_user_data: CohortUserInput!): CohortUser!
-    createCohortTeam(cohort_id: ID!, cohort_tier_id: Int!): CohortTeam!
-    addUserToCohortTeam(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
+    createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
+    addUserToCohortTeam(
+      cohort_team_id: ID!,
+      cohort_user_id: ID!,
+      role: _CohortTeamCohortUserRole!
+    ): CohortTeamCohortUser!
 
     createUser(user_data: UserInput!, email: String!, password: String!): Token!
     signInUser(email: String!, password: String!): Token!

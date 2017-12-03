@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const CohortTeamUser = sequelize.define('CohortTeamUser', {
+  const CohortTeamCohortUser = sequelize.define('CohortTeamCohortUser', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -17,20 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
-    user_id: {
+    cohort_user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       onDelete: 'CASCADE',
       references: {
-        model: 'users',
+        model: 'cohort_users',
         key: 'id',
       },
-    },
-
-    role: {
-      type: DataTypes.ENUM,
-      allowNull: false,
-      values: ['project_manager', 'member'],
     },
 
     status: {
@@ -39,12 +33,18 @@ module.exports = (sequelize, DataTypes) => {
       values: ['active', 'removed', 'reassigned'],
       defaultValue: 'active',
     },
+
+    role: {
+      type: DataTypes.ENUM,
+      allowNull: false,
+      values: ['project_manager', 'member'],
+    },
   });
 
-  CohortTeamUser.associate = (models) => {
-    CohortTeamUser.belongsTo(models.CohortTeam);
-    CohortTeamUser.belongsTo(models.User);
+  CohortTeamCohortUser.associate = (models) => {
+    CohortTeamCohortUser.belongsTo(models.CohortTeam);
+    CohortTeamCohortUser.belongsTo(models.CohortUser);
   };
 
-  return CohortTeamUser;
+  return CohortTeamCohortUser;
 };
