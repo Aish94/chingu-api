@@ -149,7 +149,7 @@ module.exports = {
           return User.create(user);
         }),
       );
-      const tiers = cohort.getTiers();
+      const tiers = await cohort.getTiers();
       return Promise.all(
         users.map((user) => {
           const user_tier = tiers.find(tier => tier.title === user.tier);
