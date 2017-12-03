@@ -2,9 +2,22 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { getConfigPath } = require('./utilities');
 
-const { JWT_SECRET } = require(getConfigPath('config'));
+const { JWT_SECRET, AUTOBOT_CDN_API_SECRET } = require(getConfigPath('config'));
 
-module.exports.authenticate = async ({ headers: { authorization } }) => {
+const authenticateAutobot = ({ headers: { authorization } }) => {
+  if (!authorization) return false;
+
+  return authorization === AUTOBOT_CDN_API_SECRET;
+};
+
+const requireAutobot = (autobot) => {
+  if (!autobot) {
+    throw new Error('Autobot privileges required.');
+  }
+};
+
+
+const authenticate = ({ headers: { authorization } }) => {
   if (!authorization || !authorization.split(' ').length > 1) return false;
 
   const token = authorization.split(' ')[1];
@@ -16,7 +29,12 @@ module.exports.authenticate = async ({ headers: { authorization } }) => {
   }
 };
 
-module.exports.checkUserPermissions = (user, permissions) => {
+const getLoggedInUser = (jwt_object) => {
+  if (jwt_object.id) return User.findById(jwt_object.id);
+  throw new Error('Login required.');
+};
+
+const checkUserPermissions = (user, permissions) => {
   if (permissions.role) {
     if (permissions.role === 'admin' && user.role !== 'admin') {
       throw new Error('Admin privileges required.');
@@ -36,7 +54,16 @@ module.exports.checkUserPermissions = (user, permissions) => {
   return user;
 };
 
-module.exports.getLoggedInUser = async (jwt_object) => {
-  if (jwt_object.id) return User.findById(jwt_object.id);
-  throw new Error('Login required.');
+const requireAdmin = async (jwt_object) => {
+  const user = await getLoggedInUser(jwt_object);
+  return checkUserPermissions(user, { role: 'admin ' });
+};
+
+module.exports = {
+  authenticateAutobot,
+  requireAutobot,
+  authenticate,
+  getLoggedInUser,
+  checkUserPermissions,
+  requireAdmin,
 };
