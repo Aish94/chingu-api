@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const fileMetadataSchema = {
-  type: String,
+  file_type: String,
   lines: Number,
   reactions: Number,
   comments_count: Number,
