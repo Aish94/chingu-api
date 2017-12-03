@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const {
   checkUserPermissions,
   getLoggedInUser,
@@ -46,6 +47,28 @@ module.exports = {
       requireAutobot(is_autobot);
       const autobot = Autobot.findOne({ where: { slack_team_id } });
       return autobot.update(autobot_data);
+    },
+
+    registerCohortTeamUser: async (
+      root,
+      { slack_team_id, slack_channel_id, slack_user_id, email_base, role },
+      { models: { Autobot, User, CohortTeam, CohortUser, CohortTeamUser }, is_autobot },
+    ) => {
+      requireAutobot(is_autobot);
+      const autobot = await Autobot.findOne({ where: { slack_team_id } });
+      const cohort_team = await CohortTeam.findOne({
+        where: { slack_channel_id, cohort_id: autobot.cohort_id },
+      });
+      const user = await User.findOne({ where: { [Op.ilike]: `${email_base}%` } });
+      const cohort_user = await CohortUser.findOne({
+        where: { cohort_id: autobot.cohort_id, user_id: user.id },
+      });
+      await cohort_user.update({ slack_user_id });
+      return CohortTeamUser.create({
+        cohort_user_id: cohort_user.id,
+        cohort_team_id: cohort_team.id,
+        role,
+      });
     },
 
     createCountry: async (root, { name }, { models: { Country, Group }, jwt_object }) => {
@@ -109,22 +132,20 @@ module.exports = {
 
     addUserToCohortTeam: async (
       root,
-      { user_id, cohort_team_id, role },
+      { cohort_user_id, cohort_team_id, role },
       { models: { CohortUser, CohortTeamUser, CohortTeam, ProjectUser },
       jwt_object,
     }) => {
       await requireAdmin(jwt_object);
       const cohort_team = await CohortTeam.findById(cohort_team_id);
-      const cohort_user = await CohortUser.findOne({
-        where: { user_id, cohort_id: cohort_team.cohort_id },
-      });
+      const cohort_user = await CohortUser.findById(cohort_user_id);
       if (!cohort_user || !cohort_user.isAccepted()) throw new Error('User is not accepted in cohort.');
       await ProjectUser.create({
-        user_id,
+        user_id: cohort_user.user_id,
         project_id: cohort_team.project_id,
         role: cohort_team.role === 'project_manager' ? 'project_manager' : 'collaborator',
       });
-      return CohortTeamUser.create({ user_id, cohort_team_id, role });
+      return CohortTeamUser.create({ cohort_user_id, cohort_team_id, role });
     },
 
     signInUser: async (root, { email, password }, { models: { User } }) => {
@@ -167,7 +188,8 @@ module.exports = {
     city: root => root.getCity(),
     projects: root => root.getProjects(),
     cohorts: root => root.getCohorts(),
-    cohort_teams: root => root.getCohortTeams(),
+    cohort_users: root => root.getCohortUsers(),
+    teams: root => root.getCohortUsers().map(cohort_user => cohort_user.getTeam()),
     groups: root => root.getGroups(),
   },
 
@@ -240,6 +262,7 @@ module.exports = {
     user: root => root.getUser(),
     cohort: root => root.getCohort(),
     standups: root => root.getStandups(),
+    team: root => root.getTeam(),
   },
 
   CohortTeamTierAct: {
@@ -267,7 +290,7 @@ module.exports = {
   },
 
   CohortTeamUser: {
-    user: root => root.getUser(),
+    cohort_user: root => root.getCohortUser(),
     cohort: root => root.getCohort(),
   },
 };

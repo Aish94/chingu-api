@@ -129,6 +129,7 @@ module.exports = `
     cohort: Cohort!
     status: _CohortUserStatus!
     tier: Int!
+    team: CohortTeam
     standups: [CohortUserStandup!]!
   }
 
@@ -166,7 +167,7 @@ module.exports = `
     id: ID!
     role: _CohortTeamUserRole
     status: _CohortTeamUserStatus
-    user: User!
+    cohort_user: CohortUser!
     cohort: Cohort!
   }
 
@@ -205,7 +206,8 @@ module.exports = `
     profile_image: String
     projects: [Project!]!
     cohorts: [Cohort!]!
-    cohort_teams: [CohortTeam!]!
+    cohort_users: [CohortUser!]!
+    teams: [CohortTeam!]!
     groups: [Group!]!
   }
 
@@ -262,6 +264,13 @@ module.exports = `
   type Mutation {
     createAutobot(autobot_data: AutobotInput!): Autobot!
     updateAutobot(slack_team_id: String!, autobot_data: AutobotInput!): Autobot!
+    registerCohortTeamUser(
+      slack_team_id: String!,
+      slack_channel_id: String!,
+      slack_user_id: String!,
+      email_base: String!
+      role: _CohortTeamUserRole!
+    ): CohortTeamUser!
 
     createCountry(name: String!): Country!
     createCity(country_id: ID!, name: String!): City!
@@ -272,7 +281,11 @@ module.exports = `
     addTierToCohort(cohort_id: ID!, tier_id: ID!): CohortTier!
     updateCohortUser(cohort_user_id: ID!, cohort_user_data: CohortUserInput!): CohortUser!
     createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
-    addUserToCohortTeam(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
+    addUserToCohortTeam(
+      cohort_team_id: ID!,
+      cohort_user_id: ID!,
+      role: _CohortTeamUserRole!
+    ): CohortTeamUser!
 
     createUser(user_data: UserInput!, email: String!, password: String!): Token!
     signInUser(email: String!, password: String!): Token!
