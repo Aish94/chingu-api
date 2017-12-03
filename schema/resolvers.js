@@ -37,7 +37,12 @@ module.exports = {
       return Autobot.create(autobot_data);
     },
 
-    updateAutobot: async (root, { slack_team_id, autobot_data }, { models: { Autobot }, is_autobot }) => {
+    updateAutobot: async (
+      root,
+      { slack_team_id, autobot_data },
+      { models: { Autobot },
+      is_autobot },
+    ) => {
       requireAutobot(is_autobot);
       const autobot = Autobot.findOne({ where: { slack_team_id } });
       return autobot.update(autobot_data);
