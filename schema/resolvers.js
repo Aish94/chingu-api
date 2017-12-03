@@ -20,7 +20,7 @@ module.exports = {
     group: async (root, { group_id }, { models: { Group } }) => Group.findById(group_id),
 
     autobot: async (root, { slack_team_id }, { models: { Autobot }, is_autobot }) => {
-      await requireAutobot(is_autobot);
+      requireAutobot(is_autobot);
       return Autobot.findOne({ where: { slack_team_id } });
     },
 
@@ -33,12 +33,12 @@ module.exports = {
 
   Mutation: {
     createAutobot: async (root, { autobot_data }, { models: { Autobot }, is_autobot }) => {
-      await requireAutobot(is_autobot);
+      requireAutobot(is_autobot);
       return Autobot.create(autobot_data);
     },
 
     updateAutobot: async (root, { slack_team_id, autobot_data }, { models: { Autobot }, is_autobot }) => {
-      await requireAutobot(is_autobot);
+      requireAutobot(is_autobot);
       const autobot = Autobot.findOne({ where: { slack_team_id } });
       return autobot.update(autobot_data);
     },
