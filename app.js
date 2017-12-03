@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const cors = require('cors');
 const { getConfigPath } = require('./config/utilities');
-const { authenticate } = require('./config/auth');
+const { authenticate, authenticateAutobot } = require('./config/auth');
 
 const { AUTH_HEADER, MONGO_URL } = require(getConfigPath('config'));
 const models = require('./models');
@@ -29,8 +29,9 @@ app.use(cors(corsOptions));
 
 const buildOptions = async (req) => {
   const jwt_object = await authenticate(req);
+  const is_autobot = authenticateAutobot(req);
   return {
-    context: { models, jwt_object },
+    context: { models, jwt_object, is_autobot },
     schema,
   };
 };
