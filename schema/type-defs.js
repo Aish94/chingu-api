@@ -219,11 +219,14 @@ module.exports = `
   }
 
   type Query {
+    autobot(slack_team_id: String!): Autobot
+    getCohortTeam(slack_team_id: String!, slack_channel_id: String!): CohortTeam!
+    getCohortTeams(slack_team_id: String!): [CohortTeam!]!
+
     user(username: String, user_id: ID): User
     group(group_id: ID!): Group
     city(city_id: ID!): City
     country(country_id: ID!): Country
-    autobot(slack_team_id: String!): Autobot
     cohort(cohort_id: ID!): Cohort
     cohorts(limit: Int = 10, offset: Int = 0): [Cohort!]!
     projects(limit: Int = 10, offset: Int = 0): [Project!]!
@@ -265,7 +268,12 @@ module.exports = `
 
   type Mutation {
     createAutobot(autobot_data: AutobotInput!): Autobot!
-    updateAutobot(slack_team_id: String!, autobot_data: AutobotInput!): Autobot!
+    updateAutobot(
+      slack_team_id: String!,
+      autobot_data: AutobotInput!,
+      user_id: Int,
+      slack_user_id: String
+    ): Autobot!
     registerCohortTeamCohortUser(
       slack_team_id: String!,
       slack_channel_id: String!,

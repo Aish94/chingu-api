@@ -40,12 +40,19 @@ module.exports = {
 
     updateAutobot: async (
       root,
-      { slack_team_id, autobot_data },
-      { models: { Autobot }, is_autobot },
+      { slack_team_id, user_id, slack_user_id, autobot_data },
+      { models: { Autobot, CohortUser }, is_autobot },
     ) => {
       requireAutobot(is_autobot);
       const autobot = await Autobot.findOne({ where: { slack_team_id } });
-      return autobot.update(autobot_data);
+      await autobot.update(autobot_data);
+      if (user_id) {
+        const cohort_user = await CohortUser.findOne({
+          where: { cohort_id: autobot.cohort_id, user_id },
+        });
+        await cohort_user.update({ slack_user_id });
+      }
+      return autobot;
     },
 
     registerCohortTeamCohortUser: async (
