@@ -32,6 +32,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       values: ['project_manager', 'member'],
     },
+
+    status: {
+      allowNull: false,
+      type: DataTypes.ENUM,
+      values: ['active', 'removed', 'reassigned'],
+      defaultValue: 'active',
+    },
   });
 
   CohortTeamUser.associate = (models) => {

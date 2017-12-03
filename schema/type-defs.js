@@ -22,6 +22,12 @@ module.exports = `
     member
   }
 
+  enum _CohortTeamUserStatus {
+    active
+    removed
+    reassigned
+  }
+
   enum _CohortUserStatus {
     pending_approval
     rejected
@@ -159,6 +165,7 @@ module.exports = `
   type CohortTeamUser {
     id: ID!
     role: _CohortTeamUserRole
+    status: _CohortTeamUserStatus
     user: User!
     cohort: Cohort!
   }
