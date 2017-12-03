@@ -19,9 +19,9 @@ module.exports = {
 
     group: async (root, { group_id }, { models: { Group } }) => Group.findById(group_id),
 
-    autobot: async (root, { slack_team_id }, { models: { Autobot }, autobot }) => {
-      requireAutobot(autobot);
-      Autobot.findOne({ where: { slack_team_id } });
+    autobot: async (root, { slack_team_id }, { models: { Autobot }, is_autobot }) => {
+      requireAutobot(is_autobot);
+      return Autobot.findOne({ where: { slack_team_id } });
     },
 
     cohort: async (root, { cohort_id }, { models: { Cohort } }) => Cohort.findById(cohort_id),
@@ -32,6 +32,17 @@ module.exports = {
   },
 
   Mutation: {
+    createAutobot: async (root, { autobot_data }, { models: { Autobot }, is_autobot }) => {
+      requireAutobot(is_autobot);
+      return Autobot.create(autobot_data);
+    },
+
+    updateAutobot: async (root, { slack_team_id, autobot_data }, { models: { Autobot }, is_autobot }) => {
+      requireAutobot(is_autobot);
+      const autobot = Autobot.findOne({ where: { slack_team_id } });
+      return autobot.update(autobot_data);
+    },
+
     createCountry: async (root, { name }, { models: { Country, Group }, jwt_object }) => {
       requireAdmin(jwt_object);
       const group = await Group.create({ title: `${name} Group`, group_type: 'Country' });
@@ -176,7 +187,7 @@ module.exports = {
     type: root => root.group_type,
   },
 
-  AutoBot: {
+  Autobot: {
     cohort: root => root.getCohort(),
   },
 

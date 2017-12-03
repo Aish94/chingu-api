@@ -61,7 +61,7 @@ module.exports = `
     tiers: [Tier!]!
   }
 
-  type AutoBot {
+  type Autobot {
     slack_team_id: String!
     slack_team_token: String!
     bot_id: String!
@@ -212,10 +212,18 @@ module.exports = `
     group(group_id: ID!): Group
     city(city_id: ID!): City
     country(country_id: ID!): Country
-    autobot(slack_team_id: String!): AutoBot
+    autobot(slack_team_id: String!): Autobot
     cohort(cohort_id: ID!): Cohort
     cohorts(limit: Int = 10, offset: Int = 0): [Cohort!]!
     projects(limit: Int = 10, offset: Int = 0): [Project!]!
+  }
+
+  input AutobotInput {
+    slack_team_id: String
+    slack_team_token: String
+    bot_id: String
+    bot_token: String
+    cohort_id: Int
   }
 
   input UserInput {
@@ -245,6 +253,9 @@ module.exports = `
   }
 
   type Mutation {
+    createAutobot(autobot_data: AutobotInput!): Autobot!
+    updateAutobot(slack_team_id: String!, autobot_data: AutobotInput!): Autobot!
+
     createCountry(name: String!): Country!
     createCity(country_id: ID!, name: String!): City!
     updateUserStatus(user_id: ID!, status: _UserStatus!): User!
