@@ -47,11 +47,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
 
-    tier: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
     standup_schedule: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -71,9 +66,9 @@ module.exports = (sequelize, DataTypes) => {
 
   CohortTeam.prototype.generateTitle = async function generateTitle() {
     const team_count = await CohortTeam.count({ where: { cohort_id: this.cohort_id } });
-    const cohort = await this.getCohort();
-    const tier_title = (await cohort.getTiers({ where: { level: this.tier } }))[0].title;
-    this.title = `${tier_title}-team-${team_count}`;
+    const cohort_tier = await this.getCohortTier();
+    const tier = await cohort_tier.getTier();
+    this.title = `${tier.title}-team-${team_count}`;
   };
 
   return CohortTeam;
