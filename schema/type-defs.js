@@ -144,6 +144,7 @@ module.exports = `
   type CohortTeam {
     id: ID!
     title: String!
+    slack_channel_id: String!
     cohort: Cohort!
     project: Project!
     tier: Tier!
@@ -272,6 +273,7 @@ module.exports = `
       email_base: String!
       role: _CohortTeamCohortUserRole!
     ): CohortTeamCohortUser!
+    autobotCreateCohortTeam(slack_team_id: String!, title: String!, slack_channel_id: String!): CohortTeam!
 
     createCountry(name: String!): Country!
     createCity(country_id: ID!, name: String!): City!

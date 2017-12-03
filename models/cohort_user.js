@@ -54,11 +54,6 @@ module.exports = (sequelize, DataTypes) => {
       ],
       defaultValue: 'pending_approval',
     },
-
-    tier: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
   });
 
   CohortUser.prototype.isAccepted = () => {
