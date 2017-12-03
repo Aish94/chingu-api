@@ -308,7 +308,7 @@ module.exports = {
   CohortTeam: {
     cohort: root => root.getCohort(),
     project: root => root.getProject(),
-    tier: root.getCohortTier().then(cohort_tier => cohort_tier.getTier()),
+    tier: root => root.getCohortTier().then(cohort_tier => cohort_tier.getTier()),
     cohort_users: root => root.getCohortUsers(),
     members: root => root.getMembers(),
     standups: root => root.getStandups(),
