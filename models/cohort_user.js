@@ -80,6 +80,7 @@ module.exports = (sequelize, DataTypes) => {
       through: models.CohortTeamCohortUser,
       as: 'Teams',
     });
+    CohortUser.hasMany(models.CohortTeamCohortUser, { as: 'TeamAssociations' });
     CohortUser.hasMany(models.CohortUserStandup, { as: 'Standups' });
   };
 

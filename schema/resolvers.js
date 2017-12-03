@@ -59,15 +59,45 @@ module.exports = {
         where: { slack_channel_id, cohort_id: autobot.cohort_id },
       });
       const user = await User.findOne({ where: { email: { [Op.iLike]: `${email_base}%` } } });
+      if (!user) {
+        throw new Error(`User with email base '${email_base}' was not found.`);
+      }
       const cohort_user = await CohortUser.findOne({
         where: { cohort_id: autobot.cohort_id, user_id: user.id },
       });
-      await cohort_user.update({ slack_user_id });
+      const cohort_team_associations = await cohort_user.getTeamAssociations();
+      if (cohort_team_associations.find(association => association.status === 'active')) {
+        throw new Error('User is already registered in a team.');
+      }
+      await Promise.all(cohort_team_associations.map(
+        association => association.update({ status: 'reassigned' }),
+      ));
+      await cohort_user.update({ slack_user_id, status: 'team_assigned' });
       return CohortTeamCohortUser.create({
         cohort_user_id: cohort_user.id,
         cohort_team_id: cohort_team.id,
         role,
       });
+    },
+
+    unregisterCohortTeamCohortUser: async (
+      root,
+      { slack_team_id, slack_channel_id, slack_user_id },
+      { models: { Autobot, CohortTeam, CohortUser, CohortTeamCohortUser }, is_autobot },
+    ) => {
+      requireAutobot(is_autobot);
+      const autobot = await Autobot.findOne({ where: { slack_team_id } });
+      const cohort_team = await CohortTeam.findOne({
+        where: { slack_channel_id, cohort_id: autobot.cohort_id },
+      });
+      const cohort_user = await CohortUser.findOne({
+        where: { cohort_id: autobot.cohort_id, slack_user_id },
+      });
+      await cohort_user.update({ status: 'tier_assigned' });
+      const cohort_team_chort_user = await CohortTeamCohortUser.findOne({
+        where: { cohort_user_id: cohort_user.id, cohort_team_id: cohort_team.id },
+      });
+      return cohort_team_chort_user.update({ status: 'removed' });
     },
 
     autobotCreateCohortTeam: async (
