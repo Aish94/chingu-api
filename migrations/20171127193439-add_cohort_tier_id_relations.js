@@ -11,7 +11,7 @@ module.exports = {
     }),
     queryInterface.addColumn('cohort_users', 'cohort_tier_id', {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
       onDelete: 'CASCADE',
       references: {
         model: 'cohort_tiers',

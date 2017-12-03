@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
 
     cohort_tier_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       onDelete: 'CASCADE',
       references: {
         model: 'cohort_tiers',

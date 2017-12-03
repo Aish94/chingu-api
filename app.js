@@ -45,7 +45,7 @@ app.use(
 app.use(
   '/graphiql',
   graphiqlExpress({
-    endpointURL: '/graphql',
+    endpointURL: 'https://chingu-api-dev.herokuapp.com/graphql',
     passHeader: AUTH_HEADER,
   }),
 );
