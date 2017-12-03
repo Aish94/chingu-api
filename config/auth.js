@@ -10,14 +10,14 @@ const authenticateAutobot = async ({ headers: { authorization } }) => {
   return authorization === AUTOBOT_CDN_API_SECRET;
 };
 
-const requireAutobot = async (autobot) => {
+const requireAutobot = (autobot) => {
   if (!autobot) {
     throw new Error('Autobot privileges required.');
   }
 };
 
 
-const authenticate = async ({ headers: { authorization } }) => {
+const authenticate = ({ headers: { authorization } }) => {
   if (!authorization || !authorization.split(' ').length > 1) return false;
 
   const token = authorization.split(' ')[1];
@@ -29,7 +29,7 @@ const authenticate = async ({ headers: { authorization } }) => {
   }
 };
 
-const getLoggedInUser = async (jwt_object) => {
+const getLoggedInUser = (jwt_object) => {
   if (jwt_object.id) return User.findById(jwt_object.id);
   throw new Error('Login required.');
 };

@@ -29,7 +29,7 @@ app.use(cors(corsOptions));
 
 const buildOptions = async (req) => {
   const jwt_object = await authenticate(req);
-  const is_autobot = await authenticateAutobot(req);
+  const is_autobot = authenticateAutobot(req);
   return {
     context: { models, jwt_object, is_autobot },
     schema,
