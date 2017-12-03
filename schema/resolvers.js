@@ -134,6 +134,36 @@ module.exports = {
       return cohort_team.save();
     },
 
+    autoAddUsersToCohort: async (
+      root,
+      { cohort_id, user_data },
+      { models: { Cohort, User, CohortUser }, jwt_object },
+    ) => {
+      requireAdmin(jwt_object);
+      const cohort = await Cohort.findById(cohort_id);
+      const new_users = JSON.parse(user_data);
+      const users = await Promise.all(
+        new_users.map(async (new_user) => {
+          const user = { ...new_user, status: 'profile_complete' };
+          user.password = await User.hashPassword('baka');
+          return User.create(user);
+        }),
+      );
+      const tiers = cohort.getTiers();
+      return Promise.all(
+        users.map((user) => {
+          const user_tier = tiers.find(tier => tier.title === user.tier);
+
+          return CohortUser.create({
+            cohort_id: cohort.id,
+            user_id: user.id,
+            cohort_tier_id: user_tier.id,
+            status: 'tier_assigned',
+          });
+        }),
+      );
+    },
+
     createCountry: async (root, { name }, { models: { Country, Group }, jwt_object }) => {
       await requireAdmin(jwt_object);
       const group = await Group.create({ title: `${name} Group`, group_type: 'Country' });

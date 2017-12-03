@@ -280,6 +280,7 @@ module.exports = `
     ): CohortTeamCohortUser!
     autobotCreateCohortTeam(slack_team_id: String!, title: String!, slack_channel_id: String!): CohortTeam!
 
+    autoAddUsersToCohort(cohort_id: Int!, users_data: String!): [CohortUser!]!
     createCountry(name: String!): Country!
     createCity(country_id: ID!, name: String!): City!
     updateUserStatus(user_id: ID!, status: _UserStatus!): User!
