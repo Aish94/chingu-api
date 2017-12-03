@@ -40,12 +40,45 @@ module.exports = {
     updateAutobot: async (
       root,
       { slack_team_id, autobot_data },
-      { models: { Autobot },
-      is_autobot },
+      { models: { Autobot }, is_autobot },
     ) => {
       requireAutobot(is_autobot);
-      const autobot = Autobot.findOne({ where: { slack_team_id } });
+      const autobot = await Autobot.findOne({ where: { slack_team_id } });
       return autobot.update(autobot_data);
+    },
+
+    autobotCreateCohortTeam: async (
+      root,
+      { slack_team_id, title, slack_channel_id },
+      { models: { Autobot, CohortTeam, Project, Tier, CohortTier }, is_autobot },
+    ) => {
+      requireAutobot(is_autobot);
+      const autobot = await Autobot.findOne({ where: { slack_team_id } });
+      // Get CohortTier based on title
+      let tier_title = 'Bears';
+      if (title.indexOf('Bears') === -1) {
+        if (title.indexOf('Geckos') > 0) {
+          tier_title = 'Geckos';
+        } else if (title.indexOf('Toucans') > 0) {
+          tier_title = 'Toucans';
+        } else {
+          throw new Error('Cannot map team title to tier.');
+        }
+      }
+      const tier = await Tier.findOne({ where: { title: tier_title } });
+      const cohort_tier = await CohortTier.findOne({
+        where: { tier_id: tier.id, cohort_id: autobot.cohort_id },
+      });
+      // Create team & project
+      const cohort_team = CohortTeam.build({
+        title,
+        slack_channel_id,
+        cohort_id: autobot.cohort_id,
+        cohort_tier_id: cohort_tier.id,
+      });
+      const project = await Project.create({ title: `${cohort_team.title} Project` });
+      cohort_team.project_id = project.id;
+      return cohort_team.save();
     },
 
     createCountry: async (root, { name }, { models: { Country, Group }, jwt_object }) => {
@@ -102,7 +135,7 @@ module.exports = {
       await requireAdmin(jwt_object);
       const cohort_team = CohortTeam.build(data);
       await cohort_team.generateTitle();
-      const project = await Project.create({ title: cohort_team.title });
+      const project = await Project.create({ title: `${cohort_team.title} Project` });
       cohort_team.project_id = project.id;
       return cohort_team.save();
     },

@@ -143,6 +143,7 @@ module.exports = `
   type CohortTeam {
     id: ID!
     title: String!
+    slack_channel_id: String!
     cohort: Cohort!
     project: Project!
     cohort_tier: CohortTier!
@@ -262,6 +263,7 @@ module.exports = `
   type Mutation {
     createAutobot(autobot_data: AutobotInput!): Autobot!
     updateAutobot(slack_team_id: String!, autobot_data: AutobotInput!): Autobot!
+    autobotCreateCohortTeam(slack_team_id: String!, title: String!, slack_channel_id: String!): CohortTeam!
 
     createCountry(name: String!): Country!
     createCity(country_id: ID!, name: String!): City!
@@ -271,7 +273,7 @@ module.exports = `
     updateCohort(cohort_id: ID!, cohort_data: CohortInput!): Cohort!
     addTierToCohort(cohort_id: ID!, tier_id: ID!): CohortTier!
     updateCohortUser(cohort_user_id: ID!, cohort_user_data: CohortUserInput!): CohortUser!
-    createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
+    createCohortTeam(cohort_id: ID!, cohort_tier_id: Int!): CohortTeam!
     addUserToCohortTeam(cohort_team_id: ID!, user_id: ID!, role: _CohortTeamUserRole): CohortTeamUser!
 
     createUser(user_data: UserInput!, email: String!, password: String!): Token!
