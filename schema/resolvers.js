@@ -152,8 +152,8 @@ module.exports = {
       const tiers = await cohort.getTiers();
       return Promise.all(
         users.map((user) => {
-          const user_tier = tiers.find(tier => tier.title === user.tier);
-
+          const new_user = new_users.find(nu => nu.email === user.email);
+          const user_tier = tiers.find(tier => tier.title === new_user.tier);
           return CohortUser.create({
             cohort_id: cohort.id,
             user_id: user.id,

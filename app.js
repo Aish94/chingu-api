@@ -5,7 +5,7 @@ const cors = require('cors');
 const { getConfigPath } = require('./config/utilities');
 const { authenticate, authenticateAutobot } = require('./config/auth');
 
-const { AUTH_HEADER, MONGO_URL } = require(getConfigPath('config'));
+const { AUTH_HEADER, MONGO_URL, ALLOW_GRAPHIQL } = require(getConfigPath('config'));
 const models = require('./models');
 const schema = require('./schema');
 const mongoose = require('mongoose');
@@ -42,13 +42,15 @@ app.use(
   graphqlExpress(buildOptions),
 );
 
-app.use(
-  '/graphiql',
-  graphiqlExpress({
-    endpointURL: 'https://chingu-api-dev.herokuapp.com/graphql',
-    passHeader: AUTH_HEADER,
-  }),
-);
+if (ALLOW_GRAPHIQL) {
+  app.use(
+    '/graphiql',
+    graphiqlExpress({
+      endpointURL: '/graphql',
+      passHeader: AUTH_HEADER,
+    }),
+  );
+}
 
 const port = process.env.PORT || 5000;
 app.listen(port, (error) => {
