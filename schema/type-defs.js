@@ -128,7 +128,7 @@ module.exports = `
     user: User!
     cohort: Cohort!
     status: _CohortUserStatus!
-    tier: Int!
+    tier: Tier!
     team: CohortTeam
     standups: [CohortUserStandup!]!
   }
@@ -146,7 +146,7 @@ module.exports = `
     title: String!
     cohort: Cohort!
     project: Project!
-    cohort_tier: CohortTier!
+    tier: Tier!
     members: [CohortTeamCohortUser!]!
     cohort_users: [CohortUser!]!
     standups: [CohortTeamStandup!]!
