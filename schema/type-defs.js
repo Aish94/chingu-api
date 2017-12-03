@@ -220,8 +220,8 @@ module.exports = `
 
   type Query {
     autobot(slack_team_id: String!): Autobot
-    getCohortTeam(slack_team_id: String!, slack_channel_id: String!): CohortTeam!
-    getCohortTeams(slack_team_id: String!): [CohortTeam!]!
+    cohortTeam(slack_team_id: String!, slack_channel_id: String!): CohortTeam!
+    cohortTeams(slack_team_id: String!): [CohortTeam!]!
 
     user(username: String, user_id: ID): User
     group(group_id: ID!): Group

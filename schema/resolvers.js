@@ -25,6 +25,26 @@ module.exports = {
       return Autobot.findOne({ where: { slack_team_id } });
     },
 
+    cohortTeam: async (
+      root,
+      { slack_team_id, slack_channel_id },
+      { models: { Autobot, CohortTeam }, is_autobot },
+    ) => {
+      requireAutobot(is_autobot);
+      const autobot = Autobot.findOne({ where: { slack_team_id } });
+      return CohortTeam.findOne({ where: { cohort_id: autobot.cohort_id, slack_channel_id } });
+    },
+
+    cohortTeams: async (
+      root,
+      { slack_team_id },
+      { models: { Autobot, CohortTeam }, is_autobot },
+    ) => {
+      requireAutobot(is_autobot);
+      const autobot = Autobot.findOne({ where: { slack_team_id } });
+      return CohortTeam.findAll({ where: { cohort_id: autobot.cohort_id } });
+    },
+
     cohort: async (root, { cohort_id }, { models: { Cohort } }) => Cohort.findById(cohort_id),
 
     cohorts: async (root, data, { models: { Cohort } }) => Cohort.findAll(data),
