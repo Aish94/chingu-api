@@ -134,7 +134,7 @@ module.exports = {
     createCohortTeam: async (root, data, { models: { CohortTeam, Project }, jwt_object }) => {
       await requireAdmin(jwt_object);
       const cohort_team = CohortTeam.build(data);
-      cohort_team.generateTitle();
+      await cohort_team.generateTitle();
       const project = await Project.create({ title: `${cohort_team.title} Project` });
       cohort_team.project_id = project.id;
       return cohort_team.save();
