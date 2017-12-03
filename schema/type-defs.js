@@ -260,7 +260,7 @@ module.exports = `
 
   input CohortUserInput {
     status: _CohortUserStatus,
-    tier: Int
+    cohort_tier_id: Int
   }
 
   type Mutation {
@@ -288,7 +288,7 @@ module.exports = `
     updateCohort(cohort_id: ID!, cohort_data: CohortInput!): Cohort!
     addTierToCohort(cohort_id: ID!, tier_id: ID!): CohortTier!
     updateCohortUser(cohort_user_id: ID!, cohort_user_data: CohortUserInput!): CohortUser!
-    createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
+    createCohortTeam(cohort_id: ID!, cohort_tier_id: Int!): CohortTeam!
     addUserToCohortTeam(
       cohort_team_id: ID!,
       cohort_user_id: ID!,
