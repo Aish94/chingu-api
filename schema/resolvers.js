@@ -1,9 +1,9 @@
-const { checkUserPermissions, getLoggedInUser } = require('../config/auth');
-
-const requireAdmin = async (jwt_object) => {
-  const user = await getLoggedInUser(jwt_object);
-  return checkUserPermissions(user, { role: 'admin ' });
-};
+const {
+  checkUserPermissions,
+  getLoggedInUser,
+  requireAutobot,
+  requireAdmin,
+} = require('../config/auth');
 
 module.exports = {
   Query: {
@@ -19,10 +19,10 @@ module.exports = {
 
     group: async (root, { group_id }, { models: { Group } }) => Group.findById(group_id),
 
-    // TODO: handle autobot_token (grab from context)
-    autobot: async (root, { slack_team_id }, { models: { AutoBot } }) => AutoBot.findOne({
-      where: { slack_team_id },
-    }),
+    autobot: async (root, { slack_team_id }, { models: { Autobot }, is_autobot }) => {
+      requireAutobot(is_autobot);
+      return Autobot.findOne({ where: { slack_team_id } });
+    },
 
     cohort: async (root, { cohort_id }, { models: { Cohort } }) => Cohort.findById(cohort_id),
 
@@ -32,42 +32,58 @@ module.exports = {
   },
 
   Mutation: {
+    createAutobot: async (root, { autobot_data }, { models: { Autobot }, is_autobot }) => {
+      requireAutobot(is_autobot);
+      return Autobot.create(autobot_data);
+    },
+
+    updateAutobot: async (
+      root,
+      { slack_team_id, autobot_data },
+      { models: { Autobot },
+      is_autobot },
+    ) => {
+      requireAutobot(is_autobot);
+      const autobot = Autobot.findOne({ where: { slack_team_id } });
+      return autobot.update(autobot_data);
+    },
+
     createCountry: async (root, { name }, { models: { Country, Group }, jwt_object }) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       const group = await Group.create({ title: `${name} Group`, group_type: 'Country' });
       return Country.create({ name, group_id: group.id });
     },
 
     createCity: async (root, { country_id, name }, { models: { City }, jwt_object }) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       return City.create({ country_id, name });
     },
 
     updateUserStatus: async (root, { user_id, status }, { models: { User }, jwt_object }) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       const target_user = await User.findById(user_id);
       return target_user.update({ status });
     },
 
     createTier: async (root, data, { models: { Tier }, jwt_object }) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       return Tier.create(data);
     },
 
     createCohort: async (root, { title }, { models: { Cohort, Group }, jwt_object }) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       const group = await Group.create({ title: `${title} Group`, group_type: 'Cohort' });
       return Cohort.create({ title, group_id: group.id });
     },
 
     updateCohort: async (root, { cohort_id, cohort_data }, { models: { Cohort }, jwt_object }) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       const cohort = await Cohort.findById(cohort_id);
       return cohort.update(cohort_data);
     },
 
     addTierToCohort: async (root, data, { models: { CohortTier }, jwt_object }) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       return CohortTier.create(data);
     },
 
@@ -77,13 +93,13 @@ module.exports = {
       { models: { CohortUser },
       jwt_object },
     ) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       const cohort_user = await CohortUser.findById(cohort_user_id);
       return cohort_user.update(cohort_user_data);
     },
 
     createCohortTeam: async (root, data, { models: { CohortTeam, Project }, jwt_object }) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       const cohort_team = CohortTeam.build(data);
       await cohort_team.generateTitle();
       const project = await Project.create({ title: cohort_team.title });
@@ -97,7 +113,7 @@ module.exports = {
       { models: { CohortUser, CohortTeamUser, CohortTeam, ProjectUser },
       jwt_object,
     }) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       const cohort_team = await CohortTeam.findById(cohort_team_id);
       const cohort_user = await CohortUser.findOne({
         where: { user_id, cohort_id: cohort_team.cohort_id },
@@ -176,7 +192,7 @@ module.exports = {
     type: root => root.group_type,
   },
 
-  AutoBot: {
+  Autobot: {
     cohort: root => root.getCohort(),
   },
 
