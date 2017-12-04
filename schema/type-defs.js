@@ -234,6 +234,7 @@ module.exports = `
     slack_team_token: String
     bot_id: String
     bot_token: String
+    cohort_id: Int
   }
 
   input UserInput {
