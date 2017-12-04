@@ -3,6 +3,7 @@ const {
   checkUserPermissions,
   getLoggedInUser,
   requireAutobot,
+  requireSlackAdmin,
   requireAdmin,
 } = require('../config/auth');
 
@@ -65,6 +66,9 @@ module.exports = {
     ) => {
       requireAutobot(is_autobot);
       const autobot = await Autobot.findOne({ where: { slack_team_id } });
+      if (autobot.cohort_id) {
+        await requireSlackAdmin(slack_user_id, autobot.cohort_id);
+      }
       await autobot.update(autobot_data);
       if (user_id) {
         const cohort_user = await CohortUser.findOne({
@@ -109,11 +113,12 @@ module.exports = {
 
     unregisterCohortTeamCohortUser: async (
       root,
-      { slack_team_id, slack_channel_id, slack_user_id },
+      { slack_team_id, slack_channel_id, slack_user_id, admin_slack_user_id },
       { models: { Autobot, CohortTeam, CohortUser, CohortTeamCohortUser }, is_autobot },
     ) => {
       requireAutobot(is_autobot);
       const autobot = await Autobot.findOne({ where: { slack_team_id } });
+      await requireSlackAdmin(admin_slack_user_id, autobot.cohort_id);
       const cohort_team = await CohortTeam.findOne({
         where: { slack_channel_id, cohort_id: autobot.cohort_id },
       });
@@ -129,11 +134,15 @@ module.exports = {
 
     autobotCreateCohortTeam: async (
       root,
-      { slack_team_id, title, slack_channel_id },
+      { slack_team_id, title, slack_channel_id, slack_user_id },
       { models: { Autobot, CohortTeam, Project, Tier, CohortTier }, is_autobot },
     ) => {
       requireAutobot(is_autobot);
       const autobot = await Autobot.findOne({ where: { slack_team_id } });
+      if (!autobot.cohort_id) {
+        throw new Error('This autobot has not been associated with a cohort.');
+      }
+      requireSlackAdmin(slack_user_id, autobot.cohort_id);
       // Get CohortTier based on title
       let tier_title = 'Bears';
       if (title.indexOf('Bears') === -1) {

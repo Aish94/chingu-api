@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
+const { User, CohortUser } = require('../models');
 const { getConfigPath } = require('./utilities');
 
 const { JWT_SECRET, AUTOBOT_CDN_API_SECRET } = require(getConfigPath('config'));
@@ -16,6 +16,13 @@ const requireAutobot = (autobot) => {
   }
 };
 
+const requireSlackAdmin = async (slack_user_id, cohort_id) => {
+  const cohort_user = await CohortUser({ where: { cohort_id, slack_user_id } });
+  const user = await cohort_user.getUser();
+  if (user.role !== 'admin') {
+    throw new Error('User must have admin priveleges.');
+  }
+};
 
 const authenticate = ({ headers: { authorization } }) => {
   if (!authorization || !authorization.split(' ').length > 1) return false;
@@ -62,6 +69,7 @@ const requireAdmin = async (jwt_object) => {
 module.exports = {
   authenticateAutobot,
   requireAutobot,
+  requireSlackAdmin,
   authenticate,
   getLoggedInUser,
   checkUserPermissions,

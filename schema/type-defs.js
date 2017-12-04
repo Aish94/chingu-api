@@ -72,7 +72,7 @@ module.exports = `
     slack_team_token: String!
     bot_id: String!
     bot_token: String!
-    cohort: Cohort!
+    cohort: Cohort
   }
 
   type CohortTier {
@@ -272,7 +272,7 @@ module.exports = `
       slack_team_id: String!,
       autobot_data: AutobotInput!,
       user_id: Int,
-      slack_user_id: String
+      slack_user_id: String!
     ): Autobot!
     registerCohortTeamCohortUser(
       slack_team_id: String!,
@@ -285,8 +285,14 @@ module.exports = `
       slack_team_id: String!,
       slack_channel_id: String!,
       slack_user_id: String!
+      admin_slack_user_id: String!
     ): CohortTeamCohortUser!
-    autobotCreateCohortTeam(slack_team_id: String!, title: String!, slack_channel_id: String!): CohortTeam!
+    autobotCreateCohortTeam(
+      slack_team_id: String!,
+      title: String!,
+      slack_channel_id: String!
+      slack_user_id: String!
+    ): CohortTeam!
 
     autoAddUsersToCohort(cohort_id: Int!, user_data: String!): [CohortUser!]!
     createCountry(name: String!): Country!
