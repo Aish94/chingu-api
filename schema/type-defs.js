@@ -294,7 +294,7 @@ module.exports = `
       slack_user_id: String!
     ): CohortTeam!
 
-    autoAddUsersToCohort(cohort_id: Int!, user_data: String!): [CohortUser!]!
+    addUsersToCohort(cohort_id: Int!, user_data: String!): [CohortUser!]!
     createCountry(name: String!): Country!
     createCity(country_id: ID!, name: String!): City!
     updateUserStatus(user_id: ID!, status: _UserStatus!): User!

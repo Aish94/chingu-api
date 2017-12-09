@@ -126,10 +126,10 @@ module.exports = {
         where: { cohort_id: autobot.cohort_id, slack_user_id },
       });
       await cohort_user.update({ status: 'tier_assigned' });
-      const cohort_team_chort_user = await CohortTeamCohortUser.findOne({
+      const cohort_team_cohort_user = await CohortTeamCohortUser.findOne({
         where: { cohort_user_id: cohort_user.id, cohort_team_id: cohort_team.id },
       });
-      return cohort_team_chort_user.update({ status: 'removed' });
+      return cohort_team_cohort_user.update({ status: 'removed' });
     },
 
     autobotCreateCohortTeam: async (
@@ -170,7 +170,7 @@ module.exports = {
       return cohort_team.save();
     },
 
-    autoAddUsersToCohort: async (
+    addUsersToCohort: async (
       root,
       { cohort_id, user_data },
       { models: { Cohort, User, CohortUser }, jwt_object },
@@ -180,7 +180,7 @@ module.exports = {
       const new_users = JSON.parse(user_data);
       const users = await Promise.all(
         new_users.map(async (new_user) => {
-          const user = { ...new_user, status: 'profile_complete' };
+          const user = { ...new_user, status: 'profile_complete', auto_generated: true };
           user.password = await User.hashPassword('baka');
           return User.create(user);
         }),
