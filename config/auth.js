@@ -16,11 +16,23 @@ const requireAutobot = (autobot) => {
   }
 };
 
-const requireSlackAdmin = async (slack_user_id, cohort_id) => {
-  const cohort_user = await CohortUser({ where: { cohort_id, slack_user_id } });
-  const user = await cohort_user.getUser();
-  if (user.role !== 'admin') {
-    throw new Error('User must have admin priveleges.');
+const requireSlackAdmin = async (autobot, bot_secret, slack_user_id) => {
+  if (bot_secret) {
+    if (autobot.cohort_id) {
+      throw new Error('This secret is no longer valid. Autobot has already been integrated.');
+    }
+
+    if (autobot.bot_secret !== bot_secret) {
+      throw new Error('Invalid secret. Permission denied.');
+    }
+  } else {
+    const cohort_user = await CohortUser({
+      where: { cohort_id: autobot.cohort_id, slack_user_id },
+    });
+    const user = await cohort_user.getUser();
+    if (user.role !== 'admin') {
+      throw new Error('User must have admin priveleges.');
+    }
   }
 };
 

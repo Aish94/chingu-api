@@ -56,27 +56,20 @@ module.exports = {
   Mutation: {
     createAutobot: async (root, { autobot_data }, { models: { Autobot }, is_autobot }) => {
       requireAutobot(is_autobot);
-      return Autobot.create(autobot_data);
+      const autobot = Autobot.build(autobot_data);
+      await autobot.generateSecret();
+      return autobot.save();
     },
 
-    updateAutobot: async (
+    integrateAutobotWithCohort: async (
       root,
-      { slack_team_id, user_id, slack_user_id, autobot_data },
-      { models: { Autobot, CohortUser }, is_autobot },
+      { slack_team_id, cohort_id, bot_secret },
+      { models: { Autobot }, is_autobot },
     ) => {
       requireAutobot(is_autobot);
       const autobot = await Autobot.findOne({ where: { slack_team_id } });
-      if (autobot.cohort_id) {
-        await requireSlackAdmin(slack_user_id, autobot.cohort_id);
-      }
-      await autobot.update(autobot_data);
-      if (user_id) {
-        const cohort_user = await CohortUser.findOne({
-          where: { cohort_id: autobot.cohort_id, user_id },
-        });
-        await cohort_user.update({ slack_user_id });
-      }
-      return autobot;
+      requireSlackAdmin(autobot, bot_secret);
+      return autobot.update({ cohort_id });
     },
 
     registerCohortTeamCohortUser: async (

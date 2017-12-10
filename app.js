@@ -2,13 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const { getConfigPath } = require('./config/utilities');
 const { authenticate, authenticateAutobot } = require('./config/auth');
 
 const { AUTH_HEADER, MONGO_URL, ALLOW_GRAPHIQL } = require(getConfigPath('config'));
 const models = require('./models');
 const schema = require('./schema');
-const mongoose = require('mongoose');
 
 const app = express();
 

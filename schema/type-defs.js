@@ -268,11 +268,10 @@ module.exports = `
 
   type Mutation {
     createAutobot(autobot_data: AutobotInput!): Autobot!
-    updateAutobot(
+    integrateAutobotWithCohort(
       slack_team_id: String!,
-      autobot_data: AutobotInput!,
-      user_id: Int,
-      slack_user_id: String!
+      cohort_id: Int!,
+      bot_secret: String!
     ): Autobot!
     registerCohortTeamCohortUser(
       slack_team_id: String!,
