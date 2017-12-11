@@ -3,6 +3,7 @@ const {
   checkUserPermissions,
   getLoggedInUser,
   requireAutobot,
+  requireSlackAdmin,
   requireAdmin,
 } = require('../config/auth');
 
@@ -25,6 +26,26 @@ module.exports = {
       return Autobot.findOne({ where: { slack_team_id } });
     },
 
+    cohortTeam: async (
+      root,
+      { slack_team_id, slack_channel_id },
+      { models: { Autobot, CohortTeam }, is_autobot },
+    ) => {
+      requireAutobot(is_autobot);
+      const autobot = Autobot.findOne({ where: { slack_team_id } });
+      return CohortTeam.findOne({ where: { cohort_id: autobot.cohort_id, slack_channel_id } });
+    },
+
+    cohortTeams: async (
+      root,
+      { slack_team_id },
+      { models: { Autobot, CohortTeam }, is_autobot },
+    ) => {
+      requireAutobot(is_autobot);
+      const autobot = Autobot.findOne({ where: { slack_team_id } });
+      return CohortTeam.findAll({ where: { cohort_id: autobot.cohort_id } });
+    },
+
     cohort: async (root, { cohort_id }, { models: { Cohort } }) => Cohort.findById(cohort_id),
 
     cohorts: async (root, data, { models: { Cohort } }) => Cohort.findAll(data),
@@ -35,17 +56,20 @@ module.exports = {
   Mutation: {
     createAutobot: async (root, { autobot_data }, { models: { Autobot }, is_autobot }) => {
       requireAutobot(is_autobot);
-      return Autobot.create(autobot_data);
+      const autobot = Autobot.build(autobot_data);
+      await autobot.generateSecret();
+      return autobot.save();
     },
 
-    updateAutobot: async (
+    integrateAutobotWithCohort: async (
       root,
-      { slack_team_id, autobot_data },
+      { slack_team_id, cohort_id, bot_secret },
       { models: { Autobot }, is_autobot },
     ) => {
       requireAutobot(is_autobot);
       const autobot = await Autobot.findOne({ where: { slack_team_id } });
-      return autobot.update(autobot_data);
+      requireSlackAdmin(autobot, bot_secret);
+      return autobot.update({ cohort_id });
     },
 
     registerCohortTeamCohortUser: async (
@@ -82,11 +106,12 @@ module.exports = {
 
     unregisterCohortTeamCohortUser: async (
       root,
-      { slack_team_id, slack_channel_id, slack_user_id },
+      { slack_team_id, slack_channel_id, slack_user_id, admin_slack_user_id },
       { models: { Autobot, CohortTeam, CohortUser, CohortTeamCohortUser }, is_autobot },
     ) => {
       requireAutobot(is_autobot);
       const autobot = await Autobot.findOne({ where: { slack_team_id } });
+      await requireSlackAdmin(admin_slack_user_id, autobot.cohort_id);
       const cohort_team = await CohortTeam.findOne({
         where: { slack_channel_id, cohort_id: autobot.cohort_id },
       });
@@ -94,19 +119,23 @@ module.exports = {
         where: { cohort_id: autobot.cohort_id, slack_user_id },
       });
       await cohort_user.update({ status: 'tier_assigned' });
-      const cohort_team_chort_user = await CohortTeamCohortUser.findOne({
+      const cohort_team_cohort_user = await CohortTeamCohortUser.findOne({
         where: { cohort_user_id: cohort_user.id, cohort_team_id: cohort_team.id },
       });
-      return cohort_team_chort_user.update({ status: 'removed' });
+      return cohort_team_cohort_user.update({ status: 'removed' });
     },
 
     autobotCreateCohortTeam: async (
       root,
-      { slack_team_id, title, slack_channel_id },
+      { slack_team_id, title, slack_channel_id, slack_user_id },
       { models: { Autobot, CohortTeam, Project, Tier, CohortTier }, is_autobot },
     ) => {
       requireAutobot(is_autobot);
       const autobot = await Autobot.findOne({ where: { slack_team_id } });
+      if (!autobot.cohort_id) {
+        throw new Error('This autobot has not been associated with a cohort.');
+      }
+      requireSlackAdmin(slack_user_id, autobot.cohort_id);
       // Get CohortTier based on title
       let tier_title = 'Bears';
       if (title.indexOf('Bears') === -1) {
@@ -132,6 +161,36 @@ module.exports = {
       const project = await Project.create({ title: `${cohort_team.title} Project` });
       cohort_team.project_id = project.id;
       return cohort_team.save();
+    },
+
+    addUsersToCohort: async (
+      root,
+      { cohort_id, user_data },
+      { models: { Cohort, User, CohortUser }, jwt_object },
+    ) => {
+      requireAdmin(jwt_object);
+      const cohort = await Cohort.findById(cohort_id);
+      const new_users = JSON.parse(user_data);
+      const users = await Promise.all(
+        new_users.map(async (new_user) => {
+          const user = { ...new_user, status: 'profile_complete', auto_generated: true };
+          user.password = await User.hashPassword('baka');
+          return User.create(user);
+        }),
+      );
+      const tiers = await cohort.getTiers();
+      return Promise.all(
+        users.map((user) => {
+          const new_user = new_users.find(nu => nu.email === user.email);
+          const user_tier = tiers.find(tier => tier.title === new_user.tier);
+          return CohortUser.create({
+            cohort_id: cohort.id,
+            user_id: user.id,
+            cohort_tier_id: user_tier.id,
+            status: 'tier_assigned',
+          });
+        }),
+      );
     },
 
     createCountry: async (root, { name }, { models: { Country, Group }, jwt_object }) => {

@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     city_id: {
       allowNull: true,
       type: DataTypes.INTEGER,
@@ -38,61 +39,80 @@ module.exports = (sequelize, DataTypes) => {
       values: ['admin', 'member'],
       defaultValue: 'member',
     },
+
     email: {
       allowNull: false,
       unique: true,
       type: DataTypes.STRING,
     },
+
     password: {
       allowNull: false,
       type: DataTypes.STRING,
     },
+
     username: {
       allowNull: true,
       unique: true,
       type: DataTypes.STRING,
     },
+
     first_name: {
       allowNull: false,
       type: DataTypes.STRING,
     },
+
     last_name: {
       allowNull: false,
       type: DataTypes.STRING,
     },
+
     status: {
       allowNull: false,
       type: DataTypes.ENUM,
       values: ['pending_approval', 'profile_incomplete', 'profile_complete'],
       defaultValue: 'pending_approval',
     },
+
     bio: {
       allowNull: true,
       type: DataTypes.TEXT,
     },
+
     github_url: {
       allowNull: true,
       type: DataTypes.STRING,
     },
+
     linkedin_url: {
       allowNull: true,
       type: DataTypes.STRING,
     },
+
     portfolio_url: {
       allowNull: true,
       type: DataTypes.STRING,
     },
+
     website_url: {
       allowNull: true,
       type: DataTypes.STRING,
     },
+
     twitter_url: {
       allowNull: true,
       type: DataTypes.STRING,
     },
+
     blog_url: {
       allowNull: true,
       type: DataTypes.STRING,
+    },
+
+    auto_generated: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   });
 

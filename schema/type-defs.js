@@ -72,7 +72,8 @@ module.exports = `
     slack_team_token: String!
     bot_id: String!
     bot_token: String!
-    cohort: Cohort!
+    bot_secret: String!
+    cohort: Cohort
   }
 
   type CohortTier {
@@ -128,7 +129,7 @@ module.exports = `
     user: User!
     cohort: Cohort!
     status: _CohortUserStatus!
-    tier: Tier!
+    tier: Tier
     team: CohortTeam
     standups: [CohortUserStandup!]!
   }
@@ -219,11 +220,14 @@ module.exports = `
   }
 
   type Query {
+    autobot(slack_team_id: String!): Autobot
+    cohortTeam(slack_team_id: String!, slack_channel_id: String!): CohortTeam!
+    cohortTeams(slack_team_id: String!): [CohortTeam!]!
+
     user(username: String, user_id: ID): User
     group(group_id: ID!): Group
     city(city_id: ID!): City
     country(country_id: ID!): Country
-    autobot(slack_team_id: String!): Autobot
     cohort(cohort_id: ID!): Cohort
     cohorts(limit: Int = 10, offset: Int = 0): [Cohort!]!
     projects(limit: Int = 10, offset: Int = 0): [Project!]!
@@ -260,12 +264,16 @@ module.exports = `
 
   input CohortUserInput {
     status: _CohortUserStatus,
-    tier: Int
+    cohort_tier_id: Int
   }
 
   type Mutation {
     createAutobot(autobot_data: AutobotInput!): Autobot!
-    updateAutobot(slack_team_id: String!, autobot_data: AutobotInput!): Autobot!
+    integrateAutobotWithCohort(
+      slack_team_id: String!,
+      cohort_id: Int!,
+      bot_secret: String!
+    ): Autobot!
     registerCohortTeamCohortUser(
       slack_team_id: String!,
       slack_channel_id: String!,
@@ -277,9 +285,16 @@ module.exports = `
       slack_team_id: String!,
       slack_channel_id: String!,
       slack_user_id: String!
+      admin_slack_user_id: String!
     ): CohortTeamCohortUser!
-    autobotCreateCohortTeam(slack_team_id: String!, title: String!, slack_channel_id: String!): CohortTeam!
+    autobotCreateCohortTeam(
+      slack_team_id: String!,
+      title: String!,
+      slack_channel_id: String!
+      slack_user_id: String!
+    ): CohortTeam!
 
+    addUsersToCohort(cohort_id: Int!, user_data: String!): [CohortUser!]!
     createCountry(name: String!): Country!
     createCity(country_id: ID!, name: String!): City!
     updateUserStatus(user_id: ID!, status: _UserStatus!): User!
@@ -288,7 +303,7 @@ module.exports = `
     updateCohort(cohort_id: ID!, cohort_data: CohortInput!): Cohort!
     addTierToCohort(cohort_id: ID!, tier_id: ID!): CohortTier!
     updateCohortUser(cohort_user_id: ID!, cohort_user_data: CohortUserInput!): CohortUser!
-    createCohortTeam(cohort_id: ID!, tier: Int!): CohortTeam!
+    createCohortTeam(cohort_id: ID!, cohort_tier_id: Int!): CohortTeam!
     addUserToCohortTeam(
       cohort_team_id: ID!,
       cohort_user_id: ID!,
