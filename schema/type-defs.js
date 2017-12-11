@@ -72,6 +72,7 @@ module.exports = `
     slack_team_token: String!
     bot_id: String!
     bot_token: String!
+    bot_secret: String!
     cohort: Cohort
   }
 
