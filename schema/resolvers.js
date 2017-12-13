@@ -172,22 +172,27 @@ module.exports = {
       const cohort = await Cohort.findById(cohort_id);
       const new_users = JSON.parse(user_data);
       const users = await Promise.all(
-        new_users.map(async (new_user) => {
-          const user = { ...new_user, status: 'profile_complete', auto_generated: true };
+        new_users.map(async ({ email }) => {
+          const user = {
+            email,
+            first_name: 'Placeholder',
+            last_name: 'Placeholder',
+            github_url: 'Placeholder',
+            status: 'profile_complete',
+            auto_generated: true,
+          };
           user.password = await User.hashPassword('baka');
           return User.create(user);
         }),
       );
-      const tiers = await cohort.getTiers();
       return Promise.all(
         users.map((user) => {
-          const new_user = new_users.find(nu => nu.email === user.email);
-          const user_tier = tiers.find(tier => tier.title === new_user.tier);
+          const { slack_user_id } = new_users.find(nu => nu.email === user.email);
           return CohortUser.create({
             cohort_id: cohort.id,
             user_id: user.id,
-            cohort_tier_id: user_tier.id,
-            status: 'tier_assigned',
+            slack_user_id,
+            status: 'accepted',
           });
         }),
       );
