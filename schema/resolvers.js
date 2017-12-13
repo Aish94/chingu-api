@@ -143,9 +143,9 @@ module.exports = {
       // Get CohortTier based on title
       let tier_title = 'Bears';
       if (title.indexOf('bears') === -1) {
-        if (title.indexOf('geckos') > 0) {
+        if (title.indexOf('geckos') > -1) {
           tier_title = 'Geckos';
-        } else if (title.indexOf('toucans') > 0) {
+        } else if (title.indexOf('toucans') > -1) {
           tier_title = 'Toucans';
         } else {
           throw new Error('Cannot map team title to tier.');
