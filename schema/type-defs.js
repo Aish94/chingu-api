@@ -67,7 +67,7 @@ module.exports = `
     tiers: [Tier!]!
   }
 
-  type Autobot {
+  type Wizard {
     slack_team_id: String!
     slack_team_token: String!
     bot_id: String!
@@ -220,7 +220,7 @@ module.exports = `
   }
 
   type Query {
-    autobot(slack_team_id: String!): Autobot
+    wizard(slack_team_id: String!): Wizard
     cohortTeam(slack_team_id: String!, slack_channel_id: String!): CohortTeam!
     cohortTeams(slack_team_id: String!): [CohortTeam!]!
 
@@ -233,7 +233,7 @@ module.exports = `
     projects(limit: Int = 10, offset: Int = 0): [Project!]!
   }
 
-  input AutobotInput {
+  input WizardInput {
     slack_team_id: String
     slack_team_token: String
     bot_id: String
@@ -268,12 +268,12 @@ module.exports = `
   }
 
   type Mutation {
-    createAutobot(autobot_data: AutobotInput!): Autobot!
-    integrateAutobotWithCohort(
+    createWizard(wizard_data: WizardInput!): Wizard!
+    integrateWizardWithCohort(
       slack_team_id: String!,
       cohort_id: Int!,
       bot_secret: String!
-    ): Autobot!
+    ): Wizard!
     registerCohortTeamCohortUser(
       slack_team_id: String!,
       slack_channel_id: String!,
@@ -287,7 +287,7 @@ module.exports = `
       slack_user_id: String!
       admin_slack_user_id: String!
     ): CohortTeamCohortUser!
-    autobotCreateCohortTeam(
+    wizardCreateCohortTeam(
       slack_team_id: String!,
       title: String!,
       slack_channel_id: String!

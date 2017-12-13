@@ -2,32 +2,32 @@ const jwt = require('jsonwebtoken');
 const { User, CohortUser } = require('../models');
 const { getConfigPath } = require('./utilities');
 
-const { JWT_SECRET, AUTOBOT_CDN_API_SECRET } = require(getConfigPath('config'));
+const { JWT_SECRET, WIZARD_CDN_API_SECRET } = require(getConfigPath('config'));
 
-const authenticateAutobot = ({ headers: { authorization } }) => {
+const authenticateWizard = ({ headers: { authorization } }) => {
   if (!authorization) return false;
 
-  return authorization === AUTOBOT_CDN_API_SECRET;
+  return authorization === WIZARD_CDN_API_SECRET;
 };
 
-const requireAutobot = (autobot) => {
-  if (!autobot) {
-    throw new Error('Autobot privileges required.');
+const requireWizard = (wizard) => {
+  if (!wizard) {
+    throw new Error('Wizard privileges required.');
   }
 };
 
-const requireSlackAdmin = async (autobot, bot_secret, slack_user_id) => {
+const requireSlackAdmin = async (wizard, bot_secret, slack_user_id) => {
   if (bot_secret) {
-    if (autobot.cohort_id) {
-      throw new Error('This secret is no longer valid. Autobot has already been integrated.');
+    if (wizard.cohort_id) {
+      throw new Error('This secret is no longer valid. Wizard has already been integrated.');
     }
 
-    if (autobot.bot_secret !== bot_secret) {
+    if (wizard.bot_secret !== bot_secret) {
       throw new Error('Invalid secret. Permission denied.');
     }
   } else {
     const cohort_user = await CohortUser({
-      where: { cohort_id: autobot.cohort_id, slack_user_id },
+      where: { cohort_id: wizard.cohort_id, slack_user_id },
     });
     const user = await cohort_user.getUser();
     if (user.role !== 'admin') {
@@ -79,8 +79,8 @@ const requireAdmin = async (jwt_object) => {
 };
 
 module.exports = {
-  authenticateAutobot,
-  requireAutobot,
+  authenticateWizard,
+  requireWizard,
   requireSlackAdmin,
   authenticate,
   getLoggedInUser,

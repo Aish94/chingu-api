@@ -1,7 +1,7 @@
 const { randomBytes } = require('crypto');
 
 module.exports = (sequelize, DataTypes) => {
-  const Autobot = sequelize.define('Autobot', {
+  const Wizard = sequelize.define('Wizard', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Autobot.prototype.generateSecret = () => new Promise((resolve, reject) => {
+  Wizard.prototype.generateSecret = () => new Promise((resolve, reject) => {
     randomBytes(48, (err, buffer) => {
       if (err) reject(err);
       this.bot_secret = buffer.toString('hex');
@@ -56,9 +56,9 @@ module.exports = (sequelize, DataTypes) => {
     });
   });
 
-  Autobot.associate = (models) => {
-    Autobot.belongsTo(models.Cohort);
+  Wizard.associate = (models) => {
+    Wizard.belongsTo(models.Cohort);
   };
 
-  return Autobot;
+  return Wizard;
 };
