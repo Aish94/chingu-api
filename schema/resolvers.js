@@ -162,7 +162,7 @@ module.exports = {
         cohort_id: wizard.cohort_id,
         cohort_tier_id: cohort_tier.id,
       });
-      const project = await Project.create({ title: `${cohort_team.title} Project` });
+      const project = await Project.create({ title: `${title} Project` });
       cohort_team.project_id = project.id;
       return cohort_team.save();
     },
