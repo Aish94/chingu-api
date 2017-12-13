@@ -18,6 +18,7 @@ const requireWizard = (wizard) => {
 
 const requireSlackAdmin = async (wizard, bot_secret, slack_user_id) => {
   if (bot_secret) {
+    console.log('no');
     if (wizard.cohort_id) {
       throw new Error('This secret is no longer valid. Wizard has already been integrated.');
     }
