@@ -18,7 +18,6 @@ const requireWizard = (wizard) => {
 
 const requireSlackAdmin = async (wizard, bot_secret, slack_user_id) => {
   if (bot_secret) {
-    console.log('no');
     if (wizard.cohort_id) {
       throw new Error('This secret is no longer valid. Wizard has already been integrated.');
     }
@@ -27,7 +26,7 @@ const requireSlackAdmin = async (wizard, bot_secret, slack_user_id) => {
       throw new Error('Invalid secret. Permission denied.');
     }
   } else {
-    const cohort_user = await CohortUser({
+    const cohort_user = await CohortUser.findOne({
       where: { cohort_id: wizard.cohort_id, slack_user_id },
     });
     const user = await cohort_user.getUser();

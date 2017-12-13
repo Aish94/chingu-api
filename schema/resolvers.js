@@ -134,16 +134,13 @@ module.exports = {
       { slack_team_id, title, slack_channel_id, slack_user_id },
       { models: { Wizard, CohortTeam, Project, Tier, CohortTier }, is_wizard },
     ) => {
-      console.log('1');
       requireWizard(is_wizard);
       const wizard = await Wizard.findOne({ where: { slack_team_id } });
       if (!wizard.cohort_id) {
         throw new Error('This wizard has not been associated with a cohort.');
       }
-      console.log('2');
       await requireSlackAdmin(wizard, null, slack_user_id);
       // Get CohortTier based on title
-      console.log('3');
       let tier_title = 'Bears';
       if (title.indexOf('Bears') === -1) {
         if (title.indexOf('Geckos') > 0) {
@@ -155,11 +152,9 @@ module.exports = {
         }
       }
       const tier = await Tier.findOne({ where: { title: tier_title } });
-      console.log('4');
       const cohort_tier = await CohortTier.findOne({
         where: { tier_id: tier.id, cohort_id: wizard.cohort_id },
       });
-      console.log('5');
       // Create team & project
       const cohort_team = CohortTeam.build({
         title,
@@ -167,11 +162,8 @@ module.exports = {
         cohort_id: wizard.cohort_id,
         cohort_tier_id: cohort_tier.id,
       });
-      console.log('6');
       const project = await Project.create({ title: `${title} Project` });
-      console.log('7');
       cohort_team.project_id = project.id;
-      console.log('8');
       return cohort_team.save();
     },
 
