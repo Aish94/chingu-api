@@ -115,7 +115,7 @@ module.exports = {
     ) => {
       requireWizard(is_wizard);
       const wizard = await Wizard.findOne({ where: { slack_team_id } });
-      await requireSlackAdmin(admin_slack_user_id, wizard.cohort_id);
+      await requireSlackAdmin(wizard.cohort_id, null, admin_slack_user_id);
       const cohort_team = await CohortTeam.findOne({
         where: { slack_channel_id, cohort_id: wizard.cohort_id },
       });
@@ -139,7 +139,7 @@ module.exports = {
       if (!wizard.cohort_id) {
         throw new Error('This wizard has not been associated with a cohort.');
       }
-      requireSlackAdmin(slack_user_id, wizard.cohort_id);
+      requireSlackAdmin(wizard, null, slack_user_id);
       // Get CohortTier based on title
       let tier_title = 'Bears';
       if (title.indexOf('Bears') === -1) {
