@@ -48,13 +48,15 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Wizard.prototype.generateSecret = () => new Promise((resolve, reject) => {
-    randomBytes(48, (err, buffer) => {
-      if (err) reject(err);
-      this.bot_secret = buffer.toString('hex');
-      resolve();
+  Wizard.prototype.generateSecret = function generateSecret() {
+    return new Promise((resolve, reject) => {
+      randomBytes(48, (err, buffer) => {
+        if (err) reject(err);
+        this.bot_secret = buffer.toString('hex');
+        resolve();
+      });
     });
-  });
+  };
 
   Wizard.associate = (models) => {
     Wizard.belongsTo(models.Cohort);
