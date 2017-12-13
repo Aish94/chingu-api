@@ -4,7 +4,7 @@ const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const { getConfigPath } = require('./config/utilities');
-const { authenticate, authenticateAutobot } = require('./config/auth');
+const { authenticate, authenticateWizard } = require('./config/auth');
 
 const { AUTH_HEADER, MONGO_URL, ALLOW_GRAPHIQL } = require(getConfigPath('config'));
 const models = require('./models');
@@ -29,9 +29,9 @@ app.use(cors(corsOptions));
 
 const buildOptions = async (req) => {
   const jwt_object = await authenticate(req);
-  const is_autobot = authenticateAutobot(req);
+  const is_wizard = authenticateWizard(req);
   return {
-    context: { models, jwt_object, is_autobot },
+    context: { models, jwt_object, is_wizard },
     schema,
   };
 };

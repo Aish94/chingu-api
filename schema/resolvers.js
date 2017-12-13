@@ -2,7 +2,7 @@ const { Op } = require('sequelize');
 const {
   checkUserPermissions,
   getLoggedInUser,
-  requireAutobot,
+  requireWizard,
   requireSlackAdmin,
   requireAdmin,
 } = require('../config/auth');
@@ -21,29 +21,29 @@ module.exports = {
 
     group: async (root, { group_id }, { models: { Group } }) => Group.findById(group_id),
 
-    autobot: async (root, { slack_team_id }, { models: { Autobot }, is_autobot }) => {
-      requireAutobot(is_autobot);
-      return Autobot.findOne({ where: { slack_team_id } });
+    wizard: async (root, { slack_team_id }, { models: { Wizard }, is_wizard }) => {
+      requireWizard(is_wizard);
+      return Wizard.findOne({ where: { slack_team_id } });
     },
 
     cohortTeam: async (
       root,
       { slack_team_id, slack_channel_id },
-      { models: { Autobot, CohortTeam }, is_autobot },
+      { models: { Wizard, CohortTeam }, is_wizard },
     ) => {
-      requireAutobot(is_autobot);
-      const autobot = Autobot.findOne({ where: { slack_team_id } });
-      return CohortTeam.findOne({ where: { cohort_id: autobot.cohort_id, slack_channel_id } });
+      requireWizard(is_wizard);
+      const wizard = Wizard.findOne({ where: { slack_team_id } });
+      return CohortTeam.findOne({ where: { cohort_id: wizard.cohort_id, slack_channel_id } });
     },
 
     cohortTeams: async (
       root,
       { slack_team_id },
-      { models: { Autobot, CohortTeam }, is_autobot },
+      { models: { Wizard, CohortTeam }, is_wizard },
     ) => {
-      requireAutobot(is_autobot);
-      const autobot = Autobot.findOne({ where: { slack_team_id } });
-      return CohortTeam.findAll({ where: { cohort_id: autobot.cohort_id } });
+      requireWizard(is_wizard);
+      const wizard = Wizard.findOne({ where: { slack_team_id } });
+      return CohortTeam.findAll({ where: { cohort_id: wizard.cohort_id } });
     },
 
     cohort: async (root, { cohort_id }, { models: { Cohort } }) => Cohort.findById(cohort_id),
@@ -54,40 +54,40 @@ module.exports = {
   },
 
   Mutation: {
-    createAutobot: async (root, { autobot_data }, { models: { Autobot }, is_autobot }) => {
-      requireAutobot(is_autobot);
-      const autobot = Autobot.build(autobot_data);
-      await autobot.generateSecret();
-      return autobot.save();
+    createWizard: async (root, { wizard_data }, { models: { Wizard }, is_wizard }) => {
+      requireWizard(is_wizard);
+      const wizard = Wizard.build(wizard_data);
+      await wizard.generateSecret();
+      return wizard.save();
     },
 
-    integrateAutobotWithCohort: async (
+    integrateWizardWithCohort: async (
       root,
       { slack_team_id, cohort_id, bot_secret },
-      { models: { Autobot }, is_autobot },
+      { models: { Wizard }, is_wizard },
     ) => {
-      requireAutobot(is_autobot);
-      const autobot = await Autobot.findOne({ where: { slack_team_id } });
-      requireSlackAdmin(autobot, bot_secret);
-      return autobot.update({ cohort_id });
+      requireWizard(is_wizard);
+      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      requireSlackAdmin(wizard, bot_secret);
+      return wizard.update({ cohort_id });
     },
 
     registerCohortTeamCohortUser: async (
       root,
       { slack_team_id, slack_channel_id, slack_user_id, email_base, role },
-      { models: { Autobot, User, CohortTeam, CohortUser, CohortTeamCohortUser }, is_autobot },
+      { models: { Wizard, User, CohortTeam, CohortUser, CohortTeamCohortUser }, is_wizard },
     ) => {
-      requireAutobot(is_autobot);
-      const autobot = await Autobot.findOne({ where: { slack_team_id } });
+      requireWizard(is_wizard);
+      const wizard = await Wizard.findOne({ where: { slack_team_id } });
       const cohort_team = await CohortTeam.findOne({
-        where: { slack_channel_id, cohort_id: autobot.cohort_id },
+        where: { slack_channel_id, cohort_id: wizard.cohort_id },
       });
       const user = await User.findOne({ where: { email: { [Op.iLike]: `${email_base}%` } } });
       if (!user) {
         throw new Error(`User with email base '${email_base}' was not found.`);
       }
       const cohort_user = await CohortUser.findOne({
-        where: { cohort_id: autobot.cohort_id, user_id: user.id },
+        where: { cohort_id: wizard.cohort_id, user_id: user.id },
       });
       const cohort_team_associations = await cohort_user.getTeamAssociations();
       if (cohort_team_associations.find(association => association.status === 'active')) {
@@ -107,16 +107,16 @@ module.exports = {
     unregisterCohortTeamCohortUser: async (
       root,
       { slack_team_id, slack_channel_id, slack_user_id, admin_slack_user_id },
-      { models: { Autobot, CohortTeam, CohortUser, CohortTeamCohortUser }, is_autobot },
+      { models: { Wizard, CohortTeam, CohortUser, CohortTeamCohortUser }, is_wizard },
     ) => {
-      requireAutobot(is_autobot);
-      const autobot = await Autobot.findOne({ where: { slack_team_id } });
-      await requireSlackAdmin(admin_slack_user_id, autobot.cohort_id);
+      requireWizard(is_wizard);
+      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      await requireSlackAdmin(admin_slack_user_id, wizard.cohort_id);
       const cohort_team = await CohortTeam.findOne({
-        where: { slack_channel_id, cohort_id: autobot.cohort_id },
+        where: { slack_channel_id, cohort_id: wizard.cohort_id },
       });
       const cohort_user = await CohortUser.findOne({
-        where: { cohort_id: autobot.cohort_id, slack_user_id },
+        where: { cohort_id: wizard.cohort_id, slack_user_id },
       });
       await cohort_user.update({ status: 'tier_assigned' });
       const cohort_team_cohort_user = await CohortTeamCohortUser.findOne({
@@ -125,17 +125,17 @@ module.exports = {
       return cohort_team_cohort_user.update({ status: 'removed' });
     },
 
-    autobotCreateCohortTeam: async (
+    wizardCreateCohortTeam: async (
       root,
       { slack_team_id, title, slack_channel_id, slack_user_id },
-      { models: { Autobot, CohortTeam, Project, Tier, CohortTier }, is_autobot },
+      { models: { Wizard, CohortTeam, Project, Tier, CohortTier }, is_wizard },
     ) => {
-      requireAutobot(is_autobot);
-      const autobot = await Autobot.findOne({ where: { slack_team_id } });
-      if (!autobot.cohort_id) {
-        throw new Error('This autobot has not been associated with a cohort.');
+      requireWizard(is_wizard);
+      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      if (!wizard.cohort_id) {
+        throw new Error('This wizard has not been associated with a cohort.');
       }
-      requireSlackAdmin(slack_user_id, autobot.cohort_id);
+      requireSlackAdmin(slack_user_id, wizard.cohort_id);
       // Get CohortTier based on title
       let tier_title = 'Bears';
       if (title.indexOf('Bears') === -1) {
@@ -149,13 +149,13 @@ module.exports = {
       }
       const tier = await Tier.findOne({ where: { title: tier_title } });
       const cohort_tier = await CohortTier.findOne({
-        where: { tier_id: tier.id, cohort_id: autobot.cohort_id },
+        where: { tier_id: tier.id, cohort_id: wizard.cohort_id },
       });
       // Create team & project
       const cohort_team = CohortTeam.build({
         title,
         slack_channel_id,
-        cohort_id: autobot.cohort_id,
+        cohort_id: wizard.cohort_id,
         cohort_tier_id: cohort_tier.id,
       });
       const project = await Project.create({ title: `${cohort_team.title} Project` });
@@ -336,7 +336,7 @@ module.exports = {
     type: root => root.group_type,
   },
 
-  Autobot: {
+  Wizard: {
     cohort: root => root.getCohort(),
   },
 
