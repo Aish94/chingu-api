@@ -142,10 +142,10 @@ module.exports = {
       await requireSlackAdmin(wizard, null, slack_user_id);
       // Get CohortTier based on title
       let tier_title = 'Bears';
-      if (title.indexOf('Bears') === -1) {
-        if (title.indexOf('Geckos') > 0) {
+      if (title.indexOf('bears') === -1) {
+        if (title.indexOf('geckos') > -1) {
           tier_title = 'Geckos';
-        } else if (title.indexOf('Toucans') > 0) {
+        } else if (title.indexOf('toucans') > -1) {
           tier_title = 'Toucans';
         } else {
           throw new Error('Cannot map team title to tier.');
@@ -162,7 +162,7 @@ module.exports = {
         cohort_id: wizard.cohort_id,
         cohort_tier_id: cohort_tier.id,
       });
-      const project = await Project.create({ title: `${cohort_team.title} Project` });
+      const project = await Project.create({ title: `${title} Project` });
       cohort_team.project_id = project.id;
       return cohort_team.save();
     },
