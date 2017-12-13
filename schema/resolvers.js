@@ -139,7 +139,7 @@ module.exports = {
       if (!wizard.cohort_id) {
         throw new Error('This wizard has not been associated with a cohort.');
       }
-      requireSlackAdmin(wizard, null, slack_user_id);
+      await requireSlackAdmin(wizard, null, slack_user_id);
       // Get CohortTier based on title
       let tier_title = 'Bears';
       if (title.indexOf('Bears') === -1) {
