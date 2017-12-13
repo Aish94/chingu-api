@@ -96,7 +96,11 @@ module.exports = {
       await Promise.all(cohort_team_associations.map(
         association => association.update({ status: 'reassigned' }),
       ));
-      await cohort_user.update({ slack_user_id, status: 'team_assigned' });
+      await cohort_user.update({
+        slack_user_id,
+        cohort_tier_id: cohort_team.cohort_tier_id,
+        status: 'team_assigned',
+      });
       return CohortTeamCohortUser.create({
         cohort_user_id: cohort_user.id,
         cohort_team_id: cohort_team.id,
