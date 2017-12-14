@@ -32,7 +32,7 @@ module.exports = {
       { models: { Wizard, CohortTeam }, is_wizard },
     ) => {
       requireWizard(is_wizard);
-      const wizard = Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await Wizard.findOne({ where: { slack_team_id } });
       return CohortTeam.findOne({ where: { cohort_id: wizard.cohort_id, slack_channel_id } });
     },
 
@@ -42,7 +42,7 @@ module.exports = {
       { models: { Wizard, CohortTeam }, is_wizard },
     ) => {
       requireWizard(is_wizard);
-      const wizard = Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await Wizard.findOne({ where: { slack_team_id } });
       return CohortTeam.findAll({ where: { cohort_id: wizard.cohort_id } });
     },
 
@@ -410,8 +410,8 @@ module.exports = {
   },
 
   CohortTeamTierAct: {
-    team: root => root.getTeam(),
-    act: root => root.getAct(),
+    team: root => root.getCohortTeam(),
+    act: root => root.getCohortTierAct(),
     completed_act_milestones: root => root.getCompletedActMilestones(),
   },
 
