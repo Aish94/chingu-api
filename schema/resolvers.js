@@ -76,14 +76,7 @@ module.exports = {
       root,
       { slack_team_id, slack_channel_id, slack_user_id, email_base, role },
       {
-        models: {
-          Wizard,
-          User,
-          CohortTeam,
-          CohortUser,
-          CohortTeamCohortUser,
-          ProjectUser,
-        },
+        models: { Wizard, User, CohortTeam, CohortUser, CohortTeamCohortUser, ProjectUser },
         is_wizard,
       },
     ) => {
