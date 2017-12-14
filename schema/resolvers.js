@@ -75,20 +75,28 @@ module.exports = {
     registerCohortTeamCohortUser: async (
       root,
       { slack_team_id, slack_channel_id, slack_user_id, email_base, role },
-      { models: { Wizard, User, CohortTeam, CohortUser, CohortTeamCohortUser }, is_wizard },
+      { models: { Wizard, User, CohortTeam, CohortUser, CohortTeamCohortUser, ProjectUser }, is_wizard },
     ) => {
       requireWizard(is_wizard);
       const wizard = await Wizard.findOne({ where: { slack_team_id } });
       const cohort_team = await CohortTeam.findOne({
         where: { slack_channel_id, cohort_id: wizard.cohort_id },
       });
+      if (!cohort_team) {
+        throw new Error('This channel is not a cohort team.');
+      }
       const user = await User.findOne({ where: { email: { [Op.iLike]: `${email_base}%` } } });
-      if (!user) {
+      const search_params = { cohort_id: wizard.cohort_id };
+      if (user) {
+        search_params.user_id = user.id;
+      } else {
+        search_params.slack_user_id = slack_user_id;
+      }
+      const cohort_user = await CohortUser.findOne({ where: search_params });
+      if (!cohort_user) {
         throw new Error(`User with email base '${email_base}' was not found.`);
       }
-      const cohort_user = await CohortUser.findOne({
-        where: { cohort_id: wizard.cohort_id, user_id: user.id },
-      });
+
       const cohort_team_associations = await cohort_user.getTeamAssociations();
       if (cohort_team_associations.find(association => association.status === 'active')) {
         throw new Error('User is already registered in a team.');
@@ -101,11 +109,17 @@ module.exports = {
         cohort_tier_id: cohort_team.cohort_tier_id,
         status: 'team_assigned',
       });
-      return CohortTeamCohortUser.create({
+      const cohort_team_cohort_user = await CohortTeamCohortUser.create({
         cohort_user_id: cohort_user.id,
         cohort_team_id: cohort_team.id,
         role,
       });
+      await ProjectUser.create({
+        user_id: cohort_user.user_id,
+        project_id: cohort_team.project_id,
+        role: role === 'member' ? 'collaborator' : 'project_manager',
+      });
+      return cohort_team_cohort_user;
     },
 
     unregisterCohortTeamCohortUser: async (
@@ -132,7 +146,7 @@ module.exports = {
     wizardCreateCohortTeam: async (
       root,
       { slack_team_id, title, slack_channel_id, slack_user_id },
-      { models: { Wizard, CohortTeam, Project, Tier, CohortTier }, is_wizard },
+      { models: { Wizard, Cohort, CohortTeam, Project, Tier, CohortTier }, is_wizard },
     ) => {
       requireWizard(is_wizard);
       const wizard = await Wizard.findOne({ where: { slack_team_id } });
@@ -140,31 +154,26 @@ module.exports = {
         throw new Error('This wizard has not been associated with a cohort.');
       }
       await requireSlackAdmin(wizard, null, slack_user_id);
-      // Get CohortTier based on title
-      let tier_title = 'Bears';
-      if (title.indexOf('bears') === -1) {
-        if (title.indexOf('geckos') > -1) {
-          tier_title = 'Geckos';
-        } else if (title.indexOf('toucans') > -1) {
-          tier_title = 'Toucans';
-        } else {
-          throw new Error('Cannot map team title to tier.');
-        }
-      }
-      const tier = await Tier.findOne({ where: { title: tier_title } });
+      const cohort = await Cohort.findById(wizard.cohort_id);
+      const tiers = await cohort.getTiers();
+      const team_tier = tiers.find(
+        tier => title.toLowerCase().indexOf(tier.title.toLowerCase()) > -1,
+      );
       const cohort_tier = await CohortTier.findOne({
-        where: { tier_id: tier.id, cohort_id: wizard.cohort_id },
+        where: { cohort_id: cohort.id, tier_id: team_tier.id },
       });
-      // Create team & project
-      const cohort_team = CohortTeam.build({
+      if (!cohort_tier) {
+        throw new Error('Cannot map team title to tier.');
+      }
+
+      const cohort_team = await CohortTeam.create({
         title,
         slack_channel_id,
         cohort_id: wizard.cohort_id,
         cohort_tier_id: cohort_tier.id,
       });
       const project = await Project.create({ title: `${title} Project` });
-      cohort_team.project_id = project.id;
-      return cohort_team.save();
+      return cohort_team.update({ project_id: project.id });
     },
 
     addUsersToCohort: async (
