@@ -75,7 +75,17 @@ module.exports = {
     registerCohortTeamCohortUser: async (
       root,
       { slack_team_id, slack_channel_id, slack_user_id, email_base, role },
-      { models: { Wizard, User, CohortTeam, CohortUser, CohortTeamCohortUser, ProjectUser }, is_wizard },
+      {
+        models: {
+          Wizard,
+          User,
+          CohortTeam,
+          CohortUser,
+          CohortTeamCohortUser,
+          ProjectUser,
+        },
+        is_wizard,
+      },
     ) => {
       requireWizard(is_wizard);
       const wizard = await Wizard.findOne({ where: { slack_team_id } });
@@ -146,7 +156,7 @@ module.exports = {
     wizardCreateCohortTeam: async (
       root,
       { slack_team_id, title, slack_channel_id, slack_user_id },
-      { models: { Wizard, Cohort, CohortTeam, Project, Tier, CohortTier }, is_wizard },
+      { models: { Wizard, Cohort, CohortTeam, Project, CohortTier }, is_wizard },
     ) => {
       requireWizard(is_wizard);
       const wizard = await Wizard.findOne({ where: { slack_team_id } });
