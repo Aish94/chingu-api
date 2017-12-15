@@ -266,9 +266,10 @@ module.exports = `
     status: _CohortUserStatus,
     cohort_tier_id: Int
   }
-
+  
   input CohortTierActInput {
     cohort_id: Int
+    tier_id: Int
     title: String
     order_index: Int
     repeatable: Boolean

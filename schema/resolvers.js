@@ -244,11 +244,11 @@ module.exports = {
 
     createCohortTierAct: async (
       root,
-      { cohort_id, title, order_index, repeatable },
+      { act_data: { cohort_id, tier_id, title, order_index, repeatable } },
       { models: { CohortTier, CohortTierAct }, jwt_object },
     ) => {
       await requireAdmin(jwt_object);
-      const cohort_tier = await CohortTier.findOne({ where: { cohort_id } });
+      const cohort_tier = await CohortTier.findOne({ where: { cohort_id, tier_id } });
       return CohortTierAct.create(
         { title, order_index, repeatable, cohort_tier_id: cohort_tier.id },
       );
