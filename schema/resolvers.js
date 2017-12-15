@@ -242,6 +242,18 @@ module.exports = {
       return Cohort.create({ title, group_id: group.id });
     },
 
+    createCohortTierAct: async (
+      root,
+      { cohort_id, title, order_index, repeatable },
+      { models: { CohortTier, CohortTierAct }, jwt_object },
+    ) => {
+      await requireAdmin(jwt_object);
+      const cohort_tier = await CohortTier.findOne({ where: { cohort_id } });
+      return CohortTierAct.create(
+        { title, order_index, repeatable, cohort_tier_id: cohort_tier.id },
+      );
+    },
+
     updateCohort: async (root, { cohort_id, cohort_data }, { models: { Cohort }, jwt_object }) => {
       await requireAdmin(jwt_object);
       const cohort = await Cohort.findById(cohort_id);
