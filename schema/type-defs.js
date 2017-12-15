@@ -266,6 +266,14 @@ module.exports = `
     status: _CohortUserStatus,
     cohort_tier_id: Int
   }
+  
+  input CohortTierActInput {
+    cohort_id: Int
+    tier_id: Int
+    title: String
+    order_index: Int
+    repeatable: Boolean
+  }
 
   type Mutation {
     createWizard(wizard_data: WizardInput!): Wizard!
@@ -309,6 +317,8 @@ module.exports = `
       cohort_user_id: ID!,
       role: _CohortTeamCohortUserRole!
     ): CohortTeamCohortUser!
+
+    createCohortTierAct(act_data: CohortTierActInput!): CohortTierAct!
 
     createUser(user_data: UserInput!, email: String!, password: String!): Token!
     signInUser(email: String!, password: String!): Token!
