@@ -254,6 +254,15 @@ module.exports = {
       );
     },
 
+    createCohortTierActMilestone: async (
+      root,
+      { act_milestone_data },
+      { models: { CohortTierActMilestone }, jwt_object },
+    ) => {
+      await requireAdmin(jwt_object);
+      return CohortTierActMilestone.create(act_milestone_data);
+    },
+
     updateCohort: async (root, { cohort_id, cohort_data }, { models: { Cohort }, jwt_object }) => {
       await requireAdmin(jwt_object);
       const cohort = await Cohort.findById(cohort_id);
@@ -403,7 +412,7 @@ module.exports = {
   },
 
   CohortTierActMilestone: {
-    act: root => root.getAct(),
+    act: root => root.getCohortTierAct(),
     milestone: root => root.getMilestone(),
     team_acts: root => root.getTeamActs(),
   },

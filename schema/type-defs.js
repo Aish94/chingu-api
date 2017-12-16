@@ -275,6 +275,12 @@ module.exports = `
     repeatable: Boolean
   }
 
+  input CohortTierActMilestoneInput {
+    cohort_tier_act_id: Int
+    milestone_id: Int
+    order_index: Int  
+  }
+
   type Mutation {
     createWizard(wizard_data: WizardInput!): Wizard!
     integrateWizardWithCohort(
@@ -319,7 +325,10 @@ module.exports = `
     ): CohortTeamCohortUser!
 
     createCohortTierAct(act_data: CohortTierActInput!): CohortTierAct!
-
+    createCohortTierActMilestone(
+      act_milestone_data: CohortTierActMilestoneInput!
+    ): CohortTierActMilestone!
+    
     createUser(user_data: UserInput!, email: String!, password: String!): Token!
     signInUser(email: String!, password: String!): Token!
     updateUser(user_data: UserInput!): User!
