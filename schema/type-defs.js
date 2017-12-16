@@ -279,7 +279,8 @@ module.exports = `
     title: String
     description: String
     resource_url: String
-    
+  }
+  
   input CohortTierActMilestoneInput {
     cohort_tier_act_id: Int
     milestone_id: Int
