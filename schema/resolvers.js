@@ -412,7 +412,7 @@ module.exports = {
   },
 
   CohortTierActMilestone: {
-    act: root => root.getAct(),
+    act: root => root.getCohortTierAct(),
     milestone: root => root.getMilestone(),
     team_acts: root => root.getTeamActs(),
   },
