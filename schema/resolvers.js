@@ -242,6 +242,11 @@ module.exports = {
       return Cohort.create({ title, group_id: group.id });
     },
 
+    createMilestone: async (root, { milestone_data }, { models: { Milestone }, jwt_object }) => {
+      await requireAdmin(jwt_object);
+      return Milestone.create(milestone_data);
+    },
+
     createCohortTierAct: async (
       root,
       { act_data: { cohort_id, tier_id, title, order_index, repeatable } },

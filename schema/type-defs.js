@@ -88,7 +88,7 @@ module.exports = `
   type Milestone {
     id: ID!
     title: String!
-    decription: String
+    description: String
     resource_url: String
     acts: [CohortTierAct!]!
   }
@@ -275,6 +275,11 @@ module.exports = `
     repeatable: Boolean
   }
 
+  input MilestoneInput {
+    title: String
+    description: String
+    resource_url: String
+    
   input CohortTierActMilestoneInput {
     cohort_tier_act_id: Int
     milestone_id: Int
@@ -324,6 +329,7 @@ module.exports = `
       role: _CohortTeamCohortUserRole!
     ): CohortTeamCohortUser!
 
+    createMilestone(milestone_data: MilestoneInput!): Milestone!
     createCohortTierAct(act_data: CohortTierActInput!): CohortTierAct!
     createCohortTierActMilestone(
       act_milestone_data: CohortTierActMilestoneInput!
