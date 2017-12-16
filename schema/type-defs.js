@@ -279,6 +279,11 @@ module.exports = `
     title: String
     description: String
     resource_url: String
+    
+  input CohortTierActMilestoneInput {
+    cohort_tier_act_id: Int
+    milestone_id: Int
+    order_index: Int  
   }
 
   type Mutation {
@@ -326,7 +331,10 @@ module.exports = `
 
     createMilestone(milestone_data: MilestoneInput!): Milestone!
     createCohortTierAct(act_data: CohortTierActInput!): CohortTierAct!
-
+    createCohortTierActMilestone(
+      act_milestone_data: CohortTierActMilestoneInput!
+    ): CohortTierActMilestone!
+    
     createUser(user_data: UserInput!, email: String!, password: String!): Token!
     signInUser(email: String!, password: String!): Token!
     updateUser(user_data: UserInput!): User!
