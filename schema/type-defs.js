@@ -324,7 +324,7 @@ module.exports = `
       role: _CohortTeamCohortUserRole!
     ): CohortTeamCohortUser!
 
-    createMilestone(milestone_data: MilestoneInput!): Milestone!\
+    createMilestone(milestone_data: MilestoneInput!): Milestone!
     createCohortTierAct(act_data: CohortTierActInput!): CohortTierAct!
 
     createUser(user_data: UserInput!, email: String!, password: String!): Token!
