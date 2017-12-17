@@ -60,7 +60,7 @@ module.exports = {
       requireWizard(is_wizard);
       const wizard = await Wizard.findOne({ where: { slack_team_id } });
 
-      const team = await CohortTeam.findAll({
+      const team = await CohortTeam.findOne({
         where: { cohort_id: wizard.cohort_id, slack_channel_id },
       });
 
@@ -101,12 +101,13 @@ module.exports = {
         });
 
         // team is at the end of a repeatable act
+        // attach the next milestone for the repeatable act
         const next_milestones = [];
         if (current_act.repeatable) {
           next_milestones.push(current_act_milestones[current_act_milestones.length - 1]);
         }
-        // send back the next milestone for the repeatable act
-        // and the next milestone for the following act
+        // return the next milestone array
+        // including the next acts first milestone
         return next_milestones.push(next_act_milestones[0]);
       }
 
