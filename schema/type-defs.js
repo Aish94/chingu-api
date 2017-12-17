@@ -315,6 +315,11 @@ module.exports = `
       slack_channel_id: String!
       slack_user_id: String!
     ): CohortTeam!
+    submitMilestone(
+      slack_team_id: String!,
+      slack_channel_id: String!,
+      cohort_tier_act_milestone_id: Int!
+    ): CohortTeamTierActMilestone!
 
     addUsersToCohort(cohort_id: Int!, user_data: String!): [CohortUser!]!
     createCountry(name: String!): Country!
