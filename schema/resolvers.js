@@ -55,7 +55,7 @@ module.exports = {
     getNextMilestone: async (
       root,
       { slack_team_id, slack_channel_id },
-      { models: { CohortTeam, Wizard }, is_wizard },
+      { models: { CohortTeam, CohortTierAct, Wizard }, is_wizard },
     ) => {
       requireWizard(is_wizard);
       const wizard = await Wizard.findOne({ where: { slack_team_id } });
@@ -65,11 +65,11 @@ module.exports = {
       });
 
       const team_acts = await team.getTeamActs({
-        order: [['order_index', 'ASC'], ['created_at', 'ASC']],
+        include: [{ model: CohortTierAct }],
+        order: [[CohortTierAct, 'order_index', 'ASC'], ['created_at', 'ASC']],
       });
 
       const last_team_act = team_acts[team_acts.length - 1];
-
       const current_act = await last_team_act.getCohortTierAct();
       const current_act_milestones = await current_act.getActMilestones({
         order: ['order_index', 'DESC'],
