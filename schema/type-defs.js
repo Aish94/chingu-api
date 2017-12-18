@@ -224,7 +224,11 @@ module.exports = `
     cohortTeam(slack_team_id: String!, slack_channel_id: String!): CohortTeam!
     cohortTeams(slack_team_id: String!): [CohortTeam!]!
 
-    getNextMilestone(slack_team_id: String!, slack_channel_id: String!): [CohortTierActMilestone!]!
+    getNextMilestone(
+      slack_team_id: String!,
+      slack_channel_id: String!,
+      slack_user_id: String!
+    ): [CohortTierActMilestone!]!
 
     user(username: String, user_id: ID): User
     group(group_id: ID!): Group
@@ -318,6 +322,7 @@ module.exports = `
     submitMilestone(
       slack_team_id: String!,
       slack_channel_id: String!,
+      slack_user_id: String!,
       cohort_tier_act_milestone_id: Int!
     ): CohortTeamTierActMilestone!
 
