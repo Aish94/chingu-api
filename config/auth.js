@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { User, CohortUser, CohortTeamCohortUser } = require('../models');
+const { Wizard, User, CohortUser, CohortTeamCohortUser } = require('../models');
 const { getConfigPath } = require('./utilities');
 
 const { JWT_SECRET, WIZARD_CDN_API_SECRET } = require(getConfigPath('config'));
@@ -10,10 +10,21 @@ const authenticateWizard = ({ headers: { authorization } }) => {
   return authorization === WIZARD_CDN_API_SECRET;
 };
 
-const requireWizard = (wizard) => {
-  if (!wizard) {
+const requireWizard = async (is_wizard, slack_team_id) => {
+  if (!is_wizard) {
     throw new Error('Wizard privileges required.');
   }
+
+  if (slack_team_id) {
+    const wizard = Wizard.findOne({ where: { slack_team_id } });
+    if (!wizard) {
+      throw new Error('This wizard does not exist');
+    }
+
+    return wizard;
+  }
+
+  return true;
 };
 
 const requireProjectManager = async ({ id, cohort_id }, slack_user_id) => {
