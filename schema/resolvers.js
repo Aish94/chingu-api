@@ -22,28 +22,26 @@ module.exports = {
 
     group: async (root, { group_id }, { models: { Group } }) => Group.findById(group_id),
 
-    wizard: async (root, { slack_team_id }, { models: { Wizard }, is_wizard }) => {
-      requireWizard(is_wizard);
-      return Wizard.findOne({ where: { slack_team_id } });
-    },
+    wizard: async (root, { slack_team_id }, { is_wizard }) => requireWizard(
+      is_wizard,
+      slack_team_id,
+    ),
 
     cohortTeam: async (
       root,
       { slack_team_id, slack_channel_id },
-      { models: { Wizard, CohortTeam }, is_wizard },
+      { models: { CohortTeam }, is_wizard },
     ) => {
-      requireWizard(is_wizard);
-      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await requireWizard(is_wizard, slack_team_id);
       return CohortTeam.findOne({ where: { cohort_id: wizard.cohort_id, slack_channel_id } });
     },
 
     cohortTeams: async (
       root,
       { slack_team_id },
-      { models: { Wizard, CohortTeam }, is_wizard },
+      { models: { CohortTeam }, is_wizard },
     ) => {
-      requireWizard(is_wizard);
-      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await requireWizard(is_wizard, slack_team_id);
       return CohortTeam.findAll({ where: { cohort_id: wizard.cohort_id } });
     },
 
@@ -56,10 +54,9 @@ module.exports = {
     getNextMilestone: async (
       root,
       { slack_team_id, slack_channel_id, slack_user_id },
-      { models: { CohortTeam, Wizard }, is_wizard },
+      { models: { CohortTeam }, is_wizard },
     ) => {
-      requireWizard(is_wizard);
-      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await requireWizard(is_wizard, slack_team_id);
 
       const team = await CohortTeam.findOne({
         where: { cohort_id: wizard.cohort_id, slack_channel_id },
@@ -82,10 +79,9 @@ module.exports = {
     integrateWizardWithCohort: async (
       root,
       { slack_team_id, cohort_id, bot_secret },
-      { models: { Wizard }, is_wizard },
+      { is_wizard },
     ) => {
-      requireWizard(is_wizard);
-      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await requireWizard(is_wizard, slack_team_id);
       requireSlackAdmin(wizard, bot_secret);
       return wizard.update({ cohort_id });
     },
@@ -94,12 +90,11 @@ module.exports = {
       root,
       { slack_team_id, slack_channel_id, slack_user_id, email_base, role },
       {
-        models: { Wizard, User, CohortTeam, CohortUser, CohortTeamCohortUser, ProjectUser },
+        models: { User, CohortTeam, CohortUser, CohortTeamCohortUser, ProjectUser },
         is_wizard,
       },
     ) => {
-      requireWizard(is_wizard);
-      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await requireWizard(is_wizard, slack_team_id);
       const cohort_team = await CohortTeam.findOne({
         where: { slack_channel_id, cohort_id: wizard.cohort_id },
       });
@@ -146,10 +141,9 @@ module.exports = {
     unregisterCohortTeamCohortUser: async (
       root,
       { slack_team_id, slack_channel_id, slack_user_id, admin_slack_user_id },
-      { models: { Wizard, CohortTeam, CohortUser, CohortTeamCohortUser }, is_wizard },
+      { models: { CohortTeam, CohortUser, CohortTeamCohortUser }, is_wizard },
     ) => {
-      requireWizard(is_wizard);
-      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await requireWizard(is_wizard, slack_team_id);
       await requireSlackAdmin(wizard.cohort_id, null, admin_slack_user_id);
       const cohort_team = await CohortTeam.findOne({
         where: { slack_channel_id, cohort_id: wizard.cohort_id },
@@ -167,10 +161,9 @@ module.exports = {
     wizardCreateCohortTeam: async (
       root,
       { slack_team_id, title, slack_channel_id, slack_user_id },
-      { models: { Wizard, Cohort, CohortTeam, Project, CohortTier }, is_wizard },
+      { models: { Cohort, CohortTeam, Project, CohortTier }, is_wizard },
     ) => {
-      requireWizard(is_wizard);
-      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await requireWizard(is_wizard, slack_team_id);
       if (!wizard.cohort_id) {
         throw new Error('This wizard has not been associated with a cohort.');
       }
@@ -200,10 +193,9 @@ module.exports = {
     submitMilestone: async (
       root,
       { slack_team_id, slack_channel_id, slack_user_id, cohort_tier_act_milestone_id },
-      { models: { Wizard, CohortTeam, CohortTeamTierAct, CohortTeamTierActMilestone }, is_wizard },
+      { models: { CohortTeam, CohortTeamTierAct, CohortTeamTierActMilestone }, is_wizard },
     ) => {
-      requireWizard(is_wizard);
-      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      const wizard = await requireWizard(is_wizard, slack_team_id);
       const team = await CohortTeam.findOne({
         where: { cohort_id: wizard.cohort_id, slack_channel_id },
       });
