@@ -79,6 +79,19 @@ module.exports = (sequelize, DataTypes) => {
       order: [[CohortTierAct, 'order_index', 'ASC'], ['created_at', 'ASC']],
     });
 
+    // Handle the case in which the team hasn't completed any milestones.
+    if (!team_acts.length) {
+      const tier = await this.getCohortTier();
+      const tier_acts = await tier.getActs({
+        order: ['order_index', 'ASC'],
+        limit: 1,
+      });
+      return tier_acts[0].getActMilestones({
+        order: ['order_index', 'ASC'],
+        limit: 1,
+      });
+    }
+
     const last_team_act = team_acts[team_acts.length - 1];
     const current_act = await last_team_act.getCohortTierAct();
     const current_act_milestones = await current_act.getActMilestones({
@@ -88,20 +101,20 @@ module.exports = (sequelize, DataTypes) => {
     const completed_milestones = await last_team_act.getCompletedActMilestones();
     const last_completed_milestone = completed_milestones[completed_milestones.length - 1];
 
-    // not on the last milestone of the act (return next milestone)
+    // If the team hasn't completed an act, return the next milestone in the act.
     if (last_completed_milestone.order_index < current_act_milestones[0].order_index) {
       return [current_act_milestones.find(
         milestone => milestone.order_index === last_completed_milestone.order_index + 1,
       )];
     }
 
-    // team is either progressing to next act or they have completed all acts and milestones
+    // The team is either progressing to the next act or has completed all acts.
     const tier = await current_act.getCohortTier();
     const tier_acts = await tier.getActs({
       order: ['order_index', 'DESC'],
     });
 
-    // team is between one act and the next
+    // Team is between one act and the next.
     if (current_act.order_index < tier_acts[0].order_index) {
       const next_act = tier_acts.find(
         act => act.order_index === current_act.order_index + 1,
@@ -110,18 +123,20 @@ module.exports = (sequelize, DataTypes) => {
         order: ['order_index', 'ASC'],
       });
 
-      // team is at the end of a repeatable act
-      // attach the next milestone for the repeatable act
+      // Team is at the end of a repeatable act.
+      // Add the first milestone of the repeatable act to the list of potential
+      // next milestones.
       const next_milestones = [];
       if (current_act.repeatable) {
         next_milestones.push(current_act_milestones[current_act_milestones.length - 1]);
       }
-      // return the next milestone array
-      // including the next acts first milestone
+
+      // Add the first milestone of the next act to the array and return it.
       return next_milestones.push(next_act_milestones[0]);
     }
 
-    // team has completed all acts and milestones return an empty array to signal completion
+    // Team has completed all acts and milestones so return an empty array to
+    // signal completion.
     return [];
   };
 
