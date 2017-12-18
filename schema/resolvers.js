@@ -55,7 +55,7 @@ module.exports = {
     getNextMilestone: async (
       root,
       { slack_team_id, slack_channel_id },
-      { models: { CohortTeam, CohortTierAct, Wizard }, is_wizard },
+      { models: { CohortTeam, Wizard }, is_wizard },
     ) => {
       requireWizard(is_wizard);
       const wizard = await Wizard.findOne({ where: { slack_team_id } });
@@ -64,55 +64,7 @@ module.exports = {
         where: { cohort_id: wizard.cohort_id, slack_channel_id },
       });
 
-      const team_acts = await team.getTeamActs({
-        include: [{ model: CohortTierAct }],
-        order: [[CohortTierAct, 'order_index', 'ASC'], ['created_at', 'ASC']],
-      });
-
-      const last_team_act = team_acts[team_acts.length - 1];
-      const current_act = await last_team_act.getCohortTierAct();
-      const current_act_milestones = await current_act.getActMilestones({
-        order: ['order_index', 'DESC'],
-      });
-
-      const completed_milestones = await last_team_act.getCompletedActMilestones();
-      const last_completed_milestone = completed_milestones[completed_milestones.length - 1];
-
-      // not on the last milestone of the act (return next milestone)
-      if (last_completed_milestone.order_index < current_act_milestones[0].order_index) {
-        return [current_act_milestones.find(
-          milestone => milestone.order_index === last_completed_milestone.order_index + 1,
-        )];
-      }
-
-      // team is either progressing to next act or they have completed all acts and milestones
-      const tier = await current_act.getCohortTier();
-      const tier_acts = await tier.getActs({
-        order: ['order_index', 'DESC'],
-      });
-
-      // team is between one act and the next
-      if (current_act.order_index < tier_acts[0].order_index) {
-        const next_act = tier_acts.find(
-          act => act.order_index === current_act.order_index + 1,
-        );
-        const next_act_milestones = await next_act.getActMilestones({
-          order: ['order_index', 'ASC'],
-        });
-
-        // team is at the end of a repeatable act
-        // attach the next milestone for the repeatable act
-        const next_milestones = [];
-        if (current_act.repeatable) {
-          next_milestones.push(current_act_milestones[current_act_milestones.length - 1]);
-        }
-        // return the next milestone array
-        // including the next acts first milestone
-        return next_milestones.push(next_act_milestones[0]);
-      }
-
-      // team has completed all acts and milestones return an empty array to signal completion
-      return [];
+      return team.getNextMilestones();
     },
   },
 
@@ -240,6 +192,50 @@ module.exports = {
       });
       const project = await Project.create({ title: `${title} Project` });
       return cohort_team.update({ project_id: project.id });
+    },
+
+    submitMilestone: async (
+      root,
+      { slack_team_id, slack_channel_id, cohort_tier_act_milestone_id },
+      { models: { Wizard, CohortTeam, CohortTeamTierAct, CohortTeamTierActMilestone }, is_wizard },
+    ) => {
+      requireWizard(is_wizard);
+      const wizard = await Wizard.findOne({ where: { slack_team_id } });
+      const team = await CohortTeam.findOne({
+        where: { cohort_id: wizard.cohort_id, slack_channel_id },
+      });
+
+      const next_milestones = await team.getNextMilestones();
+      const new_milestone = next_milestones.find(
+        milestone => milestone.id === cohort_tier_act_milestone_id,
+      );
+
+      if (!new_milestone) {
+        throw new Error('You cannot complete this mutation now.');
+      }
+
+      const team_acts = await team.getTeamActs();
+      let team_act = team_acts.find(
+        act => act.cohort_tier_act_id === new_milestone.cohort_tier_act_id,
+      );
+
+      if (!team_act) {
+        team_act = await CohortTeamTierAct.create({
+          cohort_tier_act_id: new_milestone.cohort_tier_act_id,
+          cohort_team_id: team.id,
+        });
+      } else if (new_milestone.order_index === 0) {
+        team_act = await CohortTeamTierAct.create({
+          cohort_tier_act_id: new_milestone.cohort_tier_act_id,
+          cohort_team_id: team.id,
+          repititions: team_act.repititions + 1,
+        });
+      }
+
+      return CohortTeamTierActMilestone.create({
+        cohort_team_tier_act_id: team_act.id,
+        cohort_tier_act_milestone_id: new_milestone.id,
+      });
     },
 
     addUsersToCohort: async (
