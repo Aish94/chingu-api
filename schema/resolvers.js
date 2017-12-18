@@ -192,6 +192,7 @@ module.exports = {
         slack_channel_id,
         cohort_id: wizard.cohort_id,
         cohort_tier_id: cohort_tier.id,
+        standup_schedule: cohort_tier.standup_schedule,
       });
       const project = await Project.create({ title: `${title} Project` });
       return cohort_team.update({ project_id: project.id });
@@ -353,13 +354,25 @@ module.exports = {
       return cohort_user.update(cohort_user_data);
     },
 
-    createCohortTeam: async (root, data, { models: { CohortTeam, Project }, jwt_object }) => {
+    createCohortTeam: async (
+      root,
+      { cohort_id, cohort_tier_id },
+      { models: { CohortTeam, CohortTier, Project }, jwt_object },
+    ) => {
       await requireAdmin(jwt_object);
-      const cohort_team = CohortTeam.build(data);
+      const cohort_tier = await CohortTier.findById(cohort_tier_id);
+      if (!cohort_tier) {
+        throw new Error('tier does not exist.');
+      }
+      const cohort_team = CohortTeam.build({
+        cohort_id,
+        cohort_tier_id,
+        standup_schedule: cohort_tier.standup_schedule,
+      });
       await cohort_team.generateTitle();
+      await cohort_team.save();
       const project = await Project.create({ title: `${cohort_team.title} Project` });
-      cohort_team.project_id = project.id;
-      return cohort_team.save();
+      return cohort_team.update({ project_id: project.id });
     },
 
     addUserToCohortTeam: async (
