@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { User, CohortUser } = require('../models');
+const { User, CohortUser, CohortTeamCohortUser } = require('../models');
 const { getConfigPath } = require('./utilities');
 
 const { JWT_SECRET, WIZARD_CDN_API_SECRET } = require(getConfigPath('config'));
@@ -14,6 +14,23 @@ const requireWizard = (wizard) => {
   if (!wizard) {
     throw new Error('Wizard privileges required.');
   }
+};
+
+const requireProjectManager = async ({ id, cohort_id }, slack_user_id) => {
+  const cohort_user = await CohortUser.findOne({ where: { cohort_id, slack_user_id } });
+  const cohort_team_cohort_user = await CohortTeamCohortUser.findOne({
+    where: { cohort_team_id: id, cohort_user_id: cohort_user.id },
+  });
+
+  if (!cohort_team_cohort_user) {
+    throw new Error('You are not a member of this team.');
+  }
+
+  if (cohort_team_cohort_user.role !== 'project_manager') {
+    throw new Error('You are not the project manager of this team');
+  }
+
+  return cohort_team_cohort_user;
 };
 
 const requireSlackAdmin = async (wizard, bot_secret, slack_user_id) => {
@@ -81,6 +98,7 @@ const requireAdmin = async (jwt_object) => {
 module.exports = {
   authenticateWizard,
   requireWizard,
+  requireProjectManager,
   requireSlackAdmin,
   authenticate,
   getLoggedInUser,

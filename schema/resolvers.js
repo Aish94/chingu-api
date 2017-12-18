@@ -3,6 +3,7 @@ const {
   checkUserPermissions,
   getLoggedInUser,
   requireWizard,
+  requireProjectManager,
   requireSlackAdmin,
   requireAdmin,
 } = require('../config/auth');
@@ -54,7 +55,7 @@ module.exports = {
 
     getNextMilestone: async (
       root,
-      { slack_team_id, slack_channel_id },
+      { slack_team_id, slack_channel_id, slack_user_id },
       { models: { CohortTeam, Wizard }, is_wizard },
     ) => {
       requireWizard(is_wizard);
@@ -63,6 +64,8 @@ module.exports = {
       const team = await CohortTeam.findOne({
         where: { cohort_id: wizard.cohort_id, slack_channel_id },
       });
+
+      await requireProjectManager(team, slack_user_id);
 
       return team.getNextMilestones();
     },
@@ -196,7 +199,7 @@ module.exports = {
 
     submitMilestone: async (
       root,
-      { slack_team_id, slack_channel_id, cohort_tier_act_milestone_id },
+      { slack_team_id, slack_channel_id, slack_user_id, cohort_tier_act_milestone_id },
       { models: { Wizard, CohortTeam, CohortTeamTierAct, CohortTeamTierActMilestone }, is_wizard },
     ) => {
       requireWizard(is_wizard);
@@ -204,6 +207,8 @@ module.exports = {
       const team = await CohortTeam.findOne({
         where: { cohort_id: wizard.cohort_id, slack_channel_id },
       });
+
+      await requireProjectManager(team, slack_user_id);
 
       const next_milestones = await team.getNextMilestones();
       const new_milestone = next_milestones.find(
