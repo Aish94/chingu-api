@@ -1,5 +1,3 @@
-const { CohortTierAct } = require('./index');
-
 module.exports = (sequelize, DataTypes) => {
   const CohortTeam = sequelize.define('CohortTeam', {
     id: {
@@ -74,24 +72,26 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   CohortTeam.prototype.getNextMilestones = async function getNextMilestone() {
-    const team_acts = await this.getTeamActs({
-      include: [{ model: CohortTierAct }],
-      order: [[CohortTierAct, 'order_index', 'ASC'], ['created_at', 'ASC']],
+    const team_acts = await sequelize.models.CohortTeamTierAct.findAll({
+      include: ['CohortTierAct'],
+      order: [['CohortTierAct', 'order_index', 'ASC'], ['created_at', 'ASC']],
+      where: { cohort_team_id: this.id },
     });
 
     // Handle the case in which the team hasn't completed any milestones.
     if (!team_acts.length) {
       const tier = await this.getCohortTier();
       const tier_acts = await tier.getActs({
-        order: ['order_index', 'ASC'],
+        order: [['order_index', 'ASC']],
         limit: 1,
       });
       return tier_acts[0].getActMilestones({
-        order: ['order_index', 'ASC'],
+        order: [['order_index', 'ASC']],
         limit: 1,
       });
     }
 
+    // Team has progressed beyond the first act and milestone.
     const last_team_act = team_acts[team_acts.length - 1];
     const current_act = await last_team_act.getCohortTierAct();
     const current_act_milestones = await current_act.getActMilestones({
@@ -111,7 +111,7 @@ module.exports = (sequelize, DataTypes) => {
     // The team is either progressing to the next act or has completed all acts.
     const tier = await current_act.getCohortTier();
     const tier_acts = await tier.getActs({
-      order: ['order_index', 'DESC'],
+      order: [['order_index', 'DESC']],
     });
 
     // Team is between one act and the next.
@@ -120,7 +120,7 @@ module.exports = (sequelize, DataTypes) => {
         act => act.order_index === current_act.order_index + 1,
       );
       const next_act_milestones = await next_act.getActMilestones({
-        order: ['order_index', 'ASC'],
+        order: [['order_index', 'ASC']],
       });
 
       // Team is at the end of a repeatable act.
