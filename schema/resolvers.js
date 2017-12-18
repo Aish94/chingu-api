@@ -205,7 +205,7 @@ module.exports = {
         where: { cohort_id: wizard.cohort_id, slack_channel_id },
       });
 
-      const next_milestones = await team.getActMilestones();
+      const next_milestones = await team.getNextMilestones();
       const new_milestone = next_milestones.find(
         milestone => milestone.id === cohort_tier_act_milestone_id,
       );
