@@ -27,19 +27,20 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const buildOptions = async (req) => {
-  const jwt_object = await authenticate(req);
-  const is_wizard = authenticateWizard(req);
-  return {
-    context: { models, jwt_object, is_wizard },
-    schema,
-  };
-};
-
 app.use(
   '/graphql',
   bodyParser.json(),
-  graphqlExpress(buildOptions),
+  graphqlExpress(async (req) => {
+    const jwt_object = await authenticate(req);
+    const is_wizard = authenticateWizard(req);
+    return {
+      context: { models, jwt_object, is_wizard },
+      schema,
+      debug: !!ALLOW_GRAPHIQL,
+      // TODO: make use of the 'formatError' and 'formatResponse' options
+      // https://www.apollographql.com/docs/apollo-server/setup.html#graphqlOptions
+    };
+  }),
 );
 
 if (ALLOW_GRAPHIQL) {
