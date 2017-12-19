@@ -95,7 +95,7 @@ module.exports = (sequelize, DataTypes) => {
     const last_team_act = team_acts[team_acts.length - 1];
     const current_act = await last_team_act.getCohortTierAct();
     const current_act_milestones = await current_act.getActMilestones({
-      order: ['order_index', 'DESC'],
+      order: [['order_index', 'DESC']],
     });
 
     const completed_milestones = await last_team_act.getCompletedActMilestones();
@@ -132,7 +132,8 @@ module.exports = (sequelize, DataTypes) => {
       }
 
       // Add the first milestone of the next act to the array and return it.
-      return next_milestones.push(next_act_milestones[0]);
+      next_milestones.push(next_act_milestones[0]);
+      return next_milestones;
     }
 
     // Team has completed all acts and milestones so return an empty array to

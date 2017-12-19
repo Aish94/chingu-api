@@ -29,8 +29,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   CohortTeamTierActMilestone.associate = (models) => {
-    CohortTeamTierActMilestone.belongsTo(models.CohortTierActMilestone, { as: 'ActMilestone' });
-    CohortTeamTierActMilestone.belongsTo(models.CohortTeamTierAct, { as: 'TeamAct' });
+    CohortTeamTierActMilestone.belongsTo(models.CohortTierActMilestone);
+    CohortTeamTierActMilestone.belongsTo(models.CohortTeamTierAct);
   };
 
   return CohortTeamTierActMilestone;
