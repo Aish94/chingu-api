@@ -220,7 +220,7 @@ module.exports = {
       const last_team_act = team_acts[0];
 
       let team_act;
-      if (last_team_act.cohort_tier_act_id === new_milestone.cohort_tier_act_id) {
+      if (last_team_act && last_team_act.cohort_tier_act_id === new_milestone.cohort_tier_act_id) {
         team_act = last_team_act;
       }
 
