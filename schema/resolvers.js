@@ -233,7 +233,7 @@ module.exports = {
         team_act = await CohortTeamTierAct.create({
           cohort_tier_act_id: new_milestone.cohort_tier_act_id,
           cohort_team_id: team.id,
-          repitition: team_act.repitition + 1,
+          repetition: team_act.repetition + 1,
         });
       }
 
