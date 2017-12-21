@@ -131,6 +131,7 @@ module.exports = `
     status: _CohortUserStatus!
     tier: Tier
     team: CohortTeam
+    slack_user_id: String 
     standups: [CohortUserStandup!]!
   }
 
@@ -229,6 +230,11 @@ module.exports = `
       slack_channel_id: String!,
       slack_user_id: String!
     ): [CohortTierActMilestone!]!
+
+    getTierActs(
+      slack_team_id: String!,
+      slack_channel_id: String!
+    ): [CohortTierAct!]!
 
     user(username: String, user_id: ID): User
     group(group_id: ID!): Group

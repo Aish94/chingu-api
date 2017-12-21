@@ -66,6 +66,22 @@ module.exports = {
 
       return team.getNextMilestones();
     },
+
+    getTierActs: async (
+      root,
+      { slack_team_id, slack_channel_id },
+      { models: { CohortTeam }, is_wizard },
+    ) => {
+      const wizard = await requireWizard(is_wizard, slack_team_id);
+      const team = await CohortTeam.findOne({
+        where: { cohort_id: wizard.cohort_id, slack_channel_id },
+      });
+
+      const cohort_tier = await team.getCohortTier();
+      return cohort_tier.getActs({
+        order: [['order_index', 'ASC']],
+      });
+    },
   },
 
   Mutation: {
@@ -487,7 +503,9 @@ module.exports = {
 
   CohortTierAct: {
     cohort_tier: root => root.getCohortTier(),
-    act_milestones: root => root.getActMilestones(),
+    act_milestones: root => root.getActMilestones({
+      order: [['order_index', 'ASC']],
+    }),
     teams: root => root.getTeams(),
     team_acts: root => root.getTeamActs(),
   },
