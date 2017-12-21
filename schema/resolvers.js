@@ -78,7 +78,9 @@ module.exports = {
       });
 
       const cohort_tier = await team.getCohortTier();
-      return cohort_tier.getActs();
+      return cohort_tier.getActs({
+        order: [['order_index', 'ASC']],
+      });
     },
   },
 
@@ -501,7 +503,9 @@ module.exports = {
 
   CohortTierAct: {
     cohort_tier: root => root.getCohortTier(),
-    act_milestones: root => root.getActMilestones(),
+    act_milestones: root => root.getActMilestones({
+      order: [['order_index', 'ASC']],
+    }),
     teams: root => root.getTeams(),
     team_acts: root => root.getTeamActs(),
   },
