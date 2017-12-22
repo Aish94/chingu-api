@@ -277,7 +277,7 @@ module.exports = {
             status: 'profile_complete',
             auto_generated: true,
           };
-          const auto_pass = User.generateAutoPassword();
+          const auto_pass = await User.generateAutoPassword();
           user.password = await User.hashPassword(auto_pass);
           return User.create(user);
         }),
