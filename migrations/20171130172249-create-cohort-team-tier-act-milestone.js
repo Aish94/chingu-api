@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('cohort_team_users', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('cohort_team_tier_act_milestones', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -7,45 +7,41 @@ module.exports = {
       type: Sequelize.INTEGER,
     },
 
-    cohort_team_id: {
-      type: Sequelize.INTEGER,
+    cohort_team_tier_act_id: {
       allowNull: false,
+      type: Sequelize.INTEGER,
       onDelete: 'CASCADE',
       references: {
-        model: 'cohort_teams',
-        key: 'id',
-      },
-    },
-    user_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      onDelete: 'CASCADE',
-      references: {
-        model: 'users',
+        model: 'cohort_team_tier_acts',
         key: 'id',
       },
     },
 
-    role: {
-      type: Sequelize.ENUM,
+    cohort_tier_act_milestone_id: {
       allowNull: false,
-      values: ['project_manager', 'member'],
+      type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'cohort_tier_act_milestones',
+        key: 'id',
+      },
     },
 
     created_at: {
       allowNull: false,
       type: Sequelize.DATE,
     },
+
     updated_at: {
       allowNull: false,
       type: Sequelize.DATE,
     },
   }, {
     uniqueKeys: [{
-      name: 'cohort_team_users_user-cohort_team_unique_index',
+      name: 'cohort_team_tier_act_milestone_unique_index',
       singleField: false,
-      fields: ['user_id', 'cohort_team_id'],
+      fields: ['cohort_tier_act_milestone_id', 'cohort_team_tier_act_id'],
     }],
   }),
-  down: queryInterface => queryInterface.dropTable('cohort_team_users'),
+  down: queryInterface => queryInterface.dropTable('cohort_team_tier_act_milestones'),
 };

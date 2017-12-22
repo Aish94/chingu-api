@@ -16,12 +16,28 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
+    slack_user_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     cohort_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       onDelete: 'CASCADE',
       references: {
         model: 'cohorts',
+        key: 'id',
+      },
+    },
+
+    cohort_tier_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'cohort_tiers',
         key: 'id',
       },
     },
@@ -38,10 +54,6 @@ module.exports = (sequelize, DataTypes) => {
       ],
       defaultValue: 'pending_approval',
     },
-    tier: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
   });
 
   CohortUser.prototype.isAccepted = () => {
@@ -54,6 +66,22 @@ module.exports = (sequelize, DataTypes) => {
   CohortUser.associate = (models) => {
     CohortUser.belongsTo(models.User);
     CohortUser.belongsTo(models.Cohort);
+    CohortUser.belongsTo(models.CohortTier);
+    CohortUser.belongsToMany(models.CohortTeam, {
+      through: {
+        model: models.CohortTeamCohortUser,
+        scope: {
+          status: 'active',
+        },
+      },
+      as: 'activeTeams',
+    });
+    CohortUser.belongsToMany(models.CohortTeam, {
+      through: models.CohortTeamCohortUser,
+      as: 'Teams',
+    });
+    CohortUser.hasMany(models.CohortTeamCohortUser, { as: 'TeamAssociations' });
+    CohortUser.hasMany(models.CohortUserStandup, { as: 'Standups' });
   };
 
   return CohortUser;

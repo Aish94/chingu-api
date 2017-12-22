@@ -10,6 +10,4 @@ const getConfigPath = (file_name) => {
   throw new Error(`File ${file_name} is not a config file that exists.`);
 };
 
-const loadConfigFile = file_name => require(getConfigPath(file_name));
-
-module.exports = { getConfigPath, loadConfigFile };
+module.exports = { getConfigPath };
