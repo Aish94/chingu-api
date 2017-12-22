@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { randomBytes } = require('crypto');
 const { getConfigPath } = require('../config/utilities');
 
 const { JWT_SECRET } = require(getConfigPath('config'));
@@ -117,6 +118,15 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.hashPassword = async password => bcrypt.hash(password, 12);
+
+  User.generateAutoPassword = function generateAutoPassword() {
+    return new Promise((resolve, reject) => {
+      randomBytes(48, (err, buffer) => {
+        if (err) reject(err);
+        resolve(buffer.toString('hex'));
+      });
+    });
+  };
 
   User.prototype.checkPassword = async function checkPassword(password) {
     return bcrypt.compare(password, this.password);

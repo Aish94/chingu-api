@@ -277,7 +277,8 @@ module.exports = {
             status: 'profile_complete',
             auto_generated: true,
           };
-          user.password = await User.hashPassword('baka');
+          const auto_pass = await User.generateAutoPassword();
+          user.password = await User.hashPassword(auto_pass);
           return User.create(user);
         }),
       );
