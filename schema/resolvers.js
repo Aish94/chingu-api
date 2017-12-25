@@ -269,7 +269,11 @@ module.exports = {
       const new_users = JSON.parse(user_data);
       const users = await Promise.all(
         new_users.map(async ({ email }) => {
-          const user = {
+          let user = await User.findOne({ where: { email } });
+          if (user) {
+            return user;
+          }
+          user = {
             email,
             first_name: 'Placeholder',
             last_name: 'Placeholder',
