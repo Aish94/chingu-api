@@ -66,6 +66,22 @@ module.exports = {
 
       return team.getNextMilestones();
     },
+
+    getTierActs: async (
+      root,
+      { slack_team_id, slack_channel_id },
+      { models: { CohortTeam }, is_wizard },
+    ) => {
+      const wizard = await requireWizard(is_wizard, slack_team_id);
+      const team = await CohortTeam.findOne({
+        where: { cohort_id: wizard.cohort_id, slack_channel_id },
+      });
+
+      const cohort_tier = await team.getCohortTier();
+      return cohort_tier.getActs({
+        order: [['order_index', 'ASC']],
+      });
+    },
   },
 
   Mutation: {
@@ -212,10 +228,17 @@ module.exports = {
         throw new Error('You cannot complete this mutation now.');
       }
 
-      const team_acts = await team.getTeamActs();
-      let team_act = team_acts.find(
-        act => act.cohort_tier_act_id === new_milestone.cohort_tier_act_id,
-      );
+      const team_acts = await team.getTeamActs({
+        order: [['created_at', 'DESC']],
+        limit: 1,
+      });
+
+      const last_team_act = team_acts[0];
+
+      let team_act;
+      if (last_team_act && last_team_act.cohort_tier_act_id === new_milestone.cohort_tier_act_id) {
+        team_act = last_team_act;
+      }
 
       if (!team_act) {
         team_act = await CohortTeamTierAct.create({
@@ -226,7 +249,7 @@ module.exports = {
         team_act = await CohortTeamTierAct.create({
           cohort_tier_act_id: new_milestone.cohort_tier_act_id,
           cohort_team_id: team.id,
-          repititions: team_act.repititions + 1,
+          repetition: team_act.repetition + 1,
         });
       }
 
@@ -246,7 +269,11 @@ module.exports = {
       const new_users = JSON.parse(user_data);
       const users = await Promise.all(
         new_users.map(async ({ email }) => {
-          const user = {
+          let user = await User.findOne({ where: { email } });
+          if (user) {
+            return user;
+          }
+          user = {
             email,
             first_name: 'Placeholder',
             last_name: 'Placeholder',
@@ -254,7 +281,8 @@ module.exports = {
             status: 'profile_complete',
             auto_generated: true,
           };
-          user.password = await User.hashPassword('baka');
+          const auto_pass = await User.generateAutoPassword();
+          user.password = await User.hashPassword(auto_pass);
           return User.create(user);
         }),
       );
@@ -480,7 +508,9 @@ module.exports = {
 
   CohortTierAct: {
     cohort_tier: root => root.getCohortTier(),
-    act_milestones: root => root.getActMilestones(),
+    act_milestones: root => root.getActMilestones({
+      order: [['order_index', 'ASC']],
+    }),
     teams: root => root.getTeams(),
     team_acts: root => root.getTeamActs(),
   },
@@ -492,8 +522,8 @@ module.exports = {
   },
 
   CohortTeamTierActMilestone: {
-    team_act: root => root.getTeamAct(),
-    act_milestone: root => root.getActMilestone(),
+    team_act: root => root.getCohortTeamTierAct(),
+    act_milestone: root => root.getCohortTierActMilestone(),
   },
 
   CohortUser: {
