@@ -1,4 +1,8 @@
-const WizardInput = `
+let WizardInput;
+
+module.exports = () => [WizardInput];
+
+WizardInput = `
   input WizardInput {
     slack_team_id: String
     slack_team_token: String
@@ -7,5 +11,3 @@ const WizardInput = `
     cohort_id: Int
   }
 `;
-
-module.exports = () => [WizardInput];

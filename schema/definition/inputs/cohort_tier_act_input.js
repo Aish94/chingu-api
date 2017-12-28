@@ -1,4 +1,8 @@
-const CohortTierActInput = `
+let CohortTierActInput;
+
+module.exports = () => [CohortTierActInput];
+
+CohortTierActInput = `
   input CohortTierActInput {
     cohort_id: Int
     tier_id: Int
@@ -7,5 +11,3 @@ const CohortTierActInput = `
     repeatable: Boolean
   }
 `;
-
-module.exports = () => [CohortTierActInput];

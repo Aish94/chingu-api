@@ -1,8 +1,15 @@
-const UserType = require('./user_type');
-const CityType = require('./city_type');
-const GroupType = require('./group_type');
+let CountryType;
+let UserType;
+let CityType;
+let GroupType;
 
-const CountryType = `
+module.exports = () => [CountryType, UserType, CityType, GroupType];
+
+UserType = require('./user_type');
+CityType = require('./city_type');
+GroupType = require('./group_type');
+
+CountryType = `
   type Country {
     id: ID!
     name: String!
@@ -11,5 +18,3 @@ const CountryType = `
     group: Group
   }
 `;
-
-module.exports = () => [CountryType, UserType, CityType, GroupType];

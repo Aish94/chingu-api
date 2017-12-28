@@ -1,4 +1,8 @@
-module.exports = `
+let CohortStatusEnum;
+
+module.exports = () => [CohortStatusEnum];
+
+CohortStatusEnum = `
   enum _CohortStatus {
     registration_open
     registration_closed

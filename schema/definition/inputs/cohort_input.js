@@ -1,7 +1,13 @@
-const DateScalar = require('../scalars/date_scalar');
-const CohortStatusEnum = require('../enums/cohort_status_enum');
+let CohortInput;
+let DateScalar;
+let CohortStatusEnum;
 
-const CohortInput = `
+module.exports = () => [CohortInput, DateScalar, CohortStatusEnum];
+
+DateScalar = require('../scalars/date_scalar');
+CohortStatusEnum = require('../enums/cohort_status_enum');
+
+CohortInput = `
   input CohortInput {
     title: String,
     status: _CohortStatus,
@@ -9,5 +15,3 @@ const CohortInput = `
     end_date: Date
   }
 `;
-
-module.exports = () => [CohortInput, DateScalar, CohortStatusEnum];

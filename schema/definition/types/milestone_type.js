@@ -1,6 +1,11 @@
-const CohortTierActType = require('./cohort_tier_act_type');
+let MilestoneType;
+let CohortTierActType;
 
-const MilestoneType = `
+module.exports = () => [MilestoneType, CohortTierActType];
+
+CohortTierActType = require('./cohort_tier_act_type');
+
+MilestoneType = `
   type Milestone {
     id: ID!
     title: String!
@@ -9,5 +14,3 @@ const MilestoneType = `
     acts: [CohortTierAct!]!
   }
 `;
-
-module.exports = () => [MilestoneType, CohortTierActType];

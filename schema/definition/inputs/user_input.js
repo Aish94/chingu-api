@@ -1,4 +1,8 @@
-const UserInput = `
+let UserInput;
+
+module.exports = () => [UserInput];
+
+UserInput = `
   input UserInput {
     first_name: String
     last_name: String
@@ -13,5 +17,3 @@ const UserInput = `
     city_id: ID
   }
 `;
-
-module.exports = () => [UserInput];

@@ -1,10 +1,13 @@
-const CohortUserStandupType = require('./cohort_user_standup_type');
+let CohortTeamStandupType;
+let CohortUserStandupType;
 
-const CohortTeamStandupType = `
+module.exports = () => [CohortTeamStandupType, CohortUserStandupType];
+
+CohortUserStandupType = require('./cohort_user_standup_type');
+
+CohortTeamStandupType = `
   type CohortTeamStandup {
     id: ID!
     user_standups: [CohortUserStandup!]!
   }
 `;
-
-module.exports = () => [CohortTeamStandupType, CohortUserStandupType];

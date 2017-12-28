@@ -1,10 +1,13 @@
-const CohortUserStatusEnum = require('../enums/cohort_user_status_enum');
+let CohortUserInput;
+let CohortUserStatusEnum;
 
-const CohortUserInput = `
+module.exports = () => [CohortUserInput, CohortUserStatusEnum];
+
+CohortUserStatusEnum = require('../enums/cohort_user_status_enum');
+
+CohortUserInput = `
   input CohortUserInput {
     status: _CohortUserStatus,
     cohort_tier_id: Int
   }
 `;
-
-module.exports = () => [CohortUserInput, CohortUserStatusEnum];

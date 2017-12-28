@@ -1,6 +1,11 @@
-const CohortType = require('./cohort_type');
+let WizardType;
+let CohortType;
 
-const WizardType = `
+module.exports = () => [WizardType, CohortType];
+
+CohortType = require('./cohort_type');
+
+WizardType = `
   type Wizard {
     slack_team_id: String!
     slack_team_token: String!
@@ -10,5 +15,3 @@ const WizardType = `
     cohort: Cohort
   }
 `;
-
-module.exports = () => [WizardType, CohortType];

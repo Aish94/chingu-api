@@ -1,14 +1,38 @@
-const DateScalar = require('../scalars/date_scalar');
-const CohortStatusEnum = require('../enums/cohort_status_enum');
-const CohortUserType = require('./cohort_user_type');
-const UserType = require('./user_type');
-const CohortTeamType = require('./cohort_team_type');
-const ProjectType = require('./project_type');
-const CountryType = require('./country_type');
-const GroupType = require('./group_type');
-const TierType = require('./tier_type');
+let CohortType;
+let DateScalar;
+let CohortStatusEnum;
+let CohortUserType;
+let UserType;
+let CohortTeamType;
+let ProjectType;
+let CountryType;
+let GroupType;
+let TierType;
 
-const CohortType = `
+module.exports = () => [
+  CohortType,
+  DateScalar,
+  CohortStatusEnum,
+  CohortUserType,
+  UserType,
+  CohortTeamType,
+  ProjectType,
+  CountryType,
+  GroupType,
+  TierType,
+];
+
+DateScalar = require('../scalars/date_scalar');
+CohortStatusEnum = require('../enums/cohort_status_enum');
+CohortUserType = require('./cohort_user_type');
+UserType = require('./user_type');
+CohortTeamType = require('./cohort_team_type');
+ProjectType = require('./project_type');
+CountryType = require('./country_type');
+GroupType = require('./group_type');
+TierType = require('./tier_type');
+
+CohortType = `
   type Cohort {
     id: ID!
     title: String!
@@ -24,16 +48,3 @@ const CohortType = `
     tiers: [Tier!]!
   }
 `;
-
-module.exports = () => [
-  CohortType,
-  DateScalar,
-  CohortStatusEnum,
-  CohortUserType,
-  UserType,
-  CohortTeamType,
-  ProjectType,
-  CountryType,
-  GroupType,
-  TierType,
-];

@@ -1,8 +1,20 @@
-const CohortTierActType = require('./cohort_tier_act_type');
-const MilestoneType = require('./milestone_type');
-const CohortTeamTierActType = require('./cohort_team_tier_act_type');
+let CohortTierActMilestoneType;
+let CohortTierActType;
+let MilestoneType;
+let CohortTeamTierActType;
 
-const CohortTierActMilestoneType = `
+module.exports = () => [
+  CohortTierActMilestoneType,
+  CohortTierActType,
+  MilestoneType,
+  CohortTeamTierActType,
+];
+
+CohortTierActType = require('./cohort_tier_act_type');
+MilestoneType = require('./milestone_type');
+CohortTeamTierActType = require('./cohort_team_tier_act_type');
+
+CohortTierActMilestoneType = `
   type CohortTierActMilestone {
     id: ID!
     order_index: Int!
@@ -11,10 +23,3 @@ const CohortTierActMilestoneType = `
     team_acts: [CohortTeamTierAct!]!
   }
 `;
-
-module.exports = () => [
-  CohortTierActMilestoneType,
-  CohortTierActType,
-  MilestoneType,
-  CohortTeamTierActType,
-];

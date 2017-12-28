@@ -1,13 +1,35 @@
-const UserStatusEnum = require('../enums/user_status_enum');
-const CountryType = require('./country_type');
-const CityType = require('./city_type');
-const ProjectType = require('./project_type');
-const CohortType = require('./cohort_type');
-const CohortUserType = require('./cohort_user_type');
-const CohortTeamType = require('./cohort_team_type');
-const GroupType = require('./group_type');
+let UserType;
+let UserStatusEnum;
+let CountryType;
+let CityType;
+let ProjectType;
+let CohortType;
+let CohortUserType;
+let CohortTeamType;
+let GroupType;
 
-const UserType = `
+module.exports = () => [
+  UserType,
+  UserStatusEnum,
+  CountryType,
+  CityType,
+  ProjectType,
+  CohortType,
+  CohortUserType,
+  CohortTeamType,
+  GroupType,
+];
+
+UserStatusEnum = require('../enums/user_status_enum');
+CountryType = require('./country_type');
+CityType = require('./city_type');
+ProjectType = require('./project_type');
+CohortType = require('./cohort_type');
+CohortUserType = require('./cohort_user_type');
+CohortTeamType = require('./cohort_team_type');
+GroupType = require('./group_type');
+
+UserType = `
   type User {
     id: ID!
     email: String!
@@ -32,15 +54,3 @@ const UserType = `
     groups: [Group!]!
   }
 `;
-
-module.exports = () => [
-  UserType,
-  UserStatusEnum,
-  CountryType,
-  CityType,
-  ProjectType,
-  CohortType,
-  CohortUserType,
-  CohortTeamType,
-  GroupType,
-];

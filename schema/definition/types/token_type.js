@@ -1,10 +1,13 @@
-const UserType = require('./user_type');
+let TokenType;
+let UserType;
 
-const TokenType = `
+module.exports = () => [TokenType, UserType];
+
+UserType = require('./user_type');
+
+TokenType = `
   type Token {
     user: User!
     jwt: String!
   }
 `;
-
-module.exports = () => [TokenType, UserType];

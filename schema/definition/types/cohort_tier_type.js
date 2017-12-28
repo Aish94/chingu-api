@@ -1,19 +1,9 @@
-const CohortType = require('./cohort_type');
-const TierType = require('./tier_type');
-const CohortTeamType = require('./cohort_team_type');
-const CohortUserType = require('./cohort_user_type');
-const CohortTierActType = require('./cohort_tier_act_type');
-
-const CohortTierType = `
-  type CohortTier {
-    id: ID!
-    cohort: Cohort!
-    tier: Tier!
-    teams: [CohortTeam!]!
-    users: [CohortUser!]!
-    acts: [CohortTierAct!]!
-  }
-`;
+let CohortTierType;
+let CohortType;
+let TierType;
+let CohortTeamType;
+let CohortUserType;
+let CohortTierActType;
 
 module.exports = () => [
   CohortTierType,
@@ -23,3 +13,20 @@ module.exports = () => [
   CohortUserType,
   CohortTierActType,
 ];
+
+CohortType = require('./cohort_type');
+TierType = require('./tier_type');
+CohortTeamType = require('./cohort_team_type');
+CohortUserType = require('./cohort_user_type');
+CohortTierActType = require('./cohort_tier_act_type');
+
+CohortTierType = `
+  type CohortTier {
+    id: ID!
+    cohort: Cohort!
+    tier: Tier!
+    teams: [CohortTeam!]!
+    users: [CohortUser!]!
+    acts: [CohortTierAct!]!
+  }
+`;

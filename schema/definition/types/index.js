@@ -18,7 +18,7 @@ const TokenType = require('./token_type');
 const UserType = require('./user_type');
 const WizardType = require('./wizard_type');
 
-module.exports = () => [
+module.exports = [
   CityType,
   CohortTeamCohortUserType,
   CohortTeamStandupType,

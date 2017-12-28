@@ -5,7 +5,7 @@ const CohortUserInput = require('./cohort_user_input');
 const MilestoneInput = require('./milestone_input');
 const WizardInput = require('./wizard_input');
 
-module.exports = () => [
+module.exports = [
   CohortInput,
   CohortTierActInput,
   CohortTierActMilestoneInput,

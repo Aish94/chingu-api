@@ -1,6 +1,11 @@
-const UserType = require('./user_type');
+let GroupType;
+let UserType;
 
-const GroupType = `
+module.exports = () => [GroupType, UserType];
+
+UserType = require('./user_type');
+
+GroupType = `
   type Group {
     id: ID!
     title: String!
@@ -8,5 +13,3 @@ const GroupType = `
     users: [User!]!
   }
 `;
-
-module.exports = () => [GroupType, UserType];

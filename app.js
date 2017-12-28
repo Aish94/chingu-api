@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const { getConfigPath } = require('./config/utilities');
 const { authenticate, authenticateWizard } = require('./config/auth');
 
-const { AUTH_HEADER, MONGO_URL, ALLOW_GRAPHIQL } = require(getConfigPath('config'));
+const { AUTH_HEADER, MONGO_URL, ALLOW_GRAPHIQL, GRAPHQL_ENDPOINT } = require(getConfigPath('config'));
 const models = require('./models');
 const schema = require('./schema');
 
@@ -47,7 +47,7 @@ if (ALLOW_GRAPHIQL) {
   app.use(
     '/graphiql',
     graphiqlExpress({
-      endpointURL: 'https://chingu-api-dev.herokuapp.com/graphql',
+      endpointURL: GRAPHQL_ENDPOINT,
       passHeader: AUTH_HEADER,
     }),
   );

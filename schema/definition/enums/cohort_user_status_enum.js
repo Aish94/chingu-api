@@ -1,4 +1,8 @@
-module.exports = `
+let CohortUserStatus;
+
+module.exports = () => [CohortUserStatus];
+
+CohortUserStatus = `
   enum _CohortUserStatus {
     pending_approval
     rejected

@@ -1,6 +1,11 @@
-const UserType = require('./user_type');
+let ProjectType;
+let UserType;
 
-const ProjectType = `
+module.exports = () => [ProjectType, UserType];
+
+UserType = require('./user_type');
+
+ProjectType = `
   type Project {
     id: ID!
     title: String!
@@ -10,5 +15,3 @@ const ProjectType = `
     users: [User!]!
   }
 `;
-
-module.exports = () => [ProjectType, UserType];
