@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const { getConfigPath } = require('./config/utilities');
 const { authenticate, authenticateWizard } = require('./config/auth');
 
-const { AUTH_HEADER, MONGO_URL, ALLOW_GRAPHIQL } = require(getConfigPath('config'));
+const { AUTH_HEADER, MONGO_URL, ALLOW_GRAPHIQL, GRAPHQL_ENDPOINT } = require(getConfigPath('config'));
 const models = require('./models');
 const schema = require('./schema');
 
@@ -27,26 +27,27 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const buildOptions = async (req) => {
-  const jwt_object = await authenticate(req);
-  const is_wizard = authenticateWizard(req);
-  return {
-    context: { models, jwt_object, is_wizard },
-    schema,
-  };
-};
-
 app.use(
   '/graphql',
   bodyParser.json(),
-  graphqlExpress(buildOptions),
+  graphqlExpress(async (req) => {
+    const jwt_object = await authenticate(req);
+    const is_wizard = authenticateWizard(req);
+    return {
+      context: { models, jwt_object, is_wizard },
+      schema,
+      debug: !!ALLOW_GRAPHIQL,
+      // TODO: make use of the 'formatError' and 'formatResponse' options
+      // https://www.apollographql.com/docs/apollo-server/setup.html#graphqlOptions
+    };
+  }),
 );
 
 if (ALLOW_GRAPHIQL) {
   app.use(
     '/graphiql',
     graphiqlExpress({
-      endpointURL: 'https://chingu-api-dev.herokuapp.com/graphql',
+      endpointURL: GRAPHQL_ENDPOINT,
       passHeader: AUTH_HEADER,
     }),
   );
