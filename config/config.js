@@ -1,6 +1,6 @@
 module.exports = {
   JWT_SECRET: process.env.JWT_SECRET,
-  MONGO_URL: process.env.MONGO_URL,
+  MONGODB_URI: process.env.MONGODB_URI,
   WIZARD_CDN_API_SECRET: process.env.WIZARD_CDN_API_SECRET,
   ALLOW_GRAPHIQL: process.env.ALLOW_GRAPHIQL,
   GRAPHQL_ENDPOINT: process.env.GRAPHQL_ENDPOINT,
