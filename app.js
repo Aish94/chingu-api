@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const { getConfigPath } = require('./config/utilities');
 const { authenticate, authenticateWizard } = require('./config/auth');
 
-const { AUTH_HEADER, MONGO_URL, ALLOW_GRAPHIQL, GRAPHQL_ENDPOINT } = require(getConfigPath('config'));
+const { AUTH_HEADER, MONGODB_URI, ALLOW_GRAPHIQL, GRAPHQL_ENDPOINT } = require(getConfigPath('config'));
 const models = require('./models');
 const schema = require('./schema');
 
@@ -61,7 +61,7 @@ app.listen(port, (error) => {
 
 // --------------------- MONGO DATABASE --------------------- //
 mongoose.Promise = global.Promise;
-mongoose.connect(MONGO_URL, { useMongoClient: true }, (error) => {
+mongoose.connect(MONGODB_URI, { useMongoClient: true }, (error) => {
   if (error) console.log(`Error connecting to database\n${error}`);
   else console.log('Successfully connected to the database');
 });
