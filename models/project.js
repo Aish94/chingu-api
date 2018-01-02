@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Project.associate = (models) => {
     Project.belongsToMany(models.User, { through: models.ProjectUser });
+    Project.belongsToMany(models.Skill, { through: models.UserSkill });
   };
 
   return Project;

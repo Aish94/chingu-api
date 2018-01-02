@@ -17,6 +17,7 @@ const TierType = require('./tier_type');
 const TokenType = require('./token_type');
 const UserType = require('./user_type');
 const WizardType = require('./wizard_type');
+const SkillType = require('./skill_type');
 
 module.exports = [
   CityType,
@@ -38,4 +39,5 @@ module.exports = [
   TokenType,
   UserType,
   WizardType,
+  SkillType,
 ];

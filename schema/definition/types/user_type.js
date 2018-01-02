@@ -7,6 +7,7 @@ let CohortType;
 let CohortUserType;
 let CohortTeamType;
 let GroupType;
+let SkillType;
 
 module.exports = () => [
   UserType,
@@ -18,6 +19,7 @@ module.exports = () => [
   CohortUserType,
   CohortTeamType,
   GroupType,
+  SkillType,
 ];
 
 UserStatusEnum = require('../enums/user_status_enum');
@@ -28,6 +30,7 @@ CohortType = require('./cohort_type');
 CohortUserType = require('./cohort_user_type');
 CohortTeamType = require('./cohort_team_type');
 GroupType = require('./group_type');
+SkillType = require('./skill_type');
 
 UserType = `
   type User {
@@ -52,5 +55,6 @@ UserType = `
     cohort_users: [CohortUser!]!
     teams: [CohortTeam!]!
     groups: [Group!]!
+    skills: [Skill!]!
   }
 `;
