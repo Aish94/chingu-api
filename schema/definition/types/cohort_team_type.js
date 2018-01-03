@@ -33,9 +33,8 @@ CohortTeamType = `
   type CohortTeam {
     id: ID!
     title: String!
-    slack_channel_id: String!
     cohort: Cohort!
-    channel: CohortChannel
+    channel: CohortChannel!
     project: Project!
     tier: Tier!
     members: [CohortTeamCohortUser!]!
