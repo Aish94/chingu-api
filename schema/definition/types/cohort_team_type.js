@@ -1,4 +1,5 @@
 let CohortTeamType;
+let CohortChannelType;
 let CohortType;
 let ProjectType;
 let TierType;
@@ -9,6 +10,7 @@ let CohortTeamTierActType;
 
 module.exports = () => [
   CohortTeamType,
+  CohortChannelType,
   CohortType,
   ProjectType,
   TierType,
@@ -19,6 +21,7 @@ module.exports = () => [
 ];
 
 CohortType = require('./cohort_type');
+CohortChannelType = require('./cohort_channel_type');
 ProjectType = require('./project_type');
 TierType = require('./tier_type');
 CohortTeamCohortUserType = require('./cohort_team_cohort_user_type');
@@ -32,6 +35,7 @@ CohortTeamType = `
     title: String!
     slack_channel_id: String!
     cohort: Cohort!
+    channel: CohortChannel
     project: Project!
     tier: Tier!
     members: [CohortTeamCohortUser!]!
