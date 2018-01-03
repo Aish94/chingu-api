@@ -10,9 +10,10 @@ const {
 
 module.exports = {
   Query: {
-    user: async (root, { username, user_id }, { models: { User }, jwt_object }) => {
+    user: async (root, { username, user_id, user_email }, { models: { User }, jwt_object }) => {
       if (username) return User.findOne({ where: { username } });
       else if (user_id) return User.findById(user_id);
+      else if (user_email) return User.findOne({ where: { email: user_email } });
       return getLoggedInUser(jwt_object);
     },
 
