@@ -149,6 +149,7 @@ module.exports = (sequelize, DataTypes) => {
     User.belongsToMany(models.Project, { through: models.ProjectUser });
     User.belongsToMany(models.Cohort, { through: models.CohortUser });
     User.belongsToMany(models.Group, { through: models.GroupUser });
+    User.belongsToMany(models.Skill, { through: models.UserSkill });
   };
 
   return User;

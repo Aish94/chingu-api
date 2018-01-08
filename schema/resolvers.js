@@ -458,6 +458,7 @@ module.exports = {
       cohort_users => cohort_users.map(cohort_user => cohort_user.getTeam()),
     ),
     groups: root => root.getGroups(),
+    skills: root => root.getSkills(),
   },
 
   Country: {
@@ -474,6 +475,7 @@ module.exports = {
 
   Project: {
     users: root => root.getUsers(),
+    skills: root => root.getSkills(),
   },
 
   Group: {
