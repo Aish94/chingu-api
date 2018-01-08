@@ -489,10 +489,16 @@ module.exports = {
     members: root => root.getMembers(),
     users: root => root.getUsers(),
     teams: root => root.getTeams(),
+    channels: root => root.getCohortChannels(),
     projects: root => root.getProjects(),
     countries: root => root.getUsers().then(users => users.map(user => user.getCountry())),
     group: root => root.getGroups(),
     tiers: root => root.getTiers(),
+  },
+
+  CohortChannel: {
+    cohort: root => root.getCohort(),
+    team: root => root.getCohortTeam(),
   },
 
   CohortTier: {
@@ -546,6 +552,7 @@ module.exports = {
     project: root => root.getProject(),
     tier: root => root.getCohortTier().then(cohort_tier => cohort_tier.getTier()),
     cohort_users: root => root.getCohortUsers(),
+    channel: root => root.getCohortChannel(),
     members: root => root.getMembers(),
     standups: root => root.getStandups(),
     team_acts: root => root.getTeamActs(),

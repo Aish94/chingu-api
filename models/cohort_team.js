@@ -17,6 +17,16 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
+    cohort_channel_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      onDelete: 'SET NULL',
+      references: {
+        model: 'cohort_channels',
+        key: 'id',
+      },
+    },
+
     cohort_tier_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -35,11 +45,6 @@ module.exports = (sequelize, DataTypes) => {
         model: 'projects',
         key: 'id',
       },
-    },
-
-    slack_channel_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
 
     title: {
@@ -61,6 +66,7 @@ module.exports = (sequelize, DataTypes) => {
     CohortTeam.belongsToMany(models.CohortUser, { through: models.CohortTeamCohortUser });
     CohortTeam.belongsTo(models.Cohort);
     CohortTeam.belongsTo(models.CohortTier);
+    CohortTeam.belongsTo(models.CohortChannel);
     CohortTeam.belongsTo(models.Project);
   };
 

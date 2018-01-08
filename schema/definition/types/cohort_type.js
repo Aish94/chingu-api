@@ -1,4 +1,5 @@
 let CohortType;
+let CohortChannelType;
 let DateScalar;
 let CohortStatusEnum;
 let CohortUserType;
@@ -11,6 +12,7 @@ let TierType;
 
 module.exports = () => [
   CohortType,
+  CohortChannelType,
   DateScalar,
   CohortStatusEnum,
   CohortUserType,
@@ -22,6 +24,7 @@ module.exports = () => [
   TierType,
 ];
 
+CohortChannelType = require('./cohort_channel_type');
 DateScalar = require('../scalars/date_scalar');
 CohortStatusEnum = require('../enums/cohort_status_enum');
 CohortUserType = require('./cohort_user_type');
@@ -42,6 +45,7 @@ CohortType = `
     members: [CohortUser!]!
     users: [User!]!
     teams: [CohortTeam!]!
+    channels: [CohortChannel!]!
     projects: [Project!]!
     countries: [Country!]!
     group: Group!

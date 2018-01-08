@@ -57,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     Cohort.hasMany(models.CohortUser, { as: 'Members' });
     Cohort.hasMany(models.CohortTeam, { as: 'Teams' });
     Cohort.hasMany(models.CohortTier);
+    Cohort.hasMany(models.CohortChannel);
     Cohort.hasOne(models.Wizard);
     Cohort.belongsTo(models.Group);
   };
