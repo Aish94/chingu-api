@@ -1,4 +1,5 @@
 const CityType = require('./city_type');
+const CohortChannelType = require('./cohort_channel_type');
 const CohortTeamCohortUserType = require('./cohort_team_cohort_user_type');
 const CohortTeamStandupType = require('./cohort_team_standup_type');
 const CohortTeamTierActMilestoneType = require('./cohort_team_tier_act_milestone_type');
@@ -21,6 +22,7 @@ const SkillType = require('./skill_type');
 
 module.exports = [
   CityType,
+  CohortChannelType,
   CohortTeamCohortUserType,
   CohortTeamStandupType,
   CohortTeamTierActMilestoneType,
