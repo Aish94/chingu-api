@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     cohort_channel_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      onDelete: 'CASCADE',
+      onDelete: 'SET NULL',
       references: {
         model: 'cohort_channels',
         key: 'id',

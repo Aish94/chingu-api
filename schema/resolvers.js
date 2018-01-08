@@ -495,6 +495,11 @@ module.exports = {
     tiers: root => root.getTiers(),
   },
 
+  CohortChannel: {
+    cohort: root => root.getCohort(),
+    team: root => root.getCohortTeam(),
+  },
+
   CohortTier: {
     cohort: root => root.getCohort(),
     tier: root => root.getTier(),
