@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "worker": "node worker/index.js",
     "dev": "nodemon app.js",
     "test": "eslint ./"
   },
@@ -28,6 +29,7 @@
     "graphql": "^0.11.7",
     "graphql-tools": "^2.7.2",
     "jsonwebtoken": "^8.1.0",
+    "kue": "^0.11.6",
     "lodash": "^4.17.4",
     "mongoose": "^4.13.5",
     "pg": "^7.4.0",
