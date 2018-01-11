@@ -29,7 +29,6 @@
     "graphql-tools": "^2.7.2",
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
-    "mongoose": "^4.13.5",
     "pg": "^7.4.0",
     "sequelize": "^4.22.5",
     "sequelize-cli": "^3.0.0"
