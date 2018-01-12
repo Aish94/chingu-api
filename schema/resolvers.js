@@ -265,7 +265,7 @@ module.exports = {
       { cohort_id, user_data },
       { models: { Cohort, User, CohortUser }, jwt_object },
     ) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       const cohort = await Cohort.findById(cohort_id);
       const new_users = JSON.parse(user_data);
       const users = await Promise.all(
@@ -445,6 +445,15 @@ module.exports = {
       const cohort = await Cohort.findById(cohort_id);
       if (cohort.status !== 'registration_open') throw new Error('Registration is not open.');
       return CohortUser.create({ cohort_id, user_id: user.id });
+    },
+
+    cohortSlackScrape: async (
+      root,
+      { cohort_id },
+      { queues: { ScrapeQ: { queue, tasks: { cohort_scrape } } }, jwt_object },
+    ) => {
+      await requireAdmin(jwt_object);
+      queue.create(cohort_scrape, cohort_id).save(console.log);
     },
   },
 

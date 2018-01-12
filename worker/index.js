@@ -1,20 +1,10 @@
-const { createQueue } = require('kue');
-const { getConfigPath } = require('../config/utilities');
+console.log('Worker running - loggy boi');
+const { Wizard, CohortChannel } = require('../models'); 
+const { ScrapeQ: { queue, tasks: { cohort_scrape } } } = require('../queues/index');
 
-const { REDIS_URL: redis } = require(getConfigPath('config'));
 
-const scrape_q = createQueue({
-  prefix: 'scrape_q',
-  redis,
+queue.process(cohort_scrape, ({ data }, done) => {
+  console.log(data);
 });
 
-const standup_q = createQueue({
-  prefix: 'standup_q',
-  redis,
-});
-
-scrape_q.process('cohort_weekly_scrape', ({ data: { cohort_id } }, done) => {
-
-});
-
-standup_q.process()
+// slack_team_token, slack_team_id, slack_channel_id, [start / end / count]
