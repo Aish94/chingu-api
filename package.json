@@ -33,7 +33,8 @@
     "lodash": "^4.17.4",
     "pg": "^7.4.0",
     "sequelize": "^4.22.5",
-    "sequelize-cli": "^3.0.0"
+    "sequelize-cli": "^3.0.0",
+    "slackmetascraper": "^2.0.0"
   },
   "devDependencies": {
     "ngrok": "^2.2.23",
