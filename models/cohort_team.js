@@ -74,6 +74,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       foreignKey: 'entity_id',
       targetKey: 'id',
+      constraints: false,
     });
   };
 
