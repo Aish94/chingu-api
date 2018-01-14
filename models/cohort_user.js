@@ -82,6 +82,14 @@ module.exports = (sequelize, DataTypes) => {
     });
     CohortUser.hasMany(models.CohortTeamCohortUser, { as: 'TeamAssociations' });
     CohortUser.hasMany(models.CohortUserStandup, { as: 'Standups' });
+    CohortUser.hasMany(models.Metadata, {
+      scope: {
+        entity_type: 'CohortUser',
+      },
+      foreignKey: 'entity_id',
+      targetKey: 'id',
+      constraints: false,
+    });
   };
 
   return CohortUser;

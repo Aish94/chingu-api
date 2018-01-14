@@ -48,5 +48,29 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  Metadata.associate = (models) => {
+    Metadata.belongsTo(models.MetadataSchema);
+    Metadata.belongsTo(models.CohortUser, {
+      foreignKey: 'entity_id',
+      targetKey: 'id',
+      constraints: false,
+    });
+    Metadata.belongsTo(models.CohortChannel, {
+      foreignKey: 'entity_id',
+      targetKey: 'id',
+      constraints: false,
+    });
+    // Metadata.belongsTo(models.CohortChannelUser, {
+    //   foreignKey: 'entity_id',
+    //   targetKey: 'id',
+    //   constraints: false,
+    // });
+    Metadata.belongsTo(models.CohortTeam, {
+      foreignKey: 'entity_id',
+      targetKey: 'id',
+      constraints: false,
+    });
+  };
+
   return Metadata;
 };

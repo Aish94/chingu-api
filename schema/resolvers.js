@@ -1,3 +1,4 @@
+const GraphQLJSON = require('graphql-type-json');
 const { Op } = require('sequelize');
 const {
   checkUserPermissions,
@@ -447,6 +448,8 @@ module.exports = {
       return CohortUser.create({ cohort_id, user_id: user.id });
     },
   },
+
+  JSON: GraphQLJSON,
 
   User: {
     country: root => root.getCountry(),
