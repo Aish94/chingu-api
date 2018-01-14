@@ -68,6 +68,13 @@ module.exports = (sequelize, DataTypes) => {
     CohortTeam.belongsTo(models.CohortTier);
     CohortTeam.belongsTo(models.CohortChannel);
     CohortTeam.belongsTo(models.Project);
+    CohortTeam.hasMany(models.Metadata, {
+      scope: {
+        entity_type: 'CohortTeam',
+      },
+      foreignKey: 'entity_id',
+      targetKey: 'id',
+    });
   };
 
   CohortTeam.prototype.generateTitle = async function generateTitle() {
