@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 
   ProjectSkill.associate = (models) => {
     ProjectSkill.belongsTo(models.Skill);
-    ProjectSkill.belongsTo(models.User);
+    ProjectSkill.belongsTo(models.Project);
   };
 
   return ProjectSkill;
