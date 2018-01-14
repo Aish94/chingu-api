@@ -60,11 +60,11 @@ module.exports = (sequelize, DataTypes) => {
       targetKey: 'id',
       constraints: false,
     });
-    // Metadata.belongsTo(models.CohortChannelUser, {
-    //   foreignKey: 'entity_id',
-    //   targetKey: 'id',
-    //   constraints: false,
-    // });
+    Metadata.belongsTo(models.CohortChannelUser, {
+      foreignKey: 'entity_id',
+      targetKey: 'id',
+      constraints: false,
+    });
     Metadata.belongsTo(models.CohortTeam, {
       foreignKey: 'entity_id',
       targetKey: 'id',
