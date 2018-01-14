@@ -1,6 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
   const Metadata = sequelize.define('Metadata', {
-
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -47,18 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
-
   });
-
-  Metadata.associate = (models) => {
-    Metadata.belongsTo(models.MetadataSchema);
-    // one to many?
-    Metadata.hasMany(models.CohortUser);
-    Metadata.hasMany(models.CohortTeam);
-    // Metadata.hasMany(models.CohortChannelUser);
-    // Metadata.hasMany(models.CohortChannel);
-    // Metadata.hasMany(models.Project);
-  };
 
   return Metadata;
 };

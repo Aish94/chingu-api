@@ -1,6 +1,5 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('metadata', {
-
     id: {
       allowNull: false,
       autoIncrement: true,

@@ -1,6 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const MetadataSchema = sequelize.define('MetadataSchema', {
-
+  const MetadataSchema = DataTypes.define('MetadataSchema', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -31,18 +30,14 @@ module.exports = (sequelize, DataTypes) => {
     schema_version: {
       allowNull: false,
       type: DataTypes.STRING,
+      defaultValue: '1',
     },
 
     metadata_structure: {
       allowNull: false,
       type: DataTypes.JSONB,
     },
-
   });
-
-  MetadataSchema.associate = (models) => {
-    MetadataSchema.hasMany(models.Metadata);
-  };
 
   return MetadataSchema;
 };
