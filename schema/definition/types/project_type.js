@@ -1,9 +1,11 @@
 let ProjectType;
 let UserType;
+let SkillType;
 
-module.exports = () => [ProjectType, UserType];
+module.exports = () => [ProjectType, UserType, SkillType];
 
 UserType = require('./user_type');
+SkillType = require('./skill_type');
 
 ProjectType = `
   type Project {
@@ -13,5 +15,6 @@ ProjectType = `
     project_url: String
     github_url: String
     users: [User!]!
+    skills: [Skill!]!
   }
 `;

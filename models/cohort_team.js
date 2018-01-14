@@ -17,6 +17,16 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
+    cohort_channel_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      onDelete: 'SET NULL',
+      references: {
+        model: 'cohort_channels',
+        key: 'id',
+      },
+    },
+
     cohort_tier_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -35,11 +45,6 @@ module.exports = (sequelize, DataTypes) => {
         model: 'projects',
         key: 'id',
       },
-    },
-
-    slack_channel_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
 
     title: {
@@ -61,6 +66,7 @@ module.exports = (sequelize, DataTypes) => {
     CohortTeam.belongsToMany(models.CohortUser, { through: models.CohortTeamCohortUser });
     CohortTeam.belongsTo(models.Cohort);
     CohortTeam.belongsTo(models.CohortTier);
+    CohortTeam.belongsTo(models.CohortChannel);
     CohortTeam.belongsTo(models.Project);
   };
 
@@ -74,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
   CohortTeam.prototype.getNextMilestones = async function getNextMilestone() {
     const team_acts = await sequelize.models.CohortTeamTierAct.findAll({
       include: ['CohortTierAct'],
-      order: [['CohortTierAct', 'order_index', 'ASC'], ['created_at', 'ASC']],
+      order: [['CohortTierAct', 'order_index', 'ASC'], ['repetition', 'ASC'], ['created_at', 'ASC']],
       where: { cohort_team_id: this.id },
     });
 
@@ -98,7 +104,9 @@ module.exports = (sequelize, DataTypes) => {
       order: [['order_index', 'DESC']],
     });
 
-    const completed_milestones = await last_team_act.getCompletedActMilestones();
+    const completed_milestones = await last_team_act.getCompletedActMilestones({
+      order: [['order_index', 'ASC'], ['created_at', 'ASC']],
+    });
     const last_completed_milestone = completed_milestones[completed_milestones.length - 1];
 
     // If the team hasn't completed an act, return the next milestone in the act.

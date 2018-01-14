@@ -10,9 +10,10 @@ const {
 
 module.exports = {
   Query: {
-    user: async (root, { username, user_id }, { models: { User }, jwt_object }) => {
+    user: async (root, { username, user_id, email }, { models: { User }, jwt_object }) => {
       if (username) return User.findOne({ where: { username } });
       else if (user_id) return User.findById(user_id);
+      else if (email) return User.findOne({ where: { email } });
       return getLoggedInUser(jwt_object);
     },
 
@@ -457,6 +458,7 @@ module.exports = {
       cohort_users => cohort_users.map(cohort_user => cohort_user.getTeam()),
     ),
     groups: root => root.getGroups(),
+    skills: root => root.getSkills(),
   },
 
   Country: {
@@ -473,6 +475,7 @@ module.exports = {
 
   Project: {
     users: root => root.getUsers(),
+    skills: root => root.getSkills(),
   },
 
   Group: {
@@ -488,10 +491,16 @@ module.exports = {
     members: root => root.getMembers(),
     users: root => root.getUsers(),
     teams: root => root.getTeams(),
+    channels: root => root.getCohortChannels(),
     projects: root => root.getProjects(),
     countries: root => root.getUsers().then(users => users.map(user => user.getCountry())),
     group: root => root.getGroups(),
     tiers: root => root.getTiers(),
+  },
+
+  CohortChannel: {
+    cohort: root => root.getCohort(),
+    team: root => root.getCohortTeam(),
   },
 
   CohortTier: {
@@ -545,6 +554,7 @@ module.exports = {
     project: root => root.getProject(),
     tier: root => root.getCohortTier().then(cohort_tier => cohort_tier.getTier()),
     cohort_users: root => root.getCohortUsers(),
+    channel: root => root.getCohortChannel(),
     members: root => root.getMembers(),
     standups: root => root.getStandups(),
     team_acts: root => root.getTeamActs(),
