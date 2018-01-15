@@ -9,6 +9,7 @@ UserType = require('../../../types/user_type');
 
 UserQuery = `
   extend type Query {
-    user(username: String, user_id: ID, email: String): User
+    user(username: String, user_id: ID, email: String): User,
+    users(limit: Int = 10): [User!]!
   }
 `;
