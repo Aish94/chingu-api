@@ -41,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
   CohortChannel.associate = (models) => {
     CohortChannel.belongsTo(models.Cohort);
     CohortChannel.hasOne(models.CohortTeam);
+    CohortChannel.belongsToMany(models.CohortUser, {
+      through: models.CohortChannelUser,
+      as: 'Members',
+    });
     CohortChannel.hasMany(models.Metadata, {
       scope: {
         entity_type: 'CohortChannel',
