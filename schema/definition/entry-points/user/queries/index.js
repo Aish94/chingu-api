@@ -5,6 +5,7 @@ const CountryQuery = require('./country_query');
 const GroupQuery = require('./group_query');
 const ProjectsQuery = require('./projects_query');
 const UserQuery = require('./user_query');
+const UsersQuery = require('./users_query');
 const SkillsQuery = require('./skill_query');
 
 module.exports = [
@@ -15,5 +16,6 @@ module.exports = [
   GroupQuery,
   ProjectsQuery,
   UserQuery,
+  UsersQuery,
   SkillsQuery,
 ];
