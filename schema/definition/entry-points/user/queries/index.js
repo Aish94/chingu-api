@@ -15,5 +15,5 @@ module.exports = [
   GroupQuery,
   ProjectsQuery,
   UserQuery,
-  SkillsQuery
+  SkillsQuery,
 ];
