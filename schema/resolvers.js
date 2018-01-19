@@ -18,6 +18,10 @@ module.exports = {
       return getLoggedInUser(jwt_object);
     },
 
+    users: async (root, data, { models: { User } }) => User.findAll(data),
+
+    skills: async (root, data, { models: { Skill } }) => Skill.findAll(),
+
     city: async (root, { city_id }, { models: { City } }) => City.findById(city_id),
 
     country: async (root, { country_id }, { models: { Country } }) => Country.findById(country_id),
