@@ -18,7 +18,25 @@ module.exports = {
       return getLoggedInUser(jwt_object);
     },
 
-    users: async (root, data, { models: { User } }) => User.findAll(data),
+    users: async (root, { search_string }, { models: { User } }) => {
+      if (search_string) {
+        const search_params = [];
+        const search_keywords = search_string.split(' ');
+        const search_fields = ['first_name', 'last_name', 'username', 'email'];
+        for (let i = 0; i < search_keywords.length; i += 1) {
+          for (let j = 0; j < search_fields.length; j += 1) {
+            const search = {};
+            search[search_fields[j]] = { [Op.iLike]: `%${search_keywords[i]}%` };
+            search_params.push(search);
+          }
+        }
+        return User.findAll({ where: { $or: [
+          ...search_params,
+        ],
+        } });
+      }
+      return User.findAll();
+    },
 
     skills: async (root, data, { models: { Skill } }) => Skill.findAll(),
 
