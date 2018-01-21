@@ -9,6 +9,6 @@ ProjectType = require('../../../types/project_type');
 
 ProjectsQuery = `
   extend type Query {
-    projects(limit: Int = 10, offset: Int = 0): [Project!]!
+    projects(title: String, skills: [String], limit: Int = 10, offset: Int = 0): [Project!]!
   }
 `;

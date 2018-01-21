@@ -90,7 +90,32 @@ module.exports = {
 
     cohorts: async (root, data, { models: { Cohort } }) => Cohort.findAll(data),
 
-    projects: async (root, data, { models: { Project } }) => Project.findAll(data),
+    // projects: async (root, data, { models: { Project } }) => Project.findAll(data),
+
+    projects: async (root, { title, skills }, { models: { Project, Skill } }) => {
+      const query = {};
+      if (title) {
+        query.where = {
+          title: { [Op.iLike]: `%${title}%` },
+        };
+      }
+      if (skills) {
+        query.include = [{
+          model: Skill,
+          where: {
+            name: skills,
+          },
+        },
+        ];
+      }
+
+      if (query) {
+        return Project.findAll({
+          ...query });
+      }
+
+      return Project.findAll();
+    },
 
     getNextMilestone: async (
       root,
