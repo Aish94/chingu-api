@@ -9,6 +9,6 @@ UserType = require('../../../types/user_type');
 
 UserQuery = `
   extend type Query {
-    users(search_string: String, limit: Int = 10): [User!]!
+    users(search_string: String, skills: [String], limit: Int = 10): [User!]!
   }
 `;

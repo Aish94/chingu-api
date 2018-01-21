@@ -18,7 +18,8 @@ module.exports = {
       return getLoggedInUser(jwt_object);
     },
 
-    users: async (root, { search_string }, { models: { User } }) => {
+    users: async (root, { search_string, skills }, { models: { User, Skill } }) => {
+      const query = {};
       if (search_string) {
         const search_params = [];
         const search_keywords = search_string.split(' ');
@@ -30,11 +31,27 @@ module.exports = {
             search_params.push(search);
           }
         }
-        return User.findAll({ where: { $or: [
-          ...search_params,
-        ],
-        } });
+        query.where = {
+          $or: [
+            ...search_params,
+          ],
+        };
       }
+      if (skills) {
+        query.include = [{
+          model: Skill,
+          where: {
+            name: skills,
+          },
+        },
+        ];
+      }
+
+      if (query) {
+        return User.findAll({
+          ...query });
+      }
+
       return User.findAll();
     },
 
