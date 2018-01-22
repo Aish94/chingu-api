@@ -18,7 +18,34 @@ module.exports = {
       return getLoggedInUser(jwt_object);
     },
 
-    users: async (root, data, { models: { User } }) => User.findAll(data),
+    users: async (root, { search_string, skills }, { models: { User, Skill } }) => {
+      const query = {};
+      if (search_string) {
+        const search_params = [];
+        const search_keywords = search_string.split(' ');
+        const search_fields = ['first_name', 'last_name', 'username', 'email'];
+        for (let i = 0; i < search_keywords.length; i += 1) {
+          for (let j = 0; j < search_fields.length; j += 1) {
+            const search = {};
+            search[search_fields[j]] = { [Op.iLike]: `%${search_keywords[i]}%` };
+            search_params.push(search);
+          }
+        }
+        query.where = {
+          $or: search_params,
+        };
+      }
+      if (skills) {
+        query.include = [{
+          model: Skill,
+          where: {
+            name: skills,
+          },
+        }];
+      }
+
+      return User.findAll(query);
+    },
 
     skills: async (root, data, { models: { Skill } }) => Skill.findAll(),
 
@@ -55,7 +82,25 @@ module.exports = {
 
     cohorts: async (root, data, { models: { Cohort } }) => Cohort.findAll(data),
 
-    projects: async (root, data, { models: { Project } }) => Project.findAll(data),
+    projects: async (root, { title, skills }, { models: { Project, Skill } }) => {
+      const query = {};
+      if (title) {
+        query.where = {
+          title: { [Op.iLike]: `%${title}%` },
+        };
+      }
+      if (skills) {
+        query.include = [{
+          model: Skill,
+          where: {
+            name: skills,
+          },
+        },
+        ];
+      }
+
+      return Project.findAll(query);
+    },
 
     getNextMilestone: async (
       root,
