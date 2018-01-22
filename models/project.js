@@ -11,14 +11,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
     },
+
     description: {
       allowNull: true,
       type: DataTypes.TEXT,
     },
+
     project_url: {
       allowNull: true,
       type: DataTypes.STRING,
     },
+
     github_url: {
       allowNull: true,
       type: DataTypes.STRING,
@@ -27,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Project.associate = (models) => {
     Project.belongsToMany(models.User, { through: models.ProjectUser });
-    Project.belongsToMany(models.Skill, { through: models.UserSkill });
+    Project.belongsToMany(models.Skill, { through: models.ProjectSkill });
   };
 
   return Project;

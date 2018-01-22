@@ -3,6 +3,7 @@ const CohortTeamCohortUserRoleEnum = require('./cohort_team_cohort_user_role_enu
 const CohortTeamCohortUserStatusEnum = require('./cohort_team_cohort_user_status_enum');
 const CohortUserStatusEnum = require('./cohort_user_status_enum');
 const UserStatusEnum = require('./user_status_enum');
+const MetadataSourceEnum = require('./metadata_source_enum');
 
 module.exports = [
   CohortStatusEnum,
@@ -10,4 +11,5 @@ module.exports = [
   CohortTeamCohortUserStatusEnum,
   CohortUserStatusEnum,
   UserStatusEnum,
+  MetadataSourceEnum,
 ];

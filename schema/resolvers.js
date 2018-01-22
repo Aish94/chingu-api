@@ -1,3 +1,4 @@
+const GraphQLJSON = require('graphql-type-json');
 const { Op } = require('sequelize');
 const {
   checkUserPermissions,
@@ -16,6 +17,10 @@ module.exports = {
       else if (email) return User.findOne({ where: { email } });
       return getLoggedInUser(jwt_object);
     },
+
+    users: async (root, data, { models: { User } }) => User.findAll(data),
+
+    skills: async (root, data, { models: { Skill } }) => Skill.findAll(),
 
     city: async (root, { city_id }, { models: { City } }) => City.findById(city_id),
 
@@ -460,6 +465,8 @@ module.exports = {
       queue.create(cohort_scrape, cohort_id).save(console.log);
     },
   },
+
+  JSON: GraphQLJSON,
 
   User: {
     country: root => root.getCountry(),

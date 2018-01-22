@@ -38,9 +38,21 @@ module.exports = (sequelize, DataTypes) => {
     return this.title.toLowerCase().replace(' ', '-');
   };
 
-  CohortChannel.associate = ({ Cohort, CohortTeam }) => {
-    CohortChannel.belongsTo(Cohort);
-    CohortChannel.hasOne(CohortTeam);
+  CohortChannel.associate = (models) => {
+    CohortChannel.belongsTo(models.Cohort);
+    CohortChannel.hasOne(models.CohortTeam);
+    CohortChannel.belongsToMany(models.CohortUser, {
+      through: models.CohortChannelUser,
+      as: 'Members',
+    });
+    CohortChannel.hasMany(models.Metadata, {
+      scope: {
+        entity_type: 'CohortChannel',
+      },
+      foreignKey: 'entity_id',
+      targetKey: 'id',
+      constraints: false,
+    });
   };
 
   return CohortChannel;

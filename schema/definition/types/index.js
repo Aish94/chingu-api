@@ -19,6 +19,7 @@ const TokenType = require('./token_type');
 const UserType = require('./user_type');
 const WizardType = require('./wizard_type');
 const SkillType = require('./skill_type');
+const MetadataType = require('./metadata_type');
 
 module.exports = [
   CityType,
@@ -42,4 +43,5 @@ module.exports = [
   UserType,
   WizardType,
   SkillType,
+  MetadataType,
 ];
