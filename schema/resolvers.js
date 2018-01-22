@@ -450,9 +450,13 @@ module.exports = {
     cohortSlackScrape: async (
       root,
       { cohort_id },
-      { queues: { ScrapeQ: { queue, tasks: { cohort_scrape } } }, jwt_object },
+      { queues: { ScrapeQ: { queue, tasks: { cohort_scrape } }, scheduleDay }, jwt_object },
     ) => {
       await requireAdmin(jwt_object);
+      // const tuesday = scheduleDay(2);
+      // const saturday = scheduleDay(6);
+      // queue.create(cohort_scrape, cohort_id).attempts(2).delay(tuesday).save(console.log);
+      // queue.create(cohort_scrape, cohort_id).attempts(2).delay(saturday).save(console.log);
       queue.create(cohort_scrape, cohort_id).save(console.log);
     },
   },
