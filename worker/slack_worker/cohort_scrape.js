@@ -1,5 +1,9 @@
 const { Wizard, CohortChannel } = require('../../models');
 const { ScrapeQ: { queue, tasks: { cohort_scrape } } } = require('../../queues/index');
+// update path to admin instead of wizard
+// correct the return type from the mutation
+// correct the inputs to include a cohort id
+const storeMetadata = require('../../schema/definition/entry-points/admin/index') 
 const scraper = require('slackmetascraper');
 
 queue.process(cohort_scrape, async ({ data: cohort_id }, done) => {
@@ -29,5 +33,3 @@ queue.process(cohort_scrape, async ({ data: cohort_id }, done) => {
 
   return console.log(scrape_results);
 });
-
-
