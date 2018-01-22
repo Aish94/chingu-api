@@ -32,9 +32,7 @@ module.exports = {
           }
         }
         query.where = {
-          $or: [
-            ...search_params,
-          ],
+          $or: search_params,
         };
       }
       if (skills) {
@@ -43,16 +41,10 @@ module.exports = {
           where: {
             name: skills,
           },
-        },
-        ];
+        }];
       }
 
-      if (query) {
-        return User.findAll({
-          ...query });
-      }
-
-      return User.findAll();
+      return User.findAll(query);
     },
 
     skills: async (root, data, { models: { Skill } }) => Skill.findAll(),
@@ -90,8 +82,6 @@ module.exports = {
 
     cohorts: async (root, data, { models: { Cohort } }) => Cohort.findAll(data),
 
-    // projects: async (root, data, { models: { Project } }) => Project.findAll(data),
-
     projects: async (root, { title, skills }, { models: { Project, Skill } }) => {
       const query = {};
       if (title) {
@@ -109,12 +99,7 @@ module.exports = {
         ];
       }
 
-      if (query) {
-        return Project.findAll({
-          ...query });
-      }
-
-      return Project.findAll();
+      return Project.findAll(query);
     },
 
     getNextMilestone: async (
