@@ -36,7 +36,7 @@
     "pg": "^7.4.1",
     "sequelize": "^4.31.0",
     "sequelize-cli": "^3.2.0",
-    "slackmetascraper": "^3.3.0"
+    "slack-metadata": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^3.19.0",
