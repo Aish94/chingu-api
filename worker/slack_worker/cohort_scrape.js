@@ -1,12 +1,15 @@
 const { Wizard, CohortChannel, CohortChannelUser, CohortUser, Metadata } = require('../../models');
 const { ScrapeQ: { queue, tasks: { cohort_scrape } } } = require('../../queues/index');
-const scraper = require('slackmetascraper');
+const scraper = require('slack-metadata');
 
 const scrapeChannel = async (channel, slack_team_token) => scraper(
   channel.slack_channel_id,
   slack_team_token,
   channel.last_slack_scrape_ts,
 ).then(async (metadata) => {
+  // if there is no metadata to process
+  if (!metadata) return null;
+
   // user metadata array
   if (metadata.users_metadata) {
     // remove the redundant channel_id property through advanced wizardry
@@ -27,7 +30,6 @@ const scrapeChannel = async (channel, slack_team_token) => scraper(
         if (user_metadata.bot) return;
 
         const { user_id: slack_user_id, ...channel_user_metadata } = user_metadata;
-        console.log(slack_user_id);
         const cohort_user = await CohortUser.findOne({ where: { slack_user_id } });
         const channel_user = await CohortChannelUser.findOne({
           where: {
@@ -35,7 +37,7 @@ const scrapeChannel = async (channel, slack_team_token) => scraper(
             cohort_channel_id: channel.id,
           },
         });
-        // console.log('user_id line 27', slack_user_id);
+        // TODO: remove this once all cohort_channel_users have been added
         if (channel_user) {
           return Metadata.create({
             metadata: channel_user_metadata,
@@ -52,7 +54,6 @@ const scrapeChannel = async (channel, slack_team_token) => scraper(
 
 queue.process(cohort_scrape, async ({ data: cohort_id }, done) => {
   const wizard = await Wizard.findOne({ where: { cohort_id } });
-
   // TODO: flesh this error out later
   if (!wizard) return console.error('no wiz');
   const channels = await CohortChannel.findAll({ where: { cohort_id } });
@@ -60,8 +61,6 @@ queue.process(cohort_scrape, async ({ data: cohort_id }, done) => {
 
   await Promise.all(channels.map(channel => scrapeChannel(channel, slack_team_token)))
     .then((scraped_channels) => {
-      // console.log('scraped_channels line 50', scraped_channels);
       done();
-      // TODO: add task done()
     }).catch();
 });
