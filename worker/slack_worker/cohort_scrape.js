@@ -10,45 +10,41 @@ const scrapeChannel = async (channel, slack_team_token) => scraper(
   // if there is no metadata to process
   if (!metadata) return null;
 
-  // user metadata array
-  if (metadata.users_metadata) {
-    // remove the redundant channel_id property through advanced wizardry
-    const { channel_id, ...channel_metadata } = metadata.channel_metadata;
-    // console.log('channel id line 14', channel_id);
-    await channel.update({ last_slack_scrape_ts: metadata.timestamp });
+  // remove the redundant channel_id property through advanced wizardry
+  const { channel_id, ...channel_metadata } = metadata.channel_metadata;
+  // update the Slack timestamp on the channel entry
+  await channel.update({ last_slack_scrape_ts: metadata.timestamp });
 
-    await Metadata.create({
-      metadata: channel_metadata,
-      metadata_source: 'slack',
-      entity_type: 'CohortChannel',
-      entity_id: channel.id,
-    }).catch(console.error);
+  await Metadata.create({
+    metadata: channel_metadata,
+    metadata_source: 'slack',
+    entity_type: 'CohortChannel',
+    entity_id: channel.id,
+  }).catch(console.error);
 
-    await Promise.all(metadata.users_metadata.map(
-      async (user_metadata) => {
-        // ignore bot users
-        if (user_metadata.bot) return;
+  await Promise.all(metadata.users_metadata.map(
+    async (user_metadata) => {
+      // ignore bot users
+      if (user_metadata.bot) return;
 
-        const { user_id: slack_user_id, ...channel_user_metadata } = user_metadata;
-        const cohort_user = await CohortUser.findOne({ where: { slack_user_id } });
-        const channel_user = await CohortChannelUser.findOne({
-          where: {
-            cohort_user_id: cohort_user.id,
-            cohort_channel_id: channel.id,
-          },
-        });
-        // TODO: remove this once all cohort_channel_users have been added
-        if (channel_user) {
-          return Metadata.create({
-            metadata: channel_user_metadata,
-            metadata_source: 'slack',
-            entity_type: 'CohortChannelUser',
-            entity_id: channel_user.id,
-          }).catch(console.error);
-        }
-      },
-    )).catch(console.error);
-  }
+      const { user_id: slack_user_id, ...channel_user_metadata } = user_metadata;
+      const cohort_user = await CohortUser.findOne({ where: { slack_user_id } });
+      const channel_user = await CohortChannelUser.findOne({
+        where: {
+          cohort_user_id: cohort_user.id,
+          cohort_channel_id: channel.id,
+        },
+      });
+
+      Metadata.create({
+        metadata: channel_user_metadata,
+        metadata_source: 'slack',
+        entity_type: 'CohortChannelUser',
+        entity_id: channel_user.id,
+      }).catch(console.error);
+    },
+  )).catch(console.error);
+
   return metadata;
 }).catch(console.error);
 
@@ -61,6 +57,7 @@ queue.process(cohort_scrape, async ({ data: cohort_id }, done) => {
 
   await Promise.all(channels.map(channel => scrapeChannel(channel, slack_team_token)))
     .then((scraped_channels) => {
+      // TODO: add CohortUser metadata by aggregating of the user metadata across all scanned channels
       done();
     }).catch();
 });
