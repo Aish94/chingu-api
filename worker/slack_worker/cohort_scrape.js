@@ -86,14 +86,26 @@ const scanChannel = async (channel, slack_team_token) => scanner(
 
 queue.process(cohort_scrape, async ({ data: cohort_id }, done) => {
   const wizard = await Wizard.findOne({ where: { cohort_id } });
-  if (!wizard) return console.error(`YOU SHALL NOT PASS...for there is no wizard associated with this ${cohort_id} cohort ID`);
+  if (!wizard) return console.error(`YOU SHALL NOT PASS...for there is no wizard associated with this cohort ID: ${cohort_id} `);
+
   const channels = await CohortChannel.findAll({ where: { cohort_id } });
   const { slack_team_token } = wizard;
 
   await Promise.all(channels.map(channel => scanChannel(channel, slack_team_token)))
-    .then((scanned_channels) => {
-      console.log(cohort_users_metadata);
-      // TODO: add CohortUser metadata by aggregating of the user metadata across all scanned channels
+    .then(() => {
+      cohort_users_metadata.forEach(async (user_metadata) => {
+        const { user_id: slack_user_id, ...cohort_user_metadata } = user_metadata;
+        const cohort_user = await CohortUser.findOne({ where: { slack_user_id } });
+        if (cohort_user) {
+          await Metadata.create({
+            metadata: cohort_user_metadata,
+            metadata_source: 'slack',
+            entity_type: 'CohortUser',
+            entity_id: cohort_user.id,
+          }).catch(console.error);
+        } else console.error(`No Cohort User found for slack_user_id: ${slack_user_id}`);
+      });
+
       done();
     }).catch();
 });
