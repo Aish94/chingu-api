@@ -455,7 +455,7 @@ module.exports = {
     cohortSlackScrape: async (
       root,
       { cohort_id },
-      { queues: { ScrapeQ: { queue, tasks: { cohort_scrape } }, scheduleDay }, jwt_object },
+      { queues: { ScrapeQ: { queue, tasks: { cohort_scrape } } }, jwt_object },
     ) => {
       await requireAdmin(jwt_object);
       queue.create(cohort_scrape, cohort_id).save(console.log);

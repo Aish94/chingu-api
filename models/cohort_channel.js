@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // converts channel title to slack format for channel creation on a Slack team
-  CohortChannel.prototype.formatSlackTitle = function () {
+  CohortChannel.prototype.formatSlackTitle = function formatSlackTitle() {
     return this.title.toLowerCase().replace(' ', '-');
   };
 
