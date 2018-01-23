@@ -91,7 +91,7 @@ queue.process(cohort_scrape, async ({ data: cohort_id }, done) => {
   const channels = await CohortChannel.findAll({ where: { cohort_id } });
   const { slack_team_token } = wizard;
 
-  await Promise.all(channels.map(channel => scanChannel(channel, slack_team_token)))
+  return Promise.all(channels.map(channel => scanChannel(channel, slack_team_token)))
     .then(() => {
       cohort_users_metadata.forEach(async (user_metadata) => {
         const { user_id: slack_user_id, ...cohort_user_metadata } = user_metadata;
