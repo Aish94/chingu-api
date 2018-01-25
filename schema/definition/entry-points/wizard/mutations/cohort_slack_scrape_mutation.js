@@ -8,6 +8,6 @@ Base = require('../../base');
 // return type?
 CohortSlackScrape = `
   extend type Mutation {
-    cohortSlackScrape(cohort_id:ID!): Boolean
+    cohortSlackScrape(slack_team_id:String!, slack_user_id:String!): Boolean
   }
 `;

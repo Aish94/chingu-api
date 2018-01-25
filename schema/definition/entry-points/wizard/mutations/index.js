@@ -4,6 +4,7 @@ const RegisterCohortTeamCohortUserMutation = require('./register_cohort_team_coh
 const UnregisterCohortTeamCohortUserMutation = require('./unregister_cohort_team_cohort_user_mutation');
 const SubmitMilestoneMutation = require('./submit_milestone_mutation');
 const WizardCreateCohortTeamMutation = require('./wizard_create_cohort_team_mutation');
+const CohortSlackScrape = require('./cohort_slack_scrape_mutation');
 
 module.exports = [
   CreateWizardMutation,
@@ -12,4 +13,5 @@ module.exports = [
   UnregisterCohortTeamCohortUserMutation,
   SubmitMilestoneMutation,
   WizardCreateCohortTeamMutation,
+  CohortSlackScrape,
 ];

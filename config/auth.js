@@ -44,7 +44,7 @@ const requireProjectManager = async ({ id, cohort_id }, slack_user_id) => {
   return cohort_team_cohort_user;
 };
 
-const requireSlackAdmin = async (wizard, bot_secret, slack_user_id) => {
+const requireSlackAdmin = async (wizard, slack_user_id, bot_secret) => {
   if (bot_secret) {
     if (wizard.cohort_id) {
       throw new Error('This secret is no longer valid. Wizard has already been integrated.');

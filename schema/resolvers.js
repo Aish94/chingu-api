@@ -149,7 +149,7 @@ module.exports = {
       { is_wizard },
     ) => {
       const wizard = await requireWizard(is_wizard, slack_team_id);
-      requireSlackAdmin(wizard, bot_secret);
+      requireSlackAdmin(wizard, null, bot_secret);
       return wizard.update({ cohort_id });
     },
 
@@ -211,7 +211,7 @@ module.exports = {
       { models: { CohortTeam, CohortUser, CohortTeamCohortUser }, is_wizard },
     ) => {
       const wizard = await requireWizard(is_wizard, slack_team_id);
-      await requireSlackAdmin(wizard.cohort_id, null, admin_slack_user_id);
+      await requireSlackAdmin(wizard.cohort_id, admin_slack_user_id);
       const cohort_team = await CohortTeam.findOne({
         where: { slack_channel_id, cohort_id: wizard.cohort_id },
       });
@@ -234,7 +234,7 @@ module.exports = {
       if (!wizard.cohort_id) {
         throw new Error('This wizard has not been associated with a cohort.');
       }
-      await requireSlackAdmin(wizard, null, slack_user_id);
+      await requireSlackAdmin(wizard, slack_user_id);
       const cohort = await Cohort.findById(wizard.cohort_id);
       const tiers = await cohort.getTiers();
       const team_tier = tiers.find(
@@ -499,11 +499,12 @@ module.exports = {
 
     cohortSlackScrape: async (
       root,
-      { cohort_id },
-      { queues: { ScrapeQ: { queue, tasks: { cohort_scrape } } }, jwt_object },
+      { slack_team_id, slack_user_id },
+      { queues: { ScrapeQ: { queue, tasks: { cohort_scrape } } }, is_wizard },
     ) => {
-      await requireAdmin(jwt_object);
-      queue.create(cohort_scrape, cohort_id).save(console.log);
+      const wizard = await requireWizard(is_wizard, slack_team_id);
+      await requireSlackAdmin(wizard.cohort_id, slack_user_id);
+      queue.create(cohort_scrape, wizard.cohort_id).save(console.log);
     },
   },
 

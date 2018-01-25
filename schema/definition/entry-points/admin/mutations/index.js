@@ -12,7 +12,6 @@ const CreateTierMutation = require('./create_tier_mutation');
 const UpdateCohortMutation = require('./update_cohort_mutation');
 const UpdateCohortUserMutation = require('./update_cohort_user_mutation');
 const UpdateUserStatusMutation = require('./update_user_status_mutation');
-const CohortSlackScrape = require('./cohort_slack_scrape_mutation');
 
 module.exports = [
   AddTierToCohortMutation,
@@ -29,5 +28,4 @@ module.exports = [
   UpdateCohortMutation,
   UpdateCohortUserMutation,
   UpdateUserStatusMutation,
-  CohortSlackScrape,
 ];
