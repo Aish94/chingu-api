@@ -6,6 +6,8 @@ const { getConfigPath } = require('./config/utilities');
 const { authenticate, authenticateWizard } = require('./config/auth');
 
 const { AUTH_HEADER, ALLOW_GRAPHIQL, GRAPHQL_ENDPOINT } = require(getConfigPath('config'));
+
+const queues = require('./queues');
 const models = require('./models');
 const schema = require('./schema');
 
@@ -33,7 +35,7 @@ app.use(
     const jwt_object = await authenticate(req);
     const is_wizard = authenticateWizard(req);
     return {
-      context: { models, jwt_object, is_wizard },
+      context: { models, jwt_object, is_wizard, queues },
       schema,
       debug: !!ALLOW_GRAPHIQL,
       // TODO: make use of the 'formatError' and 'formatResponse' options

@@ -149,7 +149,7 @@ module.exports = {
       { is_wizard },
     ) => {
       const wizard = await requireWizard(is_wizard, slack_team_id);
-      requireSlackAdmin(wizard, bot_secret);
+      requireSlackAdmin(wizard, null, bot_secret);
       return wizard.update({ cohort_id });
     },
 
@@ -211,7 +211,7 @@ module.exports = {
       { models: { CohortTeam, CohortUser, CohortTeamCohortUser }, is_wizard },
     ) => {
       const wizard = await requireWizard(is_wizard, slack_team_id);
-      await requireSlackAdmin(wizard.cohort_id, null, admin_slack_user_id);
+      await requireSlackAdmin(wizard.cohort_id, admin_slack_user_id);
       const cohort_team = await CohortTeam.findOne({
         where: { slack_channel_id, cohort_id: wizard.cohort_id },
       });
@@ -234,7 +234,7 @@ module.exports = {
       if (!wizard.cohort_id) {
         throw new Error('This wizard has not been associated with a cohort.');
       }
-      await requireSlackAdmin(wizard, null, slack_user_id);
+      await requireSlackAdmin(wizard, slack_user_id);
       const cohort = await Cohort.findById(wizard.cohort_id);
       const tiers = await cohort.getTiers();
       const team_tier = tiers.find(
@@ -315,7 +315,7 @@ module.exports = {
       { cohort_id, user_data },
       { models: { Cohort, User, CohortUser }, jwt_object },
     ) => {
-      requireAdmin(jwt_object);
+      await requireAdmin(jwt_object);
       const cohort = await Cohort.findById(cohort_id);
       const new_users = JSON.parse(user_data);
       const users = await Promise.all(
@@ -495,6 +495,16 @@ module.exports = {
       const cohort = await Cohort.findById(cohort_id);
       if (cohort.status !== 'registration_open') throw new Error('Registration is not open.');
       return CohortUser.create({ cohort_id, user_id: user.id });
+    },
+
+    cohortSlackScrape: async (
+      root,
+      { slack_team_id, slack_user_id },
+      { queues: { ScrapeQ: { queue, tasks: { cohort_scrape } } }, is_wizard },
+    ) => {
+      const wizard = await requireWizard(is_wizard, slack_team_id);
+      await requireSlackAdmin(wizard.cohort_id, slack_user_id);
+      queue.create(cohort_scrape, wizard.cohort_id).save(console.log);
     },
   },
 
