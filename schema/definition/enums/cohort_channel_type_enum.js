@@ -1,8 +1,8 @@
-let CohortChannelTypeEnum;
+let CohortChannelType;
 
-module.exports = () => [CohortChannelTypeEnum];
+module.exports = () => [CohortChannelType];
 
-CohortChannelTypeEnum = `
+CohortChannelType = `
   enum _CohortChannelType {
     admin
     team
