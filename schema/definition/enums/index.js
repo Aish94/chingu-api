@@ -4,6 +4,7 @@ const CohortTeamCohortUserStatusEnum = require('./cohort_team_cohort_user_status
 const CohortUserStatusEnum = require('./cohort_user_status_enum');
 const UserStatusEnum = require('./user_status_enum');
 const MetadataSourceEnum = require('./metadata_source_enum');
+const CohortChannelTypeEnum = require('./cohort_channel_type_enum');
 
 module.exports = [
   CohortStatusEnum,
@@ -12,4 +13,5 @@ module.exports = [
   CohortUserStatusEnum,
   UserStatusEnum,
   MetadataSourceEnum,
+  CohortChannelTypeEnum,
 ];

@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
+    channel_type: {
+      allowNull: false,
+      type: DataTypes.ENUM,
+      values: ['admin', 'team', 'public'],
+    },
+
     slack_channel_id: {
       allowNull: true,
       type: DataTypes.STRING,
