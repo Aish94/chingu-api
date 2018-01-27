@@ -425,6 +425,15 @@ module.exports = {
       return cohort_user.update(cohort_user_data);
     },
 
+    createCohortChannel: async (
+      root,
+      { cohort_id, title, channel_type },
+      { models: { CohortChannel }, jwt_object },
+    ) => {
+      await requireAdmin(jwt_object);
+      return CohortChannel.create({ cohort_id, title, channel_type });
+    },
+
     createCohortTeam: async (
       root,
       { cohort_id, cohort_tier_id },

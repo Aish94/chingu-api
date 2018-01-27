@@ -12,6 +12,7 @@ const CreateTierMutation = require('./create_tier_mutation');
 const UpdateCohortMutation = require('./update_cohort_mutation');
 const UpdateCohortUserMutation = require('./update_cohort_user_mutation');
 const UpdateUserStatusMutation = require('./update_user_status_mutation');
+const CreateCohortChannel = require('./create_cohort_channel');
 
 module.exports = [
   AddTierToCohortMutation,
@@ -28,4 +29,5 @@ module.exports = [
   UpdateCohortMutation,
   UpdateCohortUserMutation,
   UpdateUserStatusMutation,
+  CreateCohortChannel,
 ];
