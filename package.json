@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Oxyrus/chingu-api.git"
+    "url": "git+https://github.com/chingu-x/chingu-api.git"
   },
-  "author": "Oxyrus, TheSabby, The-Vampiire",
+  "author": "TheSabby, The-Vampiire",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Oxyrus/chingu-api/issues"
+    "url": "https://github.com/chingu-x/chingu-api/issues"
   },
-  "homepage": "https://github.com/Oxyrus/chingu-api#readme",
+  "homepage": "https://github.com/chingu-x/chingu-api#readme",
   "dependencies": {
     "apollo-server-express": "^1.3.2",
     "bcryptjs": "^2.4.3",

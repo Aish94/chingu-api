@@ -503,7 +503,7 @@ module.exports = {
       { queues: { ScrapeQ: { queue, tasks: { cohort_scrape } } }, is_wizard },
     ) => {
       const wizard = await requireWizard(is_wizard, slack_team_id);
-      await requireSlackAdmin(wizard.cohort_id, slack_user_id);
+      await requireSlackAdmin(wizard, slack_user_id);
       queue.create(cohort_scrape, wizard.cohort_id).save(console.log);
     },
   },
