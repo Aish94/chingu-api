@@ -9,6 +9,6 @@ CohortUserType = require('../../../types/cohort_user_type');
 
 AddUsersToCohortMutation = `
   extend type Mutation {
-    addUsersToCohort(cohort_id: Int!, user_data: String!): [CohortUser!]!
+    addUsersToCohort(cohort_id: ID!, user_data: String!): [CohortUser!]!
   }
 `;

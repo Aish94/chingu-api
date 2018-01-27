@@ -11,7 +11,7 @@ IntegrateWizardWithCohortMutation = `
   extend type Mutation {
     integrateWizardWithCohort(
       slack_team_id: String!,
-      cohort_id: Int!,
+      cohort_id: ID!,
       bot_secret: String!
     ): Wizard!
   }
