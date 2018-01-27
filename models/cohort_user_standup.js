@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+
     cohort_team_standup_id: {
       allowNull: true,
       type: DataTypes.INTEGER,
@@ -23,6 +24,17 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: 'cohort_team_standups',
         key: 'id',
+      },
+
+      standup_type: {
+        allowNull: false,
+        type: DataTypes.ENUM,
+        values: ['user_log', 'user_checkin', 'manager_update'],
+      },
+
+      standup: {
+        allowNull: false,
+        type: DataTypes.JSONB,
       },
     },
   });
