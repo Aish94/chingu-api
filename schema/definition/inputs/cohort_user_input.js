@@ -8,6 +8,6 @@ CohortUserStatusEnum = require('../enums/cohort_user_status_enum');
 CohortUserInput = `
   input CohortUserInput {
     status: _CohortUserStatus,
-    cohort_tier_id: Int
+    cohort_tier_id: ID
   }
 `;

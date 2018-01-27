@@ -4,8 +4,8 @@ module.exports = () => [CohortTierActInput];
 
 CohortTierActInput = `
   input CohortTierActInput {
-    cohort_id: Int
-    tier_id: Int
+    cohort_id: ID
+    tier_id: ID
     title: String
     order_index: Int
     repeatable: Boolean

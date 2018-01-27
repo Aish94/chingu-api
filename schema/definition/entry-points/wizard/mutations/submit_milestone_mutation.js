@@ -13,7 +13,7 @@ SubmitMilestoneMutation = `
       slack_team_id: String!,
       slack_channel_id: String!,
       slack_user_id: String!,
-      cohort_tier_act_milestone_id: Int!
+      cohort_tier_act_milestone_id: ID!
     ): CohortTeamTierActMilestone!
   }
 `;
