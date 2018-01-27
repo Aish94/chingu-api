@@ -427,11 +427,11 @@ module.exports = {
 
     createCohortChannel: async (
       root,
-      { cohort_id, title, channel_type },
+      { cohort_id, title, public_channel, channel_type },
       { models: { CohortChannel }, jwt_object },
     ) => {
       await requireAdmin(jwt_object);
-      return CohortChannel.create({ cohort_id, title, channel_type });
+      return CohortChannel.create({ cohort_id, title, public_channel, channel_type });
     },
 
     createCohortTeam: async (

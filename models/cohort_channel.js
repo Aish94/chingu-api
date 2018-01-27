@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
       values: ['admin', 'team', 'public'],
     },
 
+    public_channel: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+
     slack_channel_id: {
       allowNull: true,
       type: DataTypes.STRING,
