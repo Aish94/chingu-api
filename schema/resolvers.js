@@ -8,6 +8,7 @@ const {
   requireSlackAdmin,
   requireAdmin,
 } = require('../config/auth');
+const { createSlackChannel } = require('../slack_api');
 
 module.exports = {
   Query: {
@@ -427,11 +428,20 @@ module.exports = {
 
     createCohortChannel: async (
       root,
-      { cohort_id, title, public_channel, channel_type },
-      { models: { CohortChannel }, jwt_object },
+      { cohort_id, title, is_public, channel_type },
+      { models: { CohortChannel, Wizard }, jwt_object },
     ) => {
       await requireAdmin(jwt_object);
-      return CohortChannel.create({ cohort_id, title, public_channel, channel_type });
+      const { slack_team_token } = await Wizard.findOne({ where: { cohort_id } });
+      const slack_channel_id = await createSlackChannel(title, slack_team_token, is_public);
+
+      return CohortChannel.create({
+        cohort_id,
+        title,
+        is_public,
+        channel_type,
+        slack_channel_id,
+      });
     },
 
     createCohortTeam: async (

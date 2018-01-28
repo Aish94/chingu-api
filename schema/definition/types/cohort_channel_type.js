@@ -15,7 +15,7 @@ CohortChannelType = `
     cohort: Cohort!
     team: CohortTeam
     channel_type: _CohortChannelType!
-    public_channel: Boolean!
+    is_public: Boolean!
     title: String!
     slack_channel_id: String
     last_slack_scrape_ts: String

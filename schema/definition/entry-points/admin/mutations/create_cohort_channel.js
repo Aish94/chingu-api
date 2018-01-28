@@ -15,7 +15,7 @@ CreateCohortChannel = `
       cohort_id: ID!,
       title: String!,
       channel_type: _CohortChannelType!,
-      public_channel: Boolean
+      is_public: Boolean
     ): CohortChannel!
   }
 `;
