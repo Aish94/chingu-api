@@ -17,6 +17,18 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
+    channel_type: {
+      allowNull: false,
+      type: DataTypes.ENUM,
+      values: ['admin', 'team', 'public'],
+    },
+
+    is_public: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+
     slack_channel_id: {
       allowNull: true,
       type: DataTypes.STRING,
@@ -32,11 +44,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
   });
-
-  // converts channel title to slack format for channel creation on a Slack team
-  CohortChannel.prototype.formatSlackTitle = function formatSlackTitle() {
-    return this.title.toLowerCase().replace(' ', '-');
-  };
 
   CohortChannel.associate = (models) => {
     CohortChannel.belongsTo(models.Cohort);

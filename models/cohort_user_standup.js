@@ -26,12 +26,6 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
 
-      standup_type: {
-        allowNull: false,
-        type: DataTypes.ENUM,
-        values: ['user_log', 'user_checkin', 'manager_update'],
-      },
-
       standup: {
         allowNull: false,
         type: DataTypes.JSONB,
