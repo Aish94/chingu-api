@@ -18,6 +18,7 @@ const corsOptions = {
   origin: [
     'https://chingu.io',
     'https://chingu-dev-network.firebaseapp.com',
+    'https://doum.herokuapp.com',
     /^http:\/\/localhost(:[0-9]{0,4})?\/?$/,
   ],
   methods: ['GET', 'PUT', 'POST'],
