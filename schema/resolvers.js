@@ -447,20 +447,48 @@ module.exports = {
     createCohortTeam: async (
       root,
       { cohort_id, cohort_tier_id },
-      { models: { CohortTeam, CohortTier, Project }, jwt_object },
+      { models: { CohortTeam, CohortTier, Wizard, CohortChannel, Project }, jwt_object },
     ) => {
       await requireAdmin(jwt_object);
+
+      const { slack_team_token } = await Wizard.findOne({ where: { cohort_id } });
+
       const cohort_tier = await CohortTier.findById(cohort_tier_id);
       if (!cohort_tier) {
         throw new Error('tier does not exist.');
       }
+
+      // build the cohort team
       const cohort_team = CohortTeam.build({
         cohort_id,
         cohort_tier_id,
         standup_schedule: cohort_tier.standup_schedule,
       });
       await cohort_team.generateTitle();
+
+      // create the slack channel for the team
+      const slack_channel_id = await createSlackChannel(
+        cohort_team.title,
+        slack_team_token,
+        false,
+      );
+
+      // create the cohort channel
+      const cohort_channel = await CohortChannel.create({
+        cohort_id,
+        channel_type: 'team',
+        is_public: false,
+        slack_channel_id,
+        title: cohort_team.title,
+      });
+
+      // add the cohort channel id to the team
+      cohort_team.cohort_channel_id = cohort_channel.id;
+
+      // save the built cohort_team instance
       await cohort_team.save();
+
+      // create the associated cohort team project
       const project = await Project.create({ title: `${cohort_team.title} Project` });
       return cohort_team.update({ project_id: project.id });
     },
